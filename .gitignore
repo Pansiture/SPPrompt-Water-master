@@ -1,6 +1,7 @@
 /data
-/output
+/pretrain
 /work_dir
+/output
 __pycache__/
 *.pyc
 *.pyo
