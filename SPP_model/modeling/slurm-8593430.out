@@ -1,0 +1,14 @@
+no change     /project/cuihao/miniconda/condabin/conda
+no change     /project/cuihao/miniconda/bin/conda
+no change     /project/cuihao/miniconda/bin/conda-env
+no change     /project/cuihao/miniconda/bin/activate
+no change     /project/cuihao/miniconda/bin/deactivate
+no change     /project/cuihao/miniconda/etc/profile.d/conda.sh
+no change     /project/cuihao/miniconda/etc/fish/conf.d/conda.fish
+no change     /project/cuihao/miniconda/shell/condabin/Conda.psm1
+no change     /project/cuihao/miniconda/shell/condabin/conda-hook.ps1
+no change     /project/cuihao/miniconda/lib/python3.12/site-packages/xontrib/conda.xsh
+no change     /project/cuihao/miniconda/etc/profile.d/conda.csh
+no change     /home/cuihao/.bashrc
+No action taken.
+/home/cuihao/.bashrc: line 36: export: `5.3.1': not a valid identifier

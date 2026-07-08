@@ -1,0 +1,16 @@
+/data
+/output
+/work_dir
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.log
+preprocess.log
+*.zip
+*.tar.gz
+*.tiff
+*.tif
+*.jpg
+*.jpeg
+*.png
