@@ -12,7 +12,7 @@ from .uper_head import UPerHead
 from .SAM_mask import PromptModule,PromptModule_noprompt
 from SPP_model import sam_model_registry
 from .swin_mmcv import SwinTransformer
-from .cross_attention import WindowCrossAttention, FeatureFusion, BiWindowCrossAttention,FeatureFusion_conv2
+from .cross_attention import WindowCrossAttention, FeatureFusion, BiWindowCrossAttention,FeatureFusion_conv2, FeatureFusion_conv2_noloss
 
 
 class SPPromptWaterNet(nn.Module):
@@ -20,7 +20,7 @@ class SPPromptWaterNet(nn.Module):
         self,
         promptcheckpoint=None,
         swin_pretrained=None,
-        freeze_prompt = True
+        freeze_prompt = False
 
 
     )-> None:
@@ -39,6 +39,7 @@ class SPPromptWaterNet(nn.Module):
 
 
         self.swin = SwinTransformer(pretrained=swin_pretrained)
+        self.swin.init_weights()
         self.uperhead=UPerHead(in_channels=[96, 192, 384, 768], num_classes=1,channels=512,
                                in_index=[0,1,2,3])
 

@@ -31,9 +31,9 @@ parser.add_argument("--data_val", type=str, default=None,
 parser.add_argument("--promptcp", type=str, default=r"",
                     help="The checkpoint of Prompt model (SAM vit-b pretrain weights, optional)")
 parser.add_argument(
-    "-freeze_prompt", type=bool, default=True, help="Freeze the prompt module (default True to preserve SAM feature extraction)"
+    "-freeze_prompt", type=bool, default=False, help="Freeze the prompt module (default False to allow fine-tuning SAM)"
 )
-parser.add_argument("--SwintransformerPretrain", type=str, default="./pretrain/swin_tiny_patch4_window7_224_20220317-1cdeb081.pth",
+parser.add_argument("--SwintransformerPretrain", type=str, default="./pretrain/swin_tiny_patch4_window7_224.pth",
                     help="Path to Swin Transformer pretrain weights. Download from https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth")
 parser.add_argument("-work_dir", type=str, default=r"./work_dir")
 
@@ -83,6 +83,29 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 logger.info(f"Logging to: {log_file}")
 
+# ---- print all training hyperparameters ----
+logger.info("=" * 60)
+logger.info("Training Configuration:")
+logger.info("  data_train:          %s", args.data_train)
+logger.info("  data_val:            %s", args.data_val if args.data_val else args.data_train.replace("train", "val"))
+logger.info("  promptcp (SAM ckpt): %s", args.promptcp)
+logger.info("  Swin Pretrain:       %s", args.SwintransformerPretrain)
+logger.info("  freeze_prompt:       %s", args.freeze_prompt)
+logger.info("  work_dir:            %s", args.work_dir)
+logger.info("  task_name:           %s", args.task_name)
+logger.info("  num_epochs:          %d", args.num_epochs)
+logger.info("  batch_size:          %d", args.batch_size)
+logger.info("  val_batch_size:      %d", args.val_batch_size)
+logger.info("  lr:                  %.6f", args.lr)
+logger.info("  weight_decay:        %.6f", args.weight_decay)
+logger.info("  num_workers:         %d", args.num_workers)
+logger.info("  device:              %s", args.device)
+logger.info("  use_amp:             %s", args.use_amp)
+logger.info("  use_wandb:           %s", args.use_wandb)
+logger.info("  resume:              %s", args.resume if args.resume else "None")
+logger.info("=" * 60)
+
+
 
 def calculate_metrics(preds, labels, num_classes=2):
     """Calculate mIoU, accuracy, and F1-score."""
@@ -125,7 +148,7 @@ def calculate_metrics(preds, labels, num_classes=2):
     # return np.nanmean(miou_list), np.nanmean(acc_list), np.nanmean(f1_list)
     return np.mean(miou_list), np.mean(acc_list), np.mean(f1_list)
 
-def validate(prompt_water_net, val_dataloader, device, dicefocal_loss):
+def validate(prompt_water_net, val_dataloader, device, loss_fn):
     """Validation loop to compute metrics."""
     prompt_water_net.eval()
     val_loss = 0
@@ -136,7 +159,7 @@ def validate(prompt_water_net, val_dataloader, device, dicefocal_loss):
         for image, labels, prompts, _ in tqdm(val_dataloader, desc="Validation"):
             image, prompts, labels = image.to(device), prompts.to(device), labels.to(device).float()
             medsam_pred = prompt_water_net(image, prompts)
-            loss = dicefocal_loss(medsam_pred, labels)
+            loss = loss_fn(medsam_pred, labels)
             val_loss += loss.item()
 
             # 计算指标
@@ -182,16 +205,36 @@ def main():
         lr=args.lr,
         weight_decay=args.weight_decay)
 
+    # Add cosine annealing LR scheduler
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=args.num_epochs, eta_min=1e-6
+    )
+
     logger.info(
         "Number of image encoder and mask decoder parameters: %s",
         sum(p.numel() for p in prompt_module_encdec_params if p.requires_grad),
     )
-    dicefocal_loss = monai.losses.dice_focal(sigmoid=True, reduction="mean", squared_pred=True)
+    logger.info("=" * 60)
+    logger.info("Model Architecture Details:")
+    logger.info("  Total parameters:         %s", sum(p.numel() for p in prompt_water_net.parameters()))
+    logger.info("  Trainable parameters:     %s", sum(p.numel() for p in prompt_water_net.parameters() if p.requires_grad))
+    logger.info("  SAM enc+dec trainable:    %s", sum(p.numel() for p in prompt_module_encdec_params if p.requires_grad))
+    logger.info("  Optimizer:                AdamW")
+    logger.info("  LR Scheduler:             CosineAnnealingLR (T_max=%d, eta_min=1e-6)", args.num_epochs)
+    logger.info("  Loss:                     0.6*DiceFocalLoss(alpha=0.75) + 0.4*TverskyLoss(alpha=0.3, beta=0.7)")
+    logger.info("=" * 60)
+
+    dice_focal_loss = monai.losses.DiceFocalLoss(sigmoid=True, reduction="mean", squared_pred=True, alpha=0.75)
+    tversky_loss = monai.losses.TverskyLoss(sigmoid=True, alpha=0.3, beta=0.7)
+    
+    def combined_loss(pred, target):
+        return 0.6 * dice_focal_loss(pred, target) + 0.4 * tversky_loss(pred, target)
 
     # 设置训练和验证数据集
     num_epochs = args.num_epochs
     # iter_num = 0
     train_loss = []
+    val_loss_list = []
     best_loss = 1e10
     best_Valscore = 0.001
     previous_best_model = None
@@ -225,7 +268,7 @@ def main():
     start_epoch = 0
     best_val_loss = 0.01
 
-    if args.resume is not None:
+    if args.resume is not None and args.resume != "":
         if os.path.isfile(args.resume):
             checkpoint = torch.load(args.resume, map_location=device)
             start_epoch = checkpoint["epoch"] + 1
@@ -243,25 +286,26 @@ def main():
             if args.use_amp:
                 with torch.autocast(device_type="cuda", dtype=torch.float16):
                     medsam_pred = prompt_water_net(image, prompts)
-                    loss = dicefocal_loss(medsam_pred, labels)
+                    loss = combined_loss(medsam_pred, labels)
                 scaler.scale(loss).backward()
                 scaler.step(optimizer)
                 scaler.update()
             else:
                 medsam_pred = prompt_water_net(image, prompts)
-                loss = dicefocal_loss(medsam_pred, labels)
+                loss = combined_loss(medsam_pred, labels)
                 loss.backward()
                 optimizer.step()
 
             epoch_loss += loss.item()
 
-        epoch_loss /= step
+        epoch_loss /= step + 1
         train_loss.append(epoch_loss)
 
-        logger.info('Time: %s, Epoch: %d, Loss: %.4f', datetime.now().strftime("%Y%m%d-%H%M"), epoch, epoch_loss)
+        logger.info('Time: %s, Epoch: %d, Loss: %.4f, LR: %.6f', datetime.now().strftime("%Y%m%d-%H%M"), epoch, epoch_loss, optimizer.param_groups[0]['lr'])
         #torch.cuda.empty_cache()
         # 验证过程
-        val_loss, val_miou, val_acc, val_f1 = validate(prompt_water_net, val_dataloader, device, dicefocal_loss)
+        val_loss, val_miou, val_acc, val_f1 = validate(prompt_water_net, val_dataloader, device, combined_loss)
+        val_loss_list.append(val_loss)
         Valscore = val_miou+val_acc+val_f1
         logger.info('Validation - Loss: %.4f, mIoU: %.4f, Acc: %.4f, F1: %.4f, Valscore: %.4f', val_loss, val_miou, val_acc, val_f1, Valscore)
 
@@ -294,20 +338,12 @@ def main():
         if (epoch + 1) % 10 == 0:
             torch.save(checkpoint, join(model_save_path, f'checkpoint_e{epoch}.pth'))
 
-
-        # # 有点问题，没输出出来
-        # if Valscore > best_Valscore:
-        #     best_Valscore = Valscore
-        #     torch.save(checkpoint, join(model_save_path, f"best_model_e{epoch}_Valscore{Valscore:.4f}.pth"))
-
-
-        # if val_loss < best_loss:
-        #     best_loss = val_loss
-        #     torch.save(checkpoint, join(model_save_path, "best_model.pth"))
+        # Step the scheduler every epoch
+        scheduler.step()
 
         # 绘制损失曲线
         plt.plot(train_loss, label="Train Loss")
-        plt.plot(val_loss, label="Val Loss")
+        plt.plot(val_loss_list, label="Val Loss")
         plt.title("Train and Validation Loss")
         plt.xlabel("Epoch")
         plt.ylabel("Loss")

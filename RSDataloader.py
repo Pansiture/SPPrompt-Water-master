@@ -41,6 +41,32 @@ class PromptDataset_GID5(Dataset):
     def __len__(self):
         return len(self.gt_path_files)
 
+    def _augment(self, img, gt, prompt):
+        """Apply spatial and color augmentations."""
+        # Random horizontal flip
+        if random.random() > 0.5:
+            img = np.flip(img, axis=2).copy()
+            gt = np.flip(gt, axis=2).copy()
+            prompt = np.flip(prompt, axis=2).copy()
+
+        # Random vertical flip
+        if random.random() > 0.5:
+            img = np.flip(img, axis=1).copy()
+            gt = np.flip(gt, axis=1).copy()
+            prompt = np.flip(prompt, axis=1).copy()
+
+        # Random 90-degree rotations (0, 90, 180, 270)
+        if random.random() > 0.5:
+            k = random.randint(1, 3)
+            img = np.rot90(img, k, axes=(1, 2)).copy()
+            gt = np.rot90(gt, k, axes=(1, 2)).copy()
+            prompt = np.rot90(prompt, k, axes=(1, 2)).copy()
+
+        # Color jitter removed: brightness & contrast changes hurt water segmentation
+        # by confusing water with shadows/buildings in remote sensing imagery
+
+        return img, gt, prompt
+
     def __getitem__(self, index):
         img_name = os.path.basename(self.gt_path_files[index])
         base_name = os.path.splitext(img_name)[0]
@@ -65,7 +91,9 @@ class PromptDataset_GID5(Dataset):
         gt = np.expand_dims(gt, axis=0)
         gt = gt / 255
 
-
+        # Apply online augmentation during training
+        if not self.inference:
+            img_1024, gt, prompt_img = self._augment(img_1024, gt, prompt_img)
 
         if self.inference:
             return (torch.tensor(img_1024).float(),torch.tensor(prompt_img).float(),join(self.gt_path, img_name))
