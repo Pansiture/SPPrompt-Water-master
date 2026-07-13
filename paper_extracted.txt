@@ -1,0 +1,1092 @@
+
+--- Page 1 ---
+IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026 5608519
+Breaking the Scale Barrier: A Scale-Progressive
+Water Body Extraction Framework Inspired by
+Human Cognitive Mechanisms
+Fanlin Meng , Guo Zhang , Member, IEEE, Hao Cui , Gui Gao , Senior Member, IEEE, Wenxuan Liu ,
+Haifeng Li , Senior Member, IEEE, Wei Wang, and Zekun Hu
+Abstract—Water bodies are typical natural features that 8.1%,6.65%,and6.79%.Theseresultsvalidatetheeffectiveness
+exhibit significant variations in scale and appearance in high- of the proposed framework and offer a novel solution for
+resolutionremotesensingimageryduetotheinfluenceoffactors high-precisiondynamicmonitoringofwaterbodiesusingremote
+such as topography, temperature, sediment content, and aquatic sensing imagery. The source code and datasets will be made
+vegetation. Existing deep learning-based water body segmenta- publicly available at https://github.com/XinMe/SPPrompt-Water
+tion networks typically adopt a local sliding-window approach
+Index Terms—Deep learning, high spatial resolution (HSR)
+for training and inference. However, this strategy limits the
+imagery, prompt learning, water body extraction.
+receptive field and hampers the model’s ability to utilize con-
+textual information for identifying large-scale, complex-textured
+I. INTRODUCTION
+water bodies, often resulting in misclassification. To address
+these limitations, we propose a scale-progressive prompt water SURFACE water bodies, as a key component of the
+body extraction framework (SPPrompt-Water), inspired by the Earth’s ecosystem, hold significant value in areas such as
+hierarchical “global-to-local” cognitive mechanisms of human water resource management, environmental protection, urban
+vision. The framework employs progressive prompting to facili-
+planning, and disaster monitoring [1], [2]. Accurate and
+tate cross-scale contextual knowledge transfer, thereby enabling
+efficient extraction of water bodies is a critical foundation
+high-precisionwaterbodyextraction.Tosupportthisframework,
+wedesignanenforcedprompt-basedparallelsimulationtraining for informed scientific decision-making [3]. In recent years,
+strategy, which leverages cross-scale sample simulation and remote sensing-based water body extraction techniques driven
+label decomposition to obtain object-level supervision within the by deep learning have achieved remarkable progress, signif-
+same scene. Through parallel contrastive training, the model
+icantly improving the precision of water body detection in
+learns to perform segmentation with enforced prompt guidance.
+high-resolution imagery [4]. However, due to factors such as
+Extensive experiments conducted on the GID, Complex Water
+BodiesSegmentationDataset(CWBSD)andGLH-Waterdatasets limited training samples, model training and inference strate-
+demonstratethattheproposedmethodeffectivelybalancesspatial gies, and computational resource constraints [5], current deep
+continuity in large-scale water bodies with boundary precision learning methods still face challenges in terms of robustness
+in small-scale ones. Our method achieves mean Intersection
+andstabilitywhenadaptingtothemultiscalenatureofremote
+over Union (mIoU) scores of 83.22%, 92.27%, and 86.91% on
+sensing imagery and extracting spatially continuous water
+the respective datasets, outperforming existing approaches by
+bodies in large scenes.
+Received10June2025;revised24November2025and15January2026; Asatypicaltypeofnaturalland-cover,waterbodiesexhibit
+accepted 30 January 2026. Date of publication 6 February 2026; date of spatial scales and spectral characteristics that are jointly influ-
+current version 20 February 2026. This work was supported in part by the
+enced by multiple factors, including terrain variation, water
+NationalNaturalScienceFoundationofChinaunderGrantU24A20589and
+Grant 42301411 and in part by National Key Research and Development temperature, suspended sediment concentration, and aquatic
+Program of China under Grant 2024YFF0617401. (Corresponding author: vegetation distribution [1], [6], [7]. By summarizing existing
+HaoCui.)
+studies, we identify the following key challenges in deep
+Fanlin Meng is with the School of Earth Sciences and Resource, China
+University of Geosciences (Beijing), Beijing 100083 China, and also with learning-based water body extraction.
+theStateKeyLaboratoryofInformationEngineeringinSurveying,Mapping 1) Scale Variability Leads to Contextual Modeling
+and Remote Sensing, Wuhan University, Wuhan 430079, China (e-mail:
+Challenges [8]. High-resolution remote sensing images often
+mengfanlin@email.cugb.edu.cn).
+Guo Zhang, Hao Cui, Wei Wang, and Zekun Hu are with the cover extremely large scenes (e.g., on the order of 10 000×
+State Key Laboratory of Information Engineering in Surveying, Mapping 10000 pixels), and a single image may span tens to hundreds
+and Remote Sensing, Wuhan University, Wuhan 430079, China (e-mail:
+of square kilometers. Correspondingly, large water bodies
+guozhang@whu.edu.cn; cuihaocasm@whu.edu.cn; 18339190251@163.com;
+zekunhu@whu.edu.cn). (lakes, coastal water, and oceans) and small ones (ponds,
+Gui Gao is with the Faculty of Geosciences and Environmental Engi- narrowstreams)mayoccupytensofthousandstoonlyseveral
+neering, Southwest Jiaotong University, Chengdu 611756, China (e-mail: pixels within an image [6], [9], resulting in substantial differ-
+dellar@126.com).
+WenxuanLiuiswithWuhanDaspatialTechnologyCompanyLtd.,Wuhan ences in shape, size, and geometric morphology (as shown in
+430223,China(e-mail:liuwenxuan@daspatial.com). Fig.1).However,mainstreamdeeplearningmethodstypically
+Haifeng Li is with the School of Geosciences and Info-Physics, Central
+adopt local sliding-window strategies for both training and
+SouthUniversity,Changsha410012,China(e-mail:lihaifeng@csu.edu.cn).
+DigitalObjectIdentifier10.1109/TGRS.2026.3661185 inference. Prior studies have shown that such a processing
+1558-0644©2026IEEE.Allrightsreserved,includingrightsfortextanddatamining,andtrainingofartificialintelligenceand
+similartechnologies.Personaluseispermitted,butrepublication/redistributionrequiresIEEEpermission.
+Seehttps://www.ieee.org/publications/rights/index.htmlformoreinformation.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 2 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+Fig.2. Cognitiveprocessofhumanremotesensingimageinterpretation.
+“global-to-local” perception paradigm. This process begins
+Fig.1. Comparisonofdifferenttypesofwaterbodiesunderthesameimage with perceiving the topological contours and spatial distri-
+sizeandspatialresolution. bution of large-scale water bodies through multiscale image
+pyramids. Subsequently, attention shifts to local regions to
+paradigmconstrainsthemodel’seffectivereceptivefield,mak- analyze spectral and textural details. Finally, coherent water
+ingitdifficultforthenetworktocapturelong-rangecontextual bodyrecognitionisachievedbyintegratingmultilevelfeatures.
+Forinstance,evenwhenwaterbodiesareinafrozenstateand
+dependencies within each window [10], [11], particularly in
+are difficult to identify within small-scale sliding windows,
+regionswithcomplextextures.Consequently,theselimitations
+their boundary textures remain distinguishable from land at
+can lead to local misclassification errors and cause noticeable
+a global scale, as illustrated in Fig. 2. These global cues can
+mosaic artifacts after stitching the window-wise predictions
+effectivelyguidesubsequentreasoningatfinerlevels,enabling
+back into a full-scene result [5], [12].
+more precise segmentation at the local scale.
+2) Appearance Variability Leads to Local Feature Extrac-
+Inspired by this cognitive process, we aim to propose a
+tion Challenges [7], [13]. At a global scale, water bodies
+scale-progressive prompt water body extraction framework
+typically exhibit distinctive geometric shapes that facilitate
+(SPPrompt-Water) that simulates the human paradigm of
+their identification. However, at the local scale, their textural
+prior-guided global reasoning followed by local refinement.
+characteristics can vary substantially due to factors such as
+The core innovation of the framework lies in its construc-
+geographic location, seasonal dynamics, sediment concentra-
+tion of a hierarchically progressive enforced prompt learning
+tion, and the distribution of aquatic vegetation. For example,
+mechanism, which enables effective cross-scale contextual
+Chen et al. [7] reported that the texture patterns of frozen
+lakes differ markedly from those of liquid water; similarly, knowledge transfer. Our goal is to overcome the local percep-
+tion limitations of conventional sliding-window approaches,
+turbid rivers with high sediment loads present significantly
+different spectral–textural appearances compared with clear maintaining spatial continuity for large-scale water bod-
+ies while accurately identifying fragmented boundaries and
+water bodies [13].
+internal heterogeneity of small-scale water bodies. Accord-
+However, these two challenges often co-occur in practical
+applications,jointlyincreasingthedifficultyofaccuratewater- ingly, the main objectives of this study are outlined as
+follows.
+body extraction [14]. Fundamentally, both the contextual gaps
+causedbyscalevariationsandthelocalspectralheterogeneity 1) To develop the SPPrompt-Water, which constructs a
+arising from phenotypic differences are closely related to the hierarchically progressive contextual co-optimization
+model’slimitedabilitytoleveragecontextualinformation[15]. mechanism that integrates global semantics with local
+If cross-scale and cross-region contextual constraints can be texture details. It is designed to enhance the model’s
+incorporated during inference, the model would be able to ability to capture intraclass heterogeneity within water
+interpret the overall morphology of water bodies within a bodies and suppress misclassification in spectrally
+broader structural framework, thereby naturally compensating ambiguous regions.
+for inconsistencies in local texture and spectral appearance. 2) To propose an enforced prompt-based supervised
+For example, with access to global spatial context, the model learning strategy by decomposing object-level labels
+can correctly identify heterogeneous regions within a large into coarse-grained prompt-aware semantic priors and
+water body—such as those affected by ice or algae—as parts enforcing parallel contrastive training to enhance
+of the same class, rather than incorrectly segmenting them prompt-guided segmentation.
+into separate components. Therefore, we argue that enhancing 3) Toconstructalarge-scalesemanticsegmentationdataset
+contextual modeling capability is an effective approach to for remote sensing water bodies—the complex water
+simultaneously mitigating both challenges and improving the bodies segmentation dataset (CWBSD)—which encom-
+stability and reliability of water-body extraction in complex passes a diverse range of challenging scenarios, includ-
+scenarios. ing ice–water mixed lakes, high-sediment rivers, and
+We conducted an in-depth analysis of the human cog- water surfaces partially obscured by thin clouds.
+nitive process in remote sensing image interpretation and The rest of the article is organized as follows. Section II
+found that humans typically follow a hierarchical, progressive introduces the related work in the water extraction field.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 3 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Section III details the SPPrompt-Water. Section IV describes 1) CNN-basedmethodsforsemanticsegmentationperform
+the datasets and the experiments. Finally, Section V pixelwise classification of water bodies by leveraging
+summarizes the conclusion. localfeatureextraction[26],[27].Withtheadvancement
+of deep learning, classic architectures such as ResNet
+II. RELATEDWORK [28], U-Net [29], and DeepLab [30] have been widely
+appliedinremotesensingimagesegmentation,providing
+A. Traditional Remote Sensing Water Body Extraction
+a solid technical foundation for water body extrac-
+Methods
+tion. For example, DensePPMUNet-a [31] introduces a
+Traditional remote sensing methods for water body extrac-
+dense pyramid pooling module to enhance multiscale
+tion primarily rely on the strong absorption characteristics
+contextual feature fusion, thereby improving extraction
+of water in the near-infrared (NIR) and shortwave-infrared
+accuracy.Anotherrepresentativework,theCOMframe-
+(SWIR) bands, which result in low reflectance. By exploit-
+work[32],usesanobject-contextualperceptionnetwork
+ing the spectral differences between water and other land
+to perform cross-dataset water body extraction, signifi-
+covers such as vegetation and soil, these methods achieve
+cantly boosting model generalization and applicability
+classification. Specifically, the features can be divided into across different remote sensing scenes. Additionally,
+two categories: single-band features and multiband spec-
+MSResNet [33] incorporates specially designed mod-
+tral relationships. The former directly uses low reflectance
+ules to distinguish water bodies of varying scales and
+values in bands such as NIR (e.g., Landsat B5) to iden-
+shapes and introduces residual connections to address
+tify water bodies [16], while the latter constructs water the difficulty in delineating fragmented water bound-
+indicessuchasthenormalizeddifferencewaterindex(NDWI)
+aries, thereby enhancing edge recognition performance.
+and its modified forms (MNDWI) to enhance the con-
+However, traditional CNNs are limited by their local
+trast between high reflectance in visible bands and strong
+receptive fields and struggle to capture the global con-
+absorptioninNIR/SWIR,therebyimprovingseparability[17],
+textual dependencies that are widely present in remote
+[18], [19].
+sensing images. This often leads to susceptibility to
+In terms of implementation, traditional methods mainly
+spectral noise and intraclass heterogeneity in complex
+includethreshold-basedapproaches,whichrelyonpriorrules,
+environments [34], [35].
+and data-driven classifiers. Threshold methods are compu-
+2) Transformer-based architectures have revolutionized
+tationally simple, but the selection of thresholds depends
+feature-modeling paradigms [36], [37]. Their self-
+on human expertise and is prone to errors due to shad-
+attention mechanisms enable long-range dependencies
+ows or clouds. Early classifier methods employed statistical
+between pixels, overcoming the spatial limitations of
+models such as maximum likelihood classification, and later
+conventional CNNs [37]. For instance, Ding et al. [38]
+evolved to machine learning approaches including support
+proposed a hybrid architecture that employs a trans-
+vectormachines(SVMs)[20],decisiontrees[21],andrandom
+former encoder to capture global contextual features
+forests [22].
+while using a CNN decoder to preserve local details,
+Traditional methods heavily depend on spectral informa-
+therebyenhancingthecompletenessofcontinuouswater
+tion and perform well on medium-resolution imagery with
+body extraction in wide-area imagery. Zhong et al. [39]
+relatively complete spectral bands, including SWIR (e.g.,
+developed NT-Net, which integrates multilevel trans-
+Landsat, Sentinel-2). However, high-resolution imagery gen-
+formermodulestosuppressbackgroundinterferenceand
+erally has limited spectral resolution and fewer bands, often
+employsboundaryenhancementstrategiestoaddressthe
+lacking SWIR, which leads to spectral confusion between
+disconnectionofsmallwaterbodies.Recentresearchhas
+water and dark surfaces such as shadows, thereby limiting the
+increasingly focused on heterogeneous feature fusion.
+applicability of traditional methods [23], [24].
+For example, Zhang et al. [40] proposed a collabora-
+tive Swin transformer–CNN framework that establishes
+B. Deep Learning-Based Remote Sensing Water Body globalsemanticrelationshipswhilepreservinglocaltex-
+Extraction Methods turedetails,enablingsubpixel-levellocalizationofwater
+Driven by advancements in deep learning, the field of boundaries in complex terrains.
+semantic segmentation for remote sensing imagery has In summary, although deep learning-based semantic seg-
+achieved remarkable progress. In particular, for water body mentation methods provide powerful technical support for
+extraction tasks, deep learning methods have demonstrated high-resolution remote sensing water body extraction, their
+significant improvements in identifying water bodies under inherent limitations still constrain performance in complex
+complex scenarios, owing to their powerful capabilities in scenarios [6], [38]. First, regarding scale characteristics,
+feature extraction and representation [25]. mainstream methods generally adopt a “slice-then-process”
+Inrecentyears,convolutionalneuralnetworks(CNNs)have paradigm [12], [41], which, due to its limited receptive field,
+achieved remarkable progress in remote sensing semantic struggles to capture long-range contextual dependencies. This
+segmentation tasks due to their powerful ability to extract often leads to fragmented segmentation of large water bodies
+localfeatures,whiletransformerarchitectures,knownfortheir andconfusioninsmallwaterbodieswithhighlyvariablemor-
+superior global modeling capabilities, have gradually become phologies[5].Second,intermsoffeatureperception,whether
+essential tools for interpreting complex scenes. usingCNNsortransformermodels,theabilitytodiscriminate
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 4 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+local spectral and texture variations remains insufficient when also beginning to show promise in remote sensing applica-
+facedwithappearancevariabilitycausedbyice,snow,oralgae tions. For example, Osco et al. [51] proposed applying the
+[7], [13]. This makes the models susceptible to interference Grounded-SAM framework [52] to remote sensing imagery.
+from heterogeneous water regions and background objects, By using natural language prompts to guide GroundDINO
+resulting in misclassification. Therefore, exploring a new [53] in object localization, followed by precise segmenta-
+paradigm that can collaboratively model both global context tion via SAM, the framework enables zero-shot semantic
+andlocaldetailsiscrucialtoovercomingthecurrenttechnical segmentation of remote sensing images based on textual
+bottlenecks [42]. descriptions.
+In summary, prompt learning has demonstrated superior
+C. Prompt Learning feature extraction capabilities in computer vision tasks. In
+Thefundamentalprincipleofpromptlearningliesinencod- recent years, this approach has been gradually introduced
+ing task objectives as “prompts” that are input into the into the field of intelligent remote sensing interpretation, with
+model. By leveraging these prompts, the model can activate several studies proposing adaptive prompt learning frame-
+its prelearned knowledge, enabling it to perform new tasks works for tasks such as land-cover classification and instance
+with no or minimal parameter updates. These prompts can segmentation. Building upon the strengths of prompt learn-
+take the form of natural language sentences, trainable vectors, ing, we conduct research on remote sensing-based waterbody
+or spatial cues within images. Depending on the content interpretation, aiming to enhance the accuracy of waterbody
+of the prompt, the model adjusts its attention mechanisms extraction and improve boundary delineation performance.
+and feature processing strategies, guiding it to focus on
+regions or semantic information relevant to the prompt. This III. METHODOLOGY
+mechanism not only effectively bridges the semantic gap
+We simulate the hierarchical and progressive cognitive
+between downstream tasks and pretrained models but also
+mechanism of human vision—from global perception to
+significantly enhances the model’s generalization and transfer
+local refinement—and propose a scale-progressive, prompt-
+capabilities. The theoretical foundation of this paradigm can
+guided framework for waterbody extraction. As illustrated
+be traced back to transformative research in the field of
+in Fig. 3, this framework consists of two main compo-
+natural language processing (NLP). Inspired by large-scale
+nents: network architecture design and a training–inference
+pretrained models such as GPT-3 [43], researchers proposed
+strategy. Architecturally, we develop a novel network named
+the use of textual prompts to steer model behavior. This
+SPPrompt-Water,whichincorporatesapromptguidancemod-
+paradigm was subsequently extended to the field of com- ule to transfer spatial-semantic information across different
+puter vision, where learnable prompt vectors allow models
+hierarchicallevels.Thisfacilitateslayerwiserefinementofseg-
+to dynamically reconstruct feature representations based on
+mentationresults andenablesaccuratedelineation ofcomplex
+task context. As a result, models have demonstrated strong
+waterbody structures. In terms of strategy, we introduce an
+performance in visual tasks such as image classification and
+enforced prompt-based parallel simulation training approach
+semantic segmentation [44], [45]. A representative example is
+that enhances the model’s prompt guidance capability by
+the segment anything model (SAM) [46], which establishes
+integrating label decomposition and perturbation simulation
+a new benchmark in semantic segmentation by incorporat-
+mechanisms. During inference, we adopt a scale-progressive
+ing a flexible prompting mechanism and robust zero-shot
+reasoning mechanism, which follows a closed-loop opti-
+capabilities.
+mization process of “downsampling–prompting–upsampling,”
+In the field of intelligent remote sensing interpretation,
+achieving fine-grained segmentation of waterbody regions
+prompt learning has emerged as a novel paradigm and is
+in a progressive manner from global context to local
+gradually being applied to key tasks such as semantic seg-
+detail.
+mentation of geospatial objects and object detection. Current
+research primarily focuses on the use of visual prompts. For
+A. SPPrompt-Water Net
+instance, Immanuel and Sinulingga [47], building upon the
+SegGPT framework [48], proposed an innovative hierarchical The SPPrompt-Water Net is responsible for encoding both
+prompt learning architecture. By independently optimizing the image and the prompts at each layer, facilitating guided
+prompt vectors for newly introduced object classes, their fusion. By integrating semantic guidance and detail enhance-
+approach effectively mitigates the issue of catastrophic for- ment, the network improves segmentation performance in
+getting in continual learning scenarios. Similarly, Chen et al. complex scenes. The overall architecture comprises a prompt
+[49]developedRSPrompter,agroundbreakingframeworkthat guidancemoduleandadetailrefinementmodule,asillustrated
+introduces prompt learning into instance segmentation tasks. in Fig. 4. The specific design is as follows.
+Leveraging a self-supervised learning paradigm, RSPrompter 1) Prompt Guidance Module: The primary function of
+adaptively generates visual prompt embeddings enriched with the prompt guidance module is to fuse the low-resolution
+geometric priors. In response to the characteristics of aerial segmentation results from the previous layer with the higher-
+imagery, GeoSAM [50] fine-tunes the SAM by integrating resolution image features at the current layer. The core idea
+sparse point prompts with dense visual prompts, significantly is to treat the low-resolution prompt map from the previous
+improving semantic segmentation accuracy for transporta- layer as an analogy to the global perception process in human
+tion infrastructure. On the other hand, textual prompts are vision, which provides a coarse estimation of the target’s
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 5 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Fig.3. Overallarchitectureoftheproposedframework.
+Fig.4. SPPrompt-WaterNet.
+spatial extent. In contrast, the high-resolution image at the The detailed workflow is as follows. Given a prompt image
+current layer offers rich detail information to further refine I ∈ RH/2×W/2, we first obtain the prompt embedding fea-
+p
+boundary representations based on the coarse outline. This tures E through convolution. A learnable output vector q
+p
+process is conceptually similar to a pyramid-based multiscale is then introduced into the prompt embedding to construct
+processing strategy, where global structures are first captured the enhanced prompt representation Q = [E ;q]. Based
+P p
+atlowerresolutions,andsubsequently,higher-resolutionlayers on this, prompt guidance module first performs self-attention
+are guided to extract local fine-grained features, ultimately withintheprompttocapturetheglobalstructuralrelationships
+leading to more accurate segmentation results. among the prompt tokens. Next, a bidirectional cross-modal
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 6 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+attention mechanism is established: the token-to-image atten- [56].Thischoiceismotivatedbythecomplementarystrengths
+tion transfers positional and structural prior information from of the two losses in handling class imbalance. Dice loss
+theprompttokenstotheimagefeatures,guidingthebackbone tacklesmacroscopicclassimbalancebydirectlyoptimizingthe
+network to focus on potential target regions; conversely, the overlap of the predicted segmentation regions and is defined
+image-to-token attention uses image semantics to adaptively as follows:
+modulatethepromptfeatures,allowingthepromptinformation P
+2 y y +(cid:15)
+to adjust to the current scene distribution. After these two L =1− true pred (4)
+Dice P y + P y +(cid:15)
+informationflowspassthroughthreelayersofMLPforfurther true pred
+abstraction, a context-aware fused representation is obtained
+where y and y denote the ground-truth labels and pre-
+true pred
+P =MLP3(AttnFuse(Q ,F )) (1) dicted probabilities, respectively, and (cid:15) is a small smoothing
+fuse P trans
+term to prevent division by zero. By measuring the overlap of
+whereAttnFuse(·)representstheintegratedcomputationofthe
+the entire segmentation region, this loss is insensitive to the
+aforementioned self-attention and bidirectional cross-modal numberofforegroundpixels,therebyeffectivelyimprovingthe
+attention.Finally,aftertheimagefeatureK isupsampledvia
+img segmentation performance of small targets.
+transposedconvolution,itismultipliedelementwisewith P fuse However, dice loss may lack sufficient focus when dealing
+to obtain the water foreground probability map as follows:
+with a large number of simple background pixels. Therefore,
+F =Conv (cid:0) K (cid:1) (cid:12)P . (2) we introduce focal loss to concentrate on hard-to-classify
+prompt img fuse
+pixels at a more fine-grained level. It dynamically down-
+This module leverages the bidirectional guidance between
+weights easily classified samples through a modulating factor
+prompt priors and image features to effectively enhance the
+and is defined as follows:
+model’s discriminative capability in complex backgrounds.
+WeadoptthepretrainedSAM[46]modelastheencoderof L =−α (cid:0) 1−y (cid:1)γ log (cid:0) y (cid:1) (5)
+Focal pred pred
+thetransformerencodertofullyleverageitspowerfulsegmen-
+tation capabilities. To preserve its original feature extraction whereαisthebalancingfactorandγisthefocusingparameter.
+performance, we freeze the parameters of the transformer Inthiswork,wesetγ=2andα=1.Thisdesignensuresthat
+encoder during training, keeping its weights unchanged with- the model continuously pays attention to more challenging
+out fine-tuning. samples during training, thereby further improving segmen-
+2) Detail Refinement and Feature Fusion: Although the tation accuracy in complex backgrounds. By combining the
+transformerencodereffectivelycapturesglobalsemanticinfor- strengths of both losses, we define the final loss function as
+mation, it primarily serves the prompt guidance module and their weighted sum
+is thus susceptible to the influence of large-scale responses in
+thepromptedregions.Thiscanleadtotheunderrepresentation L Total =λ Dice L Dice +λ Focal L Focal . (6)
+of fine-grained, small-scale water bodies. To address this
+limitation,weintroducetheSwintransformer[54]asaparallel Dice loss ensures the overall geometric integrity of the
+branch to enhance the extraction of local detail features. segmented targets, while focal loss refines pixel-level clas-
+The Swin transformer employs window-based multihead sification boundaries. We expect that the synergistic effect of
+self-attention (W-MSA) to model local features. Unlike thetwolosseswilljointlyenhancethemodel’srobustnessand
+ViT [37], which performs self-attention globally, W-MSA overall performance in scenarios with class imbalance.
+restricts attention computation to nonoverlapping local win-
+dows, thereby reducing computational complexity. However,
+B. Prompt-Guided Training and Inference Method
+this limitation also constrains information exchange across
+differentwindows.Toaddressthisissue,theSwinTransformer To address the limitations of conventional image-label
+introduces the SW-MSA mechanism in adjacent layers. By supervision paradigms, in which models passively fit the
+shiftingwindowpositionsbetweenlayers,SW-MSAfacilitates data distribution and lack dynamic semantic guidance, we
+cross-window feature fusion, thereby enhancing the model’s propose a prompt-guided training and inference method. Dur-
+capability in fine-grained representation learning. ing training, we construct an enforced prompt-based parallel
+Atthefinalstageofthenetwork,inordertofurtherintegrate simulation framework that explicitly enhances the association
+local detail features with prompt-guided information, we con- between prompt vectors and target regions by decomposing
+catenatethefeaturerepresentationF ,extractedbytheSwin label regions and prompt samples for parallel training. In the
+swin
+transformer,withtheprompt-guidedfeaturesF ,outputby inference phase, we introduce a scale-progressive prompting
+prompt
+the prompt guidance module, along the channel dimension to mechanism that follows a closed-loop optimization process
+obtain the final fused representation Y, as formulated in the consistingofdownsampling,prompting,andupsampling.This
+following equation: mechanismintegratesmultiscalefeatureinformation,allowing
+Y =Concat (cid:0) F ,F (cid:1) . (3) coarse-grained prompts to progressively guide fine-grained
+swin prompt segmentation. It enables hierarchical and refined delineation
+To address the significant class imbalance in this task (i.e., of water bodies, from global coherence to local detail, effec-
+backgroundpixelsvastlyoutnumbertargetpixels),weemploy tively alleviating the spatial fragmentation problem caused by
+a hybrid loss function combining dice loss [55] and focal loss patch-based processing in traditional approaches.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 7 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+1) Enforced Prompt-Based Parallel Simulation Training:
+The conventional image-label supervision paradigm relies on
+supervised training for the model to learn the mapping from
+images to annotations, which essentially results in passive
+fitting of the data distribution. In this study, we propose the
+enforcedprompt-basedparallelsimulation-trainingframework.
+Itscoreideaistoprovideonlypartialsupervisoryinformation
+for the sample images and, through prompt learning and
+contrastive training, enable the model to acquire the ability
+to perform segmentation guided by prompts, achieving a
+“segment where pointed” effect. The overall framework is
+summarized in Algorithm 1.
+As shown in Fig. 5, during the training stage, we auto-
+matically construct prompt samples from the annotated data Fig.5. Illustrationofenforcedprompt-basedparallelsimulationtraining.
+through a three-step process.
+Algorithm 1 Enforced Prompt-Based Parallel Simulation
+1) Label Topological Decomposition: We first perform
+Training
+connected-component analysis on water body labels,
+Input: Training image set I, label set L, number of iterations T
+decomposing complex whole-water polygons into Output: Trained model parameters Θ
+multiple spatially independent subregions to obtain 1: for t=1 to T do
+object-level supervision. 2: Sample a mini-batch (I batch, L batch) from the dataset
+2) Morphological Perturbation (Erosion/Dilation): To sim- 3: for each image-label pair (I,L) in (I batch ,L batch ) do
+4: # 1. Label decomposition and prompt generation
+ulate potential uncertainties in real prompts, each
+5: R= RandomMerge(TopologicalDecomposition(L))
+subregion is randomly eroded or dilated (with the struc-
+# Eq.(7)
+tural element size randomly chosen between 3 and 10), 6: Prompt Set =∅
+generating noisy prompt maps that enable the model to 7: Label set Set = ø
+handle imprecise prompts. 8: for each decomposed region R j in R do
+3) Downsampling: To create coarse-grained prompts com- 9: P j = DownSample(Dilation(Erosion (R j )))
+# Eq.(8), prompt map
+patible with the hierarchical network, the perturbed 10: L j =R j # Guidedlabel
+prompt maps are downsampled to obtain low-resolution 11: Add (P j ,L j ) into Prompt set and Label set
+prompts, which serve as guidance for lower-level 12: end for
+network inputs. Through these three steps, we gener- 13: # 2. Parallel simulation training
+ate a set of enhanced prompt samples corresponding 14: for each prompt-1abel pair (P,L guide ) in (Prompt Set , Label
+) do
+Set
+to the original images, along with their region-level 15: Y pred = SPPrompt-Water-Net (I,P) # Forward pass
+supervisory labels. 16: Loss = ComputeLoss (Y pred ,L guide ) # Simplifiedloss
+Let the original label image be L∈{0,1}H×W. By applying 17: Backpropagate and accumulate gradients
+18: end for
+the topological decomposition function T(·), an initial set of 19: Update model parameters Θ using accumulated gradients
+independent subregions T(L) can be obtained. Based on this, 20: end for
+theRandomMergefunctionrandomlysamplesfromthesesub- 21: end for
+regions and merges the sampled subregions using a pixelwise 22: return Θ
+union, thereby generating a set of prompts R with varying
+coverage
+bodyregionswithintheimage,therebyformingcorresponding
+R=RandomMerge(T(L))={R 1 ,R 2 ,...,R N }. (7) region-guided labels (e.g., L 2 , L 3 , and L 4 in Fig. 5). Based on
+the correspondence between each prompt and its label, the
+Subsequently,asshownin(8),eachimageR j intheprompt network performs local supervised learning under different
+set R undergoes erosion E(), dilation D(), and downsampling
+prompt conditions, progressively guiding the establishment
+downsample() operations
+of an explicit association from prompts to target responses.
+P j =DownSample (cid:0) D (cid:0) E (cid:0) R j (cid:1)(cid:1)(cid:1) ∈RH 2 ×W 2 (8) This mechanism enforces the model to learn texture features
+within the prompt range for region-focused constraints and
+where the kernel size for erosion and dilation is randomly to apply feature activation penalties to nonprompt regions for
+selected between 3 and 10, the number of iterations set to 1. background suppression.
+During the training phase, images and prompt patches are 2) Scale-Progressive Prompt-Guided Inference: In this
+jointly input into the SPPrompt-Water Net to achieve guided section,wedesignascale-progressivepromptinferencemech-
+feature interaction and water body region extraction. The anism that achieves gradual refinement from global structures
+prompt patches serve as spatial prior knowledge to construct to local boundaries. This method constructs a multiscale
+spatially constrained supervision, enhancing the model’s per- feature pyramid based on cascaded downsampling, using
+ceptionofdesignatedregions.Specifically,forthesameremote coarse-grained prompts as high-level priors to progressively
+sensingimage,multipledifferentpromptmapsareconstructed guide the optimization of low-level local features. Through a
+(e.g., P , P , and P in Fig. 5), each covering different water closed-loopprocessofdownsampling,prompting,andupsam-
+2 3 4
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 8 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+segmentation result was reconstructed by spatially stitching
+together 43 subimages, achieving a high-precision prediction
+output consistent with the original image size.
+To accommodate scenarios where explicit prompts are
+unavailable during inference, we introduce a “default prompt
+token” at the highest scale layer (Layer N), which is imple-
+mented as a zero-valued tensor and is shared across all
+images and scenes. When no prompt image is provided, this
+token serves as a placeholder input to the prompt module,
+enablingthenetworktooperatenormallyundera“no-prompt”
+condition. Although it does not carry any prior information
+aboutthescene,itpreservesthestructuralconsistencyrequired
+by the prompt mechanism. Subsequently, the model uses the
+predictionfromLayerNasthepromptforLayerN−1,andthis
+processisrepeatedacrosssubsequentlayers.Throughthistop-
+down,progressivepromptmechanism,themodelcangenerate
+increasingly refined pseudo-prompts at each layer, ultimately
+producing reliable water body segmentation results.
+Fig.6. Illustrationofthescale-progressivepromptinferencemechanism.
+Algorithm 2 Scale-Progressive Prompt-Guided Inference
+Input: Full-scene image I , model SPPrompt-Water-Net, pyramid
+pling, multiscale semantic collaborative inference is realized, 0
+levels N
+effectively enhancing the continuity expression and boundary Output: Final segmentation Y
+0
+delineation of complex water body structures. 1: #Build image pyramid
+Giventhefull-sceneremotesensingimageI ,amultiresolu- 2: for n=N down to 0 do
+tionfeaturepyramidisconstructedbycascaded 0 downsampling 3: I n = Downsample(I 0 , factor =2n)
+4: end for
+at a rate of 2n per level. As illustrated in Fig. 6, the highest
+5: # Top-level coarse segmentation
+downsampling level is defined as Layer N, with its resolution 6: P N = InitializePrompt(Size(I N ))
+corresponding to I n = I 0 × 1/2n. At this level, the image 7: Y N = SPPrompt-Water-Net (I N ,P N )
+I ∈ RH×W is obtained, along with the corresponding coarse- 8: #Progressive top-down refinement
+g n rained prompt P ∈ RH/2×W/2. At Layer N, the initial 9: for n=N−1 down to 0 do
+segmentation result n Y n ∈ RH×W is first generated through the 1 1 0 1 : : P I n N s = ub S = p S li p t( l Y it { ( n I + n 1 ) } ) # # 4 4 su s b u - b i - m p a ro g m es pts
+SPPrompt-Water Net 12:
+13: for i=1 to 4 do
+Y n =SPPrompt(I n ,P n ). (9) 14: Y nˆi = SPPrompt-Water-Net (I n subˆi ,P nˆi )
+15: end for
+The initial result Y is divided along the spatial dimen-
+n 16:
+sion into four subregions {Pi n−1 }4 i=1 ∈ RH/2×W/2, which serve 17: Y n = Mosaic ({Y n n 1 }) # merge sub-results
+as prompt embeddings Pi ∈ RH/2×W/2 for layer N − 1. 18: end for
+n−1
+Simultaneously, the image I n ∈ RH×W is partitioned in the 19: return Y 0
+same spatial manner and then upsampled by a factor of two
+to obtain the aligned layer N − 1 images Ii ∈ RH×W. At each scale level, the low-resolution prediction from
+n−1
+Subsequently,morerefinedsegmentationresultsYi ∈RH×W the previous layer is directly used as the prompt input for
+n−1
+are generated through SPPrompt-Water Net. This top-down the next layer, forming a “coarse-to-fine” hierarchical prompt
+process is repeated at each layer with the same operations chain. The coarse-scale prompts provide the overall structure
+until the original resolution is restored at layer N = 0. and large-scale water distribution, while the fine-scale mod-
+As shown in (10), at layer 0, the images are restored to the ules iteratively refine local boundaries under the guidance of
+original resolution, and all subregions {Yi}4N are concatenated the prompts, achieving progressive refinement from global
+0 1
+accordingtotheirspatialpositionstoreconstructthecomplete to local. This closed-loop, progressive inference mechanism
+high-resolution segmentation result Y significantly enhances both the spatial continuity of large-
+0
+Y =mosaic (cid:16) ∪4NPPrompt (cid:0) Ii,Pi(cid:1)(cid:17) . (10) scale water bodies and the detailed delineation of small-scale
+0 1 0 0 boundaries.
+The above process is summarized in Algorithm 2.
+Taking the GID dataset as an example, its original IV. EXPERIMENTS
+image resolution is 7300 × 6908 pixels. To meet the scale
+A. Datasets
+consistency requirements of the hierarchical segmentation
+network, the image is first padded with zeros to expand TovalidatethegeneralizationabilityoftheSPPrompt-Water
+it to 8192 × 8192 pixels. Based on the ratio between the network, we conducted experiments on two datasets: the GID
+image size and the minimum sub-image scale, the number of dataset and the CWBSD dataset.
+hierarchy levels was set to 3. Finally, at level 0, the complete
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 9 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Fig.7. IllustrationofdifferenttypesofwaterbodiesintheCWBSDdataset.
+1) GID: The GID dataset is constructed using imagery global surface water detection. It contains a total of 250
+from the Gaofen-2 (GF-2) satellite and contains a total of satellite images, each with a resolution of 12800 × 12800
+150 scenes with an original resolution of 7300×6908 pixels. pixels and a spatial resolution of 0.3 m. The images are
+It is primarily designed for land cover classification tasks. sourced from the Google Earth platform, covering multiple
+The original dataset includes annotations for five land cover regions worldwide (excluding Antarctica) and spanning the
+classes: built-up, farmland, forest, meadow, and water. To period from 2011 to 2022 [57].
+meet the requirements of our method, we retained only the
+water class and divided the images into smaller patches of
+B. Evaluation Indexes
+1024 × 1024 pixels to ensure that the model could more
+effectively learn water-related features. The test set defined To quantitatively evaluate the performance of different
+methods, we compared the predicted masks with the ground
+by the original authors of the GID dataset was used for
+truth and adopted three commonly used metrics: overall
+evaluation, while the remaining images were allocated for
+accuracy (OA), mean intersection over union (mIoU), and
+trainingandvalidation,ensuringthecomparabilityandvalidity
+F1-score. The formulas for these metrics are defined as
+of experimental results.
+follows:
+2) CWBSD: To further validate the effectiveness of
+TP+TN
+SPPrompt-Water Net, we constructed a dataset encompassing OA=
+TP+TN+FP+FN
+a wide range of complex water body scenarios. This dataset
+N
+includesvariouschallengingwatertypes,suchasfrozenlakes, mIoU= 1 X TP i
+ice-water mixed lakes, algae-rich waters, lakes partially cov- N TP +FP +FN
+ered by thin clouds, rivers with high sediment concentrations,
+i=1 i i i
+2TP
+andwatersurfacesaffectedbysolarreflections,asillustratedin F1= (11)
+2TP+FP+FN
+Fig. 7. Additionally, the dataset contains small-scale artificial
+water bodies such as man-made channels and ponds, ensuring where TP, TN, FP, and FN represent the number of true water
+a diverse representation of water types. The dataset comprises pixels, true background pixels, false water pixels, and false
+a total of 360 remote sensing images with variable sizes, background pixels, respectively. N denotes the total number
+rangingfrom1665×1121–18722×11612pixels,andspatial of classes, and i indicates the ith class. In this study, N is
+resolutions between 0.8 and 2 m. Each image contains three set to 2.
+spectral bands (RGB) and is sourced from the Gaofen-1
+(GF-1) and GF-2 satellites. During training, we uniformly C. Comparative Experiments
+cropped the images into 1024×1024 patches. To ensure class
+To evaluate the effectiveness of the proposed SPPrompt-
+balance, we removed patches that did not contain any water
+water method in waterbody extraction tasks, we conducted
+bodies. The dataset was then split into 60% for training,
+comparisons with seven representative deep learning-based
+20% for validation, and 20% for testing. The test set is
+waterbody extraction methods: U-Net [29], Swin trans-
+madepubliclyavailabletofacilitatereproducibilityandfurther
+former [54], QTNUnet [10], MECNet [11], MSLANet [25],
+research.
+MSResNet [33], and SkySense++ [58]. These methods were
+3) GLH-Water: The GLH-water dataset is a large-scale, tested on the GID, CWBSD, and GLH-Water datasets.
+ultrahigh-resolution satellite imagery dataset designed for
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 10 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+Fig. 8. Visual results of different methods on GID. (a) Image. (b) Label. (c) U-Net. (d) Swin Transformer. (e) QTNUnet. (f) MECNet. (g) MSLANet.
+(h)MSResNET.(i)SkySense++.(j)SPPrompt-Water(ours).
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 11 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+During inference, we introduce the proposed scale- TABLEI
+progressive prompt-guided inference mechanism. In contrast, QUANTITATIVECOMPARISONRESULTSOFGID
+baseline methods, which do not incorporate a prompt-guided
+structure, still rely on a sliding-window inference strategy,
+where the full image is divided into patches for prediction
+and then reconstructed into a complete result. To ensure
+fairness,allquantitativemetricsforthecomparedmethodsare
+calculatedandevaluatedbasedonthereconstructedfull-scene
+predictions.
+1) GID: As shown in Table II, on the GID dataset,
+the proposed SPPrompt-Water method achieved state-of-the-
+art segmentation performance, outperforming all comparative
+methods across multiple evaluation metrics. Specifically, it TABLEII
+reached an OA of 99.09%, with an mIoU of 83.22%, and an QUANTITATIVECOMPARISONRESULTSOFCWBSD
+F1-score of 85.92%. Although most methods reported high
+OA values (all exceeding 96%), this is largely due to the
+dominance of background and target categories in the test set,
+which limits the sensitivity of OA in reflecting true model
+discrimination—especially in the presence of minimal bound-
+ary complexity. In contrast, mIoU and F1-score provide more
+reliable evaluations of a model’s ability to accurately identify
+waterbodies. For example, in terms of mIoU, SPPrompt-
+water outperforms the second-ranked SkySense++ by 8.1%
+points (83.22% versus 75.12%), and in F1-score, it exceeds
+Swin transformer by 7.07% points (85.92% versus 78.85%),
+2) CWBSD: AsshowninTableII,theproposedSPPrompt-
+demonstrating its superior accuracy in target localization and
+Water method achieves the best performance on the CWBSD
+boundary delineation. These results indicate that SPPrompt-
+dataset, with an OA of 99.51%, mIoU of 92.27%, and
+Waternotonlydistinguisheswaterbodiesfromthebackground
+F1-score of 93.97%, significantly outperforming all other
+accurately but also possesses stronger representational and
+comparison methods. Compared with the second-best per-
+discriminativecapabilitieswhenhandlingcomplexboundaries
+forming model, MSResNet, SPPrompt-Water improves OA
+and fine structures.
+by 2.42%, mIoU by 6.65%, and F1-score by 4.98%. These
+As shown in the comparison results in Fig. 8, SPPrompt-
+improvements indicate that the model possesses a stronger
+Waterdemonstratessuperiorperformanceinpreservingwater-
+body boundary integrity and capturing fine details, effectively discriminative capability along class boundaries, effectively
+reducing both false positives and false negatives in waterbody
+reducing shape distortion and misclassification. In complex
+edge regions. Furthermore, it enhances recognition accu-
+scenarios where waterbodies are interwoven with farmland,
+racy in small-scale or morphologically irregular waterbodies,
+models such as QTNUnet, MECNet, and MSLANet exhibit
+thereby improving the model’s overall spatial consistency
+notable confusion between farmland and pond categories.
+and semantic completeness. These results demonstrate that
+In contrast, SPPrompt-Water achieves higher accuracy in
+by introducing a prompt guidance module, SPPrompt-Water
+both regional segmentation and class discrimination. In the
+effectively integrates multiscale spatial contextual informa-
+blue-highlighted area of Fig. 8, SPPrompt-Water successfully
+tion, significantly enhancing the model’s ability to identify
+extracts water branches that are not labeled in the ground
+waterbodies of various scales and irregular shapes.
+truth, whereas Swin transformer fails to detect this region.
+Through comparative experiments on representative scenes
+AlthoughU-Net,QTNUnet,andMSResNETdoidentifyparts
+ofthewaterbody,theirsegmentationresultssufferfromblurred shown in Fig. 9, we conducted a visual evaluation of the
+semantic segmentation performance of each model. When the
+boundaries and noticeable shape distortions. Similarly, in
+water surface is densely covered with algae accompanied by
+the green-highlighted area, a small pond in the lower-left
+significantcolorvariation,thebaselinemodelstendtomisclas-
+corner is not annotated in the ground truth, yet all methods
+sify these areas due to an over-response to the algae texture,
+detectit.Amongthem,SPPrompt-Waterachievesmoreprecise
+mistakenly identifying clusters of algae as water boundaries.
+edge extraction, especially in delineating nonwater regions
+within the pond, effectively distinguishing waterbodies from Incontrast,SPPrompt-Waterleveragesamultiscaleprompting
+mechanism to effectively distinguish between algal biomass
+the background and thus improving segmentation accuracy
+and true water regions, demonstrating superior robustness to
+and spatial consistency. These results confirm that SPPrompt-
+suchinterference.Insceneswherethereisstillacertaindegree
+Water possesses enhanced boundary awareness and achieves
+of algal interference but a distinct boundary between land
+highersegmentationaccuracyincomplexwaterbodyscenarios,
+further validating its effectiveness in waterbody extraction and lake exists, the overall segmentation performance across
+modelsismoresatisfactoryandthedifferencesamongmodels
+tasks.
+are less noticeable. This may be because models can more
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 12 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+Fig.9. VisualresultsofdifferentmethodsonCWBSD.(a)Image.(b)Label.(c)U-Net.(d)SwinTransformer.(e)QTNUnet.(f)MECNet.(g)MSLANet.
+(h)MSResNET.(i)SkySense++.(j)SPPrompt-Water(ours).
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 13 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Fig.10. Visualresultsofdifferentmethodsonfull-sceneimagesfromtheCWBSD.(a)Image.(b)Label.(c)Swintransformer.(d)MSResNET.(e)SkySense++.
+(f)SPPrompt-Water(ours).
+easily learn discriminative features from objects with strong is seriously challenged. Baseline methods often misclassify
+color contrast, resulting in accurate semantic segmentation. regions based on texture features present at the ice–water
+In comparison, in continuous waterbody areas affected by interface or on the ice surface itself. In contrast, SPPrompt-
+algae and texture variations, models are more susceptible Water, empowered by a progressive scale-aware prompting
+to misclassification. This comparison highlights that most mechanism, remains unaffected by the complexity of mixed
+models struggle to maintain segmentation performance in ice–water areas, demonstrating its technical advantage in han-
+large-scale water scenes without clear boundaries and are dlingchallengingwaterbodysegmentationtasks.Furthermore,
+easily affected by surface texture interference. In wave reflec- by incorporating a scale-aware guidance strategy, our method
+tion scenarios caused by sunlight creating dynamic reflection enables the model to focus on the holistic shape characteris-
+patterns on water surfaces, segmentation accuracy is signifi- tics of waterbodies while enhancing semantic understanding
+cantly impaired. Baseline models tend to overemphasize local through prompts. This approach not only improves the recog-
+texture features and frequently misidentify specular reflection nition of large, continuous waterbodies but also ensures high
+regions as nonwater. Models such as Swin transformer and segmentation accuracy for fine-grained and small-scale water
+MSResNet partially suppress such texture noise due to their regions, reflecting the strong adaptability and generalization
+ability to model long-range dependencies. SPPrompt-Water ability of the proposed approach.
+not only preserves the structural integrity of waterbodies but To evaluate the performance of different methods on full-
+also substantially reduces false positives in reflective areas. scene remote sensing images, we selected four representative
+In ice–water mixed scenarios where ice coverage causes complex scenarios from the CWBSD dataset: lakes with a
+heterogeneity on the water surface, model generalization mix of ice and water, lakes affected by solar reflection, lakes
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 14 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+TABLEIII bridges. Both U-Net and QTNUnet are significantly affected
+QUANTITATIVECOMPARISONRESULTSOFGLH (see the blue circles), resulting in misclassification of vege-
+tated areas as water. In the third column of Fig. 11, strong
+thin cloud interference is present. Most methods experience
+severe segmentation degradation under this condition, with a
+substantial increase in erroneous regions. Swin Transformer
+performsrelativelybetterbutstillexhibitsseveralmisclassified
+areas. In contrast, our method maintains high segmentation
+accuracyevenunderthesecomplexinterferenceconditions.In
+thefourthcolumnofFig.11,shadowscausedbytallbuildings
+partially blocking sunlight are visible (see the red circles).
+Except for SkySense++ and our method, all other methods
+misidentify shadowed regions as water. While SkySense++
+covered by thin clouds, and lakes rich in algae. We then can suppress shadow interference to some extent, our method
+compared our proposed method with the three top-performing demonstrates the most stable fine-grained distinction between
+baseline methods in the previous quantitative results—Swin water and shadows.
+transformer, MSResNET, and SkySense++. In summary, our method consistently shows superior dis-
+As shown in Fig. 10, in the lake with a mix of ice criminative ability and robustness in challenging scenarios,
+and water scenario, all three baseline methods exhibit a including narrow bridge-gap water bodies, interference from
+noticeableperformancedrop,generallybeingdisturbedbythe aquatic vegetation, thin cloud coverage, and shadow confu-
+bright textures of snow-covered ice, which leads to confusion sion,furtherhighlightingitspracticalapplicabilityincomplex
+in identifying ice-covered regions. In contrast, our method, remote sensing environments.
+equipped with a cross-level prompt-guided prior mechanism,
+effectively suppresses the interference from snow textures,
+D. Model Analysis and Limitations
+maintaining higher recognition stability in ice-covered areas.
+Inthelakeaffectedbysolarreflectionscenario,theSwintrans- 1) Ablation Studies: To verify the effectiveness of the
+former produces evident mosaic-like artifacts, indicating that prompt guidance module and the enforced prompt-based par-
+it is strongly disturbed by high-frequency reflection patterns, allel simulation training, we conducted ablation experiments
+as well as prediction discontinuities commonly observed in on the CWBSD dataset using SPPrompt-Water, focusing on
+sliding-window inference. Intense solar reflection also affects the impact of two core components: the prompt mechanism
+MSResNET and SkySense++ to some extent, causing partial and the training strategy on segmentation performance.
+omission in the central regions of the lake, while our method In the first group of ablation experiments, the model struc-
+maintains spatially consistent predictions across subregion turewaskeptunchanged,butnopromptimageswereprovided,
+boundaries. in order to evaluate performance under the no-prompt condi-
+3) GLH-Water: The quantitative comparison results on the tion. In the second group, only prompt images were input,
+GLH dataset are shown in Table III. Methods such as U-Net but the enforced-prompt parallel simulation training was not
+and QTNUnet achieve mIoU values mostly in the 70%–74% applied. The third group employed the full method proposed
+range, indicating relatively limited performance. Swin Trans- in our work.
+former shows some improvement over other models but The results of the ablation experiments shown in Table IV
+remains insufficient for handling complex water body scenar- and Fig. 12 indicate that the introduction of the prompt
+ios. Models incorporating multiscale and residual structures, mechanism significantly enhances the model’s fine-grained
+suchasMSResNET,furtherincreasethemIoUto78.14%.The segmentation capability. Adding the prompt mechanism
+latest vision foundation model in the remote sensing domain, improvedthemIoUfrom81.43%to90.04%andthe F1-score
+SkySense++,achieves80.12%mIoUwiththebenefitoflarge- from 84.98% to 92.45%, confirming that the prompt mech-
+scale pre-training. In comparison, SPPrompt-Water achieves anism, by guiding spatial attention, effectively strengthens
+the best performance across all metrics, with an mIoU of the model’s ability to capture details and accurately identify
+86.91%,representinga6.79%improvementoverSkySense++. boundaries of multiscale water bodies. Furthermore, applying
+Thissignificantgainfullydemonstratestheeffectivenessofthe theenforcedprompttrainingstrategyincreasedOAby0.38%,
+proposed hierarchical prompt-guided framework for complex mIoU by 2.23%, and F1-score by 1.52%. This performance
+water body segmentation tasks. improvement primarily stems from the enforced prompt par-
+Fig.11presentsvisualcomparisonresultsofdifferentmeth- allel simulation training strategy, which effectively guides the
+odsinrepresentativecomplexscenarios,providinganintuitive model to learn more robust feature representations, thereby
+assessment of each method’s robustness and generalization enhancing its ability to recognize water regions in complex
+abilityinrealremotesensingenvironments.Inthefirstcolumn backgrounds. Through the enforced prompt mechanism in the
+ofFig.11,smallwaterbodiescanstillbeobservedinthegaps pretraining phase, the model develops a deep understanding
+between bridges. However, none of the methods except ours of multiscale water body targets during training and can more
+wereabletoidentifythesenarrowwaterregions.Additionally, precisely capture the spatial distribution characteristics of the
+large areas of aquatic vegetation are present beneath the target regions.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 15 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Fig. 11. Visual results of different methods on GLH. (a) Image. (b) Label. (c) U-Net. (d) Swin transformer. (e) QTNUnet. (f) MECNet. (g) MSLANet.
+(h)MSResNET.(i)SkySense++.(j)SPPrompt-Water(ours).
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 16 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+TABLEIV (resolution: 7300×6908). The average value is reported to
+QUANTITATIVECOMPARISONRESULTSOFABLATIONSTUDIES eliminate variations caused by I/O operations.
+The results show that SPPrompt-Water contains 132.1 M
+parameters, requires 1250.0G FLOPs, and achieves a full-
+scene inference time of 38.51 s. Although these values
+are slightly higher than those of traditional convolutional
+architectures such as U-Net and MECNet, SPPrompt-Water
+performs significantly better than the remote-sensing foun-
+dation model SkySense++ (347.8 M parameters, 9621.1G
+FLOPs, 113.21 s). The increase in computational cost mainly
+TABLEV
+arises from the multiscale prompt guidance and cross-layer
+MODELSIZEANDINFERENCEEFFICIENCYCOMPARISON
+feature interaction modules, which require multilevel con-
+textual fusion during inference. However, these components
+lead to substantial improvements in segmentation accuracy
+and boundary completeness. Compared with models that rely
+solely on local convolutions or single-scale Transformers,
+SPPrompt-Water strikes a favorable balance between accu-
+racy and efficiency, demonstrating strong practical potential
+and engineering scalability for full-scene segmentation in
+large-format, high-resolution remote sensing imagery.
+3) Discussion: Although SPPrompt-Water Net performs
+well in complex water body scenarios, there are still several
+considerations for practical applications.
+Ontheonehand,themodel’sinferencereliesonmultiscale
+prompt generation and a hierarchical guidance mechanism,
+which can incur substantial time and memory costs when
+processing ultra-large images. While our experiments have
+demonstratedthemodel’scapabilitytohandlefull-scenehigh-
+resolutionimagery,itmaystillberelativelyheavycomparedto
+lighter-weight models in production environments with strict
+efficiency requirements.
+On the other hand, our method is specifically designed
+to address the challenge of preserving the overall struc-
+tural continuity of large-scale water bodies in high-resolution
+remote sensing images. It therefore shows clear advantages
+when processing water bodies that span large spatial extents,
+have complex shapes, or exhibit strong upstream-downstream
+connectivity, such as large rivers and lakes. In contrast, for
+scenarios dominated by small-scale water bodies, such as
+ponds or narrow channels, where spatial extent is limited
+andlong-rangecontextualdependenciesareweak,thebenefits
+of multiscale prompt guidance are less pronounced. In these
+cases, conventional networks can often achieve stable predic-
+tions, and the use of more complex prompt mechanisms does
+not provide significant improvements. Similarly, preliminary
+experiments on other geospatial classes (e.g., roads) indicate
+that the proposed prompt-guided strategy retains a certain
+degree of transferability. However, due to the inherent differ-
+Fig.12. Visualresultsofablationstudies.(a)Image.(b)Label.(c)Without
+ences in spatial topology and structural characteristics among
+prompt.(d)Withoutenforcedprompt.(e)SPPrompt-Water(ours).
+different object categories, achieving optimal performance in
+nonwaterscenariosmayrequireadaptingthepromptdesignto
+2) Efficiency Analysis: To comprehensively evaluate the class-specific structural priors.
+differences in model size and computational efficiency across
+methods,wefurthercomparesevenrepresentativenetworksin
+V. CONCLUSION
+terms of the number of parameters, floating-point operations To address the challenges of multiscale feature varia-
+(FLOPs),andfull-sceneinferencetime(inseconds),asshown tion and texture interference in water body extraction from
+in Table V. The full-scene inference time is measured on an high-resolution remote sensing images, we propose a scale-
+NVIDIA V100 GPU using 30 images from the GID dataset progressiveprompt-basedframeworkforwaterextraction.This
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 17 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+method simulates the human “global-to-local” hierarchical [12] M.MajurskiandP.Bajcsy,“Exacttile-basedsegmentationinferencefor
+cognitive process by designing a hierarchical progressive imageslargerthanGPUmemory,”J.Res.Nat.Inst.StandardsTechnol.,
+vol.126,Jun.2021,Art.no.126009.
+prompt learning strategy that integrates the global semantic
+[13] D.Doxaran,J.Froidefond,andP.Castaing,“Remote-sensingreflectance
+modeling capability of the prompt guidance module with ofturbidsediment-dominatedwatersreductionofsedimenttypevaria-
+the local detail extraction strengths of the Swin transformer.
+tionsandchangingilluminationconditionseffectsbyuseofreflectance
+ratios,”Appl.Opt.,vol.42,no.15,pp.2623–2634,2003.
+This enables cross-scale contextual knowledge transfer and
+[14] S. Rajeswari and P. Rathika, “Emerging methodologies in waterbody
+noise suppression. On the GID, CWBSD, and GLH-Water delineation:Anin-depthreview,”Int.J.RemoteSens.,vol.45,no.17,
+datasets, SPPrompt-Water improves mIoU by approximately pp.5789–5819,Sep.2024.
+[15] J. Zhang, S. Lin, L. Ding, and L. Bruzzone, “Multi-scale context
+8.1%, 6.65%, and 6.79%, respectively, demonstrating clear
+aggregation for semantic segmentation of remote sensing images,”
+advantages over the best existing models. Ablation studies RemoteSens.,vol.12,no.4,p.701,Feb.2020.
+further validate the effectiveness of the morphology-driven [16] P. Frazier and K. Page, “Water body detection and delineation with
+LandsatTMdata,”PhotogrammetricEng.remoteSens.,vol.66,no.12,
+enforcedpromptsupervisionstrategy,whichdynamicallycon-
+pp.1461–1467,2000.
+strains target region activation and suppresses background [17] Y. Zhuang and C. Chen, “A method for water body extraction based
+noise, significantly enhancing the model’s ability to finely on the tasselled cap transformation from remote sensing images,” in
+Proc. 5th Int. Workshop Earth Observ. Remote Sens. Appl. (EORSA),
+delineateheterogeneouswaterboundariesandmaintainspatial
+Jun.2018,pp.1–5.
+continuity in large-scale water bodies. This work offers new [18] S. K. McFeeters, “The use of the normalized difference water index
+insights for dynamic monitoring of complex water bodies in (NDWI)inthedelineationofopenwaterfeatures,”Int.J.RemoteSens.,
+vol.17,no.7,pp.1425–1432,May1996.
+high-resolution remote sensing imagery. [19] H. Xu, “Modification of normalised difference water index
+(NDWI) to enhance open water features in remotely sensed
+imagery,” Int. J. Remote Sens., vol.27, no.14, pp.3025–3033,
+ACKNOWLEDGMENT Jul.2006.
+[20] A. Paul, D. Tripathi, and D. Dutta, “Application and comparison of
+The authors would like to thank the Supercomputing Cen-
+advanced supervised classifiers in extraction of water bodies from
+ter of Wuhan University for providing computing power to remotesensingimages,”Sustain.WaterResour.Manage.,vol.4,no.4,
+conduct experiments. pp.905–919,Dec.2018.
+[21] J.Fu,J.Wang,andJ.Li,“Studyontheautomaticextractionofwater
+body from TM image using decision tree algorithm,” Proc. SPIE,
+vol.6625,pp.17–25,Sep.2007.
+REFERENCES
+[22] B. Ko, H. Kim, and J. Nam, “Classification of potential water
+bodies using Landsat 8 OLI and a combination of two boosted
+[1] J.-F.Pekel,A.Cottam,N.Gorelick,andA.S.Belward,“High-resolution random forest classifiers,” Sensors, vol.15, no.6, pp.13763–13777,
+mapping of global surface water and its long-term changes,” Nature, Jun.2015.
+vol.540,no.7633,pp.418–422,Dec.2016. [23] C. Huang, Y. Chen, S. Zhang, and J. Wu, “Detecting, extract-
+[2] L. Chakraborty, H. Taherimashhadi, J. Thistlethwaite, and D. Henstra, ing, and monitoring surface water from space using optical
+“A probabilistic framework for spatio-temporal social vulnerability sensors: A review,” Rev. Geophys., vol.56, no.2, pp.333–360,
+assessment to flood hazards in Canada using Bayesian machine Jun.2018.
+learning,” J. Geovisualization Spatial Anal., vol.10, no.1, p.3, Jun. [24] Y. Chen, R. Fan, X. Yang, J. Wang, and A. Latif, “Extraction
+2026. of urban water bodies from high-resolution remote-sensing
+[3] N. Sharnagat et al., “State-of-the-art status of Google Earth engine imagery using deep learning,” Water, vol.10, no.5, p.585,
+(GEE)applicationinlandandwaterresourcemanagement:Asciento- May2018.
+metricanalysis,”J.GeovisualizationSpatialAnal.,vol.9,no.1,p.16, [25] X. Dai, M. Xia, L. Weng, K. Hu, H. Lin, and M. Qian, “Multiscale
+Jun.2025. locationattentionnetworkforbuildingandwatersegmentationofremote
+[4] M.Li,P.Wu,B.Wang,H.Park,H.Yang,andY.Wu,“Adeeplearning sensingimage,”IEEETrans.Geosci.RemoteSens.,vol.61,2023,Art.
+method of water body extraction from high resolution remote sensing no.5609519.
+images with multisensors,” IEEE J. Sel. Topics Appl. Earth Observ. [26] V. Badrinarayanan, A. Kendall, and R. Cipolla, “SegNet: A deep
+RemoteSens.,vol.14,pp.3120–3132,2021. convolutional encoder–decoder architecture for image segmentation,”
+[5] Y. Liu, S. Shi, J. Wang, and Y. Zhong, “Seeing beyond the patch: IEEETrans.PatternAnal.Mach.Intell.,vol.39,no.12,pp.2481–2495,
+Scale-adaptivesemanticsegmentationofhigh-resolutionremotesensing Dec.2017.
+imagerybasedonreinforcementlearning,”inProc.IEEE/CVFInt.Conf. [27] M.Sarıgu¨l,B.M.Ozyildirim,andM.Avci,“Differentialconvolutional
+Comput.Vis.(ICCV),Oct.2023,pp.16822–16832. neuralnetwork,”NeuralNetw.,vol.116,pp.279–287,Aug.2019.
+[6] D. Sun, G. Gao, L. Huang, Y. Liu, and D. Liu, “Extraction of water [28] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for
+bodies from high-resolution remote sensing imagery based on a deep imagerecognition,”inProc.IEEEConf.Comput.Vis.PatternRecognit.
+semantic segmentation network,” Sci. Rep., vol.14, no.1, p.14604, (CVPR),Jun.2016,pp.770–778.
+Jun.2024. [29] W. Feng, H. Sui, W. Huang, C. Xu, and K. An, “Water body
+[7] J. Chen et al., “Remote sensing big data for water environment moni- extraction from very high-resolution remote sensing imagery using
+toring:Currentstatus,challenges,andfutureprospects,”Earth’sFuture, deep U-Net and a superpixel-based conditional random field model,”
+vol.10,no.2,p.2021,Feb.2022. IEEE Geosci. Remote Sens. Lett., vol.16, no.4, pp.618–622,
+[8] J.Kang,H.Guan,D.Peng,andZ.Chen,“Multi-scalecontextextractor Apr.2019.
+networkforwater-bodyextractionfromhigh-resolutionopticalremotely [30] L.-C.Chen,G.Papandreou,F.Schroff,andH.Adam,“Rethinkingatrous
+sensedimages,”Int.J.Appl.EarthObserv.Geoinf.,vol.103,Dec.2021, convolutionforsemanticimagesegmentation,”2017,arXiv:1706.05587.
+Art.no.102499. [31] D.Xiang,X.Zhang,W.Wu,andH.Liu,“DensePPMUNet—A:Arobust
+[9] Z. Wang, X. Gao, Y. Zhang, and G. Zhao, “MSLWENet: A novel deeplearningnetworkforsegmentingwaterbodiesfromaerialimages,”
+deeplearningnetworkforlakewaterbodyextractionofGoogleremote IEEETrans.Geosci.RemoteSens.,vol.61,2023,Art.no.4202611.
+sensingimages,”RemoteSens.,vol.12,no.24,p.4140,Dec.2020. [32] Z. Li, Q. Zhu, J. Yang, J. Lv, and Q. Guan, “A cross-domain object-
+[10] M. Wang, C. Li, X. Yang, D. Chu, Z. Zhou, and R. Y. K. Lau, semantic matching framework for imbalanced high spatial resolution
+“QTU-Net:Quaterniontransformer-basedU-netforwaterbodyextrac- imagery water-body extraction,” IEEE Trans. Geosci. Remote Sens.,
+tionofRGBsatelliteimage,”IEEETrans.Geosci.RemoteSens.,vol.62, vol.62,2024,Art.no.5629015.
+2024,Art.no.5634816. [33] B. Dang and Y. Li, “MSResNet: Multiscale residual network
+[11] Z. Zhang, M. Lu, S. Ji, H. Yu, and C. Nie, “Rich CNN features for via self-supervised learning for water-body detection in remote
+water-body segmentation from very high resolution aerial and satellite sensing imagery,” Remote Sens., vol.13, no.16, p.3122,
+imagery,”RemoteSens.,vol.13,no.10,p.1912,May2021. Aug.2021.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 18 ---
+5608519 IEEETRANSACTIONSONGEOSCIENCEANDREMOTESENSING,VOL.64,2026
+[34] J. Kim, J. K. Lee, and K. M. Lee, “Accurate image super-resolution Fanlin Meng received the B.S. degree in remote
+usingverydeepconvolutionalnetworks,”inProc.IEEEConf.Comput. sensingscienceandtechnologyfromShandongUni-
+Vis.PatternRecognit.(CVPR),Jun.2016,pp.1646–1654. versityofScienceandTechnology,Qingdao,China,
+[35] H.-F. Zhong, H.-M. Sun, D.-N. Han, Z.-H. Li, and R.-S. Jia, “Lake in 2023. He is currently pursuing the M.S. degree
+water body extraction of optical remote sensing images based on in remote sensing of resources and environment
+semanticsegmentation,”Appl.Intell.,vol.52,no.15,pp.17974–17989, with the School of Earth Sciences and Resources,
+Dec.2022. ChinaUniversityofGeosciences(Beijing),Beijing,
+[36] A.Vaswanietal.,“Attentionisallyouneed,”inProc.Adv.NeuralInf. China.
+Process.Syst.,vol.30,2017,pp.5998–6008. His research interests include intelligent remote
+[37] A.Dosovitskiyetal.,“Animageisworth16×16words:Transformers sensinginterpretationandimageprocessing.
+forimagerecognitionatscale,”2020,arXiv:2010.11929.
+[38] L. Ding et al., “Looking outside the window: Wide-context trans-
+former for the semantic segmentation of high-resolution remote
+sensing images,” IEEE Trans. Geosci. Remote Sens., vol.60,
+2022,Art.no.4410313.
+[39] H.-F. Zhong, Q. Sun, H.-M. Sun, and R.-S. Jia, “NT-Net: A semantic
+segmentation network for extracting lake water bodies from optical
+Guo Zhang (Member, IEEE) received the B.E.
+remote sensing images based on transformer,” IEEE Trans. Geosci.
+and Ph.D. degrees in photogrammetry and remote
+RemoteSens.,vol.60,2022,Art.no.5627513.
+sensing from the School of Remote Sensing and
+[40] Q. Zhang, X. Hu, and Y. Xiao, “A novel hybrid model based
+InformationEngineering,WuhanUniversity,Wuhan,
+on CNN and multi-scale transformer for extracting water bod-
+China,in2000and2005,respectively.
+ies from high resolution remote sensing images,” ISPRS Ann.
+His doctoral dissertation was on rectifying high-
+Photogramm., Remote Sens. Spatial Inf. Sci., vol.1, pp.889–894,
+resolution remote sensing images under lack of
+Dec.2023.
+ground control points. He has been with the State
+[41] C.-I. Cira, M.-A´. Manso-Callejo, R. Alcarria, T. Iturrioz, and
+Key Laboratory of Information Engineering in
+J.-J.Arranz-Justel,“Insightsintotheeffectsoftilesizeandtileoverlap
+Surveying, Mapping and Remote Sensing, Wuhan
+levels on semantic segmentation models trained for road surface area
+University,since2005,wherehebecameaProfessor
+extractionfromaerialorthophotography,”RemoteSens.,vol.16,no.16,
+in2011.Hisresearchinterestsincludespacephotogrammetry(includingthe
+p.2954,Aug.2024.
+processing and applications for optical load, synthetic aperture radar (SAR)
+[42] J.Li,Y.Cai,Q.Li,M.Kou,andT.Zhang,“Areviewofremotesensing load,videoload,andlaserload).
+image segmentation by deep learning methods,” Int. J. Digit. Earth,
+vol.17,no.1,Dec.2024,Art.no.2328827.
+[43] T.B.Brownetal.,“Languagemodelsarefew-shotlearners,”inProc.
+NIPS,2020,pp.1877–1901.
+[44] M.Jiaetal.,“Visualprompttuning,”inProc.Eur.Conf.Comput.Vis.,
+Oct.2022,pp.709–727.
+[45] K.Zhou,J.Yang,C.C.Loy,andZ.Liu,“Conditionalpromptlearning
+for vision-language models,” in Proc. IEEE/CVF Conf. Comput. Vis. Hao Cui received the B.S. degree in surveying
+PatternRecognit.(CVPR),Jun.2022,pp.16795–16804. andmappingengineeringfromShanxiDatongUni-
+[46] A.Kirillovetal.,“Segmentanything,”2023,arXiv:2304.02643. versity, Datong, China, in 2015, the M.S. degree
+[47] S.A.ImmanuelandH.R.Sinulingga,“Learnablepromptforfew-shot in geographic information systems from Lanzhou
+semanticsegmentationinremotesensingdomain,”inProc.IEEE/CVF JiaotongUniversity,Lanzhou,China,in2018,and
+Conf.Comput.Vis.PatternRecognit.Workshops(CVPRW),Jun.2024, the Ph.D. degree in photogrammetry and remote
+pp.2755–2761. sensing from the State Key Laboratory of Infor-
+[48] X.Wang,X.Zhang,Y.Cao,W.Wang,C.Shen,andT.Huang,“SegGPT: mation Engineering in Surveying, Mapping, and
+Segmentingeverythingincontext,”2023,arXiv:2304.03284. RemoteSensing,WuhanUniversity,Wuhan,China,
+[49] K. Chen et al., “RSPrompter: Learning to prompt for remote sensing in2021.
+instancesegmentationbasedonvisualfoundationmodel,”IEEETrans. HeiscurrentlyengagedaPost-DoctoralResearch
+Geosci.RemoteSens.,vol.62,2024,Art.no.4701117. with the State Key Laboratory of Information Engineering in Surveying,
+[50] R. I. Sultan, C. Li, H. Zhu, P. Khanduri, M. Brocanelli, and D. Zhu, Mapping, and Remote Sensing, Wuhan University. His research inter-
+“GeoSAM: Fine-tuning SAM with multi-modal prompts for mobility ests include image quality improvement, radiation correction, and image
+infrastructuresegmentation,”2023,arXiv:2311.11319. informationextractionfromremotesensing.
+[51] L. P. Osco et al., “The segment anything model (SAM) for remote
+sensingapplications:Fromzerotooneshot,”Int.J.Appl.EarthObserv.
+Geoinf.,vol.124,Nov.2023,Art.no.103540.
+[52] T. Ren et al., “Grounded SAM: Assembling open-world models for
+diversevisualtasks,”2024,arXiv:2401.14159.
+[53] S. Liu et al., “Grounding DINO: Marrying DINO with grounded pre-
+trainingforopen-setobjectdetection,”inProc.Eur.Conf.Comput.Vis., Gui Gao (Senior Member, IEEE) received the
+2023,pp.38–55. B.S. degree in information engineering, the M.S.
+[54] Z.Liuetal.,“Swintransformer:Hierarchicalvisiontransformerusing and Ph.D. degrees in remote sensing information
+shifted windows,” in Proc. IEEE/CVF Int. Conf. Comput. Vis. (ICCV), processing from National University of Defense
+Oct.2021,pp.9992–10002. Technology (NUDT), Changsha, China, in 2002,
+[55] F. Milletari, N. Navab, and S.-A. Ahmadi, “V-Net: Fully 2003,and2007,respectively.
+convolutional neural networks for volumetric medical image From 2007, he joined the Faculty of Informa-
+segmentation,” in Proc. 4th Int. Conf. 3D Vis. (3DV), Oct. 2016, tionEngineering,SchoolofElectronicScienceand
+pp.565–571. Engineering, NUDT, as an Associate Professor.
+[56] T.-Y. Lin, P. Goyal, R. Girshick, K. He, and P. Dolla´r, “Focal loss for From 2017, he was with Faculty of Geosciences
+denseobjectdetection,”inProc.IEEEInt.Conf.Comput.Vis.(ICCV), andEnvironmentalEngineering,SouthwestJiaotong
+Oct.2017,pp.2999–3007. University, Chengdu, China, where he is currently a Professor. He is
+[57] Y.Li,B.Dang,W.Li,andY.Zhang,“GLH-water:Alarge-scaledataset also the Leader of Sichuan Natural Science Foundation Innovation Group
+for global surface water detection in large-size very-high-resolution and the Innovation Team of Ministry of Education of China. He has
+satellite imagery,” in Proc. AAAI Conf. Artif. Intell., 2024, vol.38, authored over 100 journal and conference papers and written eight books
+no.20,pp.22213–22221. and an English chapter. His research interests include synthetic aperture
+[58] K.Wuetal.,“Asemantic-enhancedmulti-modalremotesensingfoun- radar (SAR) signal processing, interferometric SAR (InSAR), statistical
+dationmodelforEarthobservation,”NatureMach.Intell.,vol.7,no.8, modeling of SAR image, target detection, and SAR ground moving target
+pp.1–15,Aug.2025. indication(GMTI).
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.
+--- Page 19 ---
+MENGetal.:BREAKINGTHESCALEBARRIER:ASCALE-PROGRESSIVEWATERBODYEXTRACTION 5608519
+Wenxuan Liu received the Ph.D. degree in car- Wei Wang received the B.S. degree in geographic
+tography and geographical information engineering information science from Henan Polytechnic Uni-
+fromtheStateKeyLaboratoryofInformationEngi- versity, Jiaozuo, China, in 2018. He is currently
+neeringinSurveying,MappingandRemoteSensing pursuing the M.S. degree in geomatics science
+(LIESMARS), Wuhan University, Wuhan, China, and technology with the School of Geomatics and
+in2022. GeographicScience,LiaoningTechnicalUniversity,
+HeiscurrentlyaResearchScientistwithWuhan Fuxin,China.
+DaspatialTechnologyCompanyLtd.,Wuhan,China, His research interests include building semantic
+wherehisresearchfocuseson3-Dreal-scenemodel- segmentationandintelligentinterpretationofremote
+ingandsemanticunderstanding.Hisexpertiseliesin sensingimagery.
+AI-drivenprocessingofmultisourcegeospatialdata,
+withrecentworkadvancingAIapplicationsinUAVimageryinterpretation.
+Haifeng Li (Senior Member, IEEE) received the
+master’s degree in transportation engineering from
+SouthChinaUniversityofTechnology,Guangzhou,
+China,in2005,andthePh.D.degreeinphotogram-
+metry and remote sensing from Wuhan University, Zekun Hu received the B.S. degree in resource
+Wuhan,China,in2009. exploration engineering from Xinjiang University,
+HewasaResearchAssociatewiththeDepartment Urumqi, China, in 2020, and the M.S. degree in
+ofLandSurveyingandGeo-Informatics,TheHong geologicalinformationengineeringfromChinaUni-
+KongPolytechnicUniversity,HongKong,in2011, versity of Geosciences (Wuhan), Wuhan, China, in
+andaVisitingScholarwiththeUniversityofIllinois 2024. He is currently pursuing the Ph.D. degree
+atUrbana–Champaign,Urbana,IL,USA,from2013 in photogrammetry and remote sensing with the
+to 2014. He is currently a Professor with the School of Geosciences and StateKeyLaboratoryofInformationEngineeringin
+Info-Physics, Central South University, Changsha, China. He has authored Surveying, Mapping and Remote Sensing, Wuhan
+over30journalarticles.Hisresearchinterestsincludegeo/remotesensingbig University,Wuhan.
+data,machine/deeplearning,andartificial/brain-inspiredintelligence. His research interests include intelligent remote
+Dr.Liisareviewerformanyjournals. sensinginterpretationandimageprocessing.
+Authorized licensed use limited to: Shanghai Maritime University. Downloaded on July 04,2026 at 04:24:11 UTC from IEEE Xplore. Restrictions apply.

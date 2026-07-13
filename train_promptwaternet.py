@@ -9,7 +9,7 @@ import torch
 import monai
 import numpy as np
 import matplotlib.pyplot as plt
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, ConcatDataset
 from skimage import io
 from tqdm import tqdm
 from datetime import datetime
@@ -182,7 +182,7 @@ def main():
     shutil.copyfile(
         __file__, join(model_save_path, run_id + "_" + os.path.basename(__file__))
     )
-    promptcheckpoint = args.promptcp
+    promptcheckpoint = args.promptcp if args.promptcp else None
     prompt_water_net = SPPromptWaterNet(promptcheckpoint,args.SwintransformerPretrain,freeze_prompt=args.freeze_prompt).to(device)
     prompt_water_net.train()
 
@@ -215,13 +215,31 @@ def main():
         sum(p.numel() for p in prompt_module_encdec_params if p.requires_grad),
     )
     logger.info("=" * 60)
+    logger.info("Weight Loading Paths:")
+    logger.info("  SAM prompt checkpoint (promptcp):  %s", args.promptcp if args.promptcp else "None (loading default)")
+    logger.info("  Swin Transformer pretrained:       %s", args.SwintransformerPretrain)
+    logger.info("  Resume checkpoint:                 %s", args.resume if args.resume else "None (training from scratch)")
+    logger.info("=" * 60)
+
     logger.info("Model Architecture Details:")
     logger.info("  Total parameters:         %s", sum(p.numel() for p in prompt_water_net.parameters()))
     logger.info("  Trainable parameters:     %s", sum(p.numel() for p in prompt_water_net.parameters() if p.requires_grad))
     logger.info("  SAM enc+dec trainable:    %s", sum(p.numel() for p in prompt_module_encdec_params if p.requires_grad))
+    logger.info("  freeze_prompt:            %s", args.freeze_prompt)
     logger.info("  Optimizer:                AdamW")
     logger.info("  LR Scheduler:             CosineAnnealingLR (T_max=%d, eta_min=1e-6)", args.num_epochs)
     logger.info("  Loss:                     0.6*DiceFocalLoss(alpha=0.75) + 0.4*TverskyLoss(alpha=0.3, beta=0.7)")
+    logger.info("  AMP (mixed precision):    %s", args.use_amp)
+    logger.info("=" * 60)
+
+    logger.info("Training Hyperparameters:")
+    logger.info("  num_epochs:      %d", args.num_epochs)
+    logger.info("  batch_size:      %d", args.batch_size)
+    logger.info("  val_batch_size:  %d", args.val_batch_size)
+    logger.info("  lr:              %.6f", args.lr)
+    logger.info("  weight_decay:    %.6f", args.weight_decay)
+    logger.info("  num_workers:     %d", args.num_workers)
+    logger.info("  device:          %s", args.device)
     logger.info("=" * 60)
 
     dice_focal_loss = monai.losses.DiceFocalLoss(sigmoid=True, reduction="mean", squared_pred=True, alpha=0.75)
@@ -239,11 +257,16 @@ def main():
     best_Valscore = 0.001
     previous_best_model = None
 
-    train_dataset = PromptDataset_GID5(args.data_train)
-
-
+    # ---- Multi-level unified dataset (no file copy needed) ----
+    levels = ["level0", "level1", "level2"]
+    train_datasets = []
+    for lv in levels:
+        ds = PromptDataset_GID5(args.data_train.replace("level0", lv))
+        train_datasets.append(ds)
+    train_dataset = ConcatDataset(train_datasets)
 
     logger.info("Number of training samples: %s", len(train_dataset))
+    logger.info("  (level0: %d, level1: %d, level2: %d)", len(train_datasets[0]), len(train_datasets[1]), len(train_datasets[2]))
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=args.batch_size,
@@ -253,8 +276,13 @@ def main():
         persistent_workers=True,
     )
 
-    val_dataset = PromptDataset_GID5(args.data_train.replace("train", "val"))
+    val_datasets = []
+    for lv in levels:
+        ds = PromptDataset_GID5(args.data_train.replace("train", "val").replace("level0", lv))
+        val_datasets.append(ds)
+    val_dataset = ConcatDataset(val_datasets)
     logger.info("Number of validation samples: %s", len(val_dataset))
+    logger.info("  (level0: %d, level1: %d, level2: %d)", len(val_datasets[0]), len(val_datasets[1]), len(val_datasets[2]))
     val_dataloader = DataLoader(
         val_dataset,
         batch_size=args.val_batch_size,
@@ -263,6 +291,19 @@ def main():
         pin_memory=True,
         persistent_workers=True,
     )
+
+    logger.info("Dataset Configuration (UNIFIED Multi-Level):")
+    logger.info("  Mode:            ConcatDataset (level0 + level1 + level2)")
+    for i, lv in enumerate(levels):
+        logger.info("  %s:", lv.upper())
+        logger.info("    Train path:    %s", args.data_train.replace("level0", lv))
+        logger.info("    Train samples: %d", len(train_datasets[i]))
+        logger.info("    Val path:      %s", args.data_train.replace("train", "val").replace("level0", lv))
+        logger.info("    Val samples:   %d", len(val_datasets[i]))
+    logger.info("  TOTAL Train:     %d", len(train_dataset))
+    logger.info("  TOTAL Val:       %d", len(val_dataset))
+    logger.info("  Zero-prompt prob: 15%% (paper-style default prompt token)")
+    logger.info("=" * 60)
 
 
     start_epoch = 0

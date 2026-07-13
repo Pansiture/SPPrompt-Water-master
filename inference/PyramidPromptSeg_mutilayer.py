@@ -102,96 +102,95 @@ class PyramidSegmenterPNG:
         image, orig_size = self._pad_to_pow2_square(image)
         prompt, _ = self._pad_to_pow2_square(prompt)
 
-        original_image = image.clone()
         B, C, H, W = image.shape
-        n_level = (H // 1024).bit_length() - 1
-        print(f"Number of pyramid levels: {n_level}")
+        # 固定为3层金字塔（level0, level1, level2），对应论文设定
+        n_level = 2
+        print(f"[Pyramid Config] Padded image size: {H}x{W}, fixed pyramid levels: {n_level} (layers 0~{n_level})")
 
+        # 各层模型输入 patch 尺寸（在金字塔图像坐标系中，模型输入固定为 1024×1024）
+        # level2 (1/4 图): 1024×1024 整图输入
+        # level1 (1/2 图): 1024×1024 patch，对应原图 2048×2048
+        # level0 (原图):   1024×1024 patch，对应原图 1024×1024
+        layer_patch_sizes = [1024, 1024, 1024]  # layer 0, 1, 2
+
+        # 构建金字塔
         X, P = image, prompt
         for i in range(n_level + 1):
             if i > 0:
-                Hx, Wx = X.shape[2:]
-                X = F.interpolate(X, size=(Hx // 2, Wx // 2), mode='area')
-                P = F.interpolate(P, size=(Hx // 2, Wx // 2), mode='area')
+                X = F.interpolate(X, scale_factor=0.5, mode='area')
+                P = F.interpolate(P, scale_factor=0.5, mode='area')
             self.memory_cache[f'layer{i}_X'] = X
+            self.memory_cache[f'layer{i}_P'] = P
+            print(f"[Pyramid Build] Layer {i}: size {X.shape[2]}x{X.shape[3]}")
             if self.save_intermediate:
                 self._save_png(X, self.output_dir / f'{prefix}_layer{i}_X.png')
 
-        P = F.avg_pool2d(P, kernel_size=2)
-        P = F.avg_pool2d(P, kernel_size=2)
-        self.memory_cache[f'layer{n_level}_P'] = P
-        if self.save_intermediate:
-            self._save_png(P*255, self.output_dir / f'{prefix}_layer{n_level}_P.png')
-
-        # ---- top layer inference ----
-        self._load_layer_weights(n_level)
-        X = self.memory_cache[f'layer{n_level}_X']
-        P = self.memory_cache[f'layer{n_level}_P']
-        with torch.no_grad():
-            Yn = torch.sigmoid(self.prompt_net(X, P))
-            Yn = (Yn > 0.5).float()
-        self.memory_cache[f'layer{n_level}_Y'] = Yn
-
-        if self.save_intermediate:
-            self._save_png(Yn*255, self.output_dir / f'{prefix}_layer{n_level}_Y.png')
-
-        # ---- pyramid refine ----
-        for level in reversed(range(n_level + 1)):
-            print(f"\nProcessing level {level}")
-
+        # 自顶向下推理
+        for level in range(n_level, -1, -1):
+            print(f"\n[Inference] ==== Processing level {level} ====")
             self._load_layer_weights(level)
-            Xn = self.memory_cache[f'layer{level}_X']
-            Yn = self.memory_cache.get(f'layer{level}_Y', None)
 
-            num_splits = 2 ** (n_level - level)
-            if num_splits > 1:
-                Xn_crops = self._crop_tensor(Xn, num_splits)
-                Ys = {}
-                for (row, col), Xi in Xn_crops.items():
-                    parent_row = row // 2
-                    parent_col = col // 2
-                    parent_key = f'layer{level+1}_Y_{parent_row}_{parent_col}'
+            X_level = self.memory_cache[f'layer{level}_X']
+            patch_size = layer_patch_sizes[level]
+            H_level, W_level = X_level.shape[2], X_level.shape[3]
+            num_splits = max(1, H_level // patch_size)
 
-                    if parent_key not in self.memory_cache:
-                        parent_Y = self.memory_cache[f'layer{level+1}_Y']
-                        parent_crops = self._crop_tensor(parent_Y, 2 ** (n_level - (level + 1)))
-                        for (r, c), crop in parent_crops.items():
-                            self.memory_cache[f'layer{level+1}_Y_{r}_{c}'] = crop
+            print(f"[Inference] Level {level}: image={H_level}x{W_level}, patch_size={patch_size}, splits={num_splits}x{num_splits}")
 
-                    Pi_parent = self.memory_cache[f'layer{level+1}_Y_{parent_row}_{parent_col}']
-                    _, _, Hp, Wp = Pi_parent.shape
-                    sub_h = max(1, Hp // 2)
-                    sub_w = max(1, Wp // 2)
-                    child_r = row % 2
-                    child_c = col % 2
-                    Pi = Pi_parent[..., child_r * sub_h:(child_r + 1) * sub_h,
-                                  child_c * sub_w:(child_c + 1) * sub_w]
+            # 切分图像
+            X_patches = self._crop_tensor(X_level, num_splits)
 
-                    Pi = F.interpolate(Pi, scale_factor=0.5, mode='nearest')
+            # 准备 prompt
+            if level == n_level:
+                # 顶层：使用原始下采样后的 prompt
+                P_level = self.memory_cache[f'layer{level}_P']
+                P_patches = self._crop_tensor(P_level, num_splits)
+            else:
+                # 下层：使用上一层输出的 mask 作为 prompt
+                parent_Y = self.memory_cache[f'layer{level+1}_Y']
+                # parent 尺寸是当前层的一半，切分份数相同
+                P_patches = self._crop_tensor(parent_Y, num_splits)
 
-                    with torch.no_grad():
-                        if self.save_intermediate2:
-                            self._save_png(Xi, self.output_dir / f'{prefix}_layer{level}_X_{row}_{col}.png')
-                            self._save_png(Pi*255, self.output_dir / f'{prefix}_layer{level}_P_{row}_{col}.png')
-                        Yi = torch.sigmoid(self.prompt_net(Xi, Pi))
-                        Yi = (Yi > 0.5).float()
-                    self.memory_cache[f'layer{level}_Y_{row}_{col}'] = Yi
-                    if self.save_intermediate2:
-                        self._save_png(Yi*255, self.output_dir / f'{prefix}_layer{level}_Y_{row}_{col}.png')
-                    Ys[(row, col)] = Yi
+            # 逐 patch 推理
+            Y_patches = {}
+            for (row, col), Xi in X_patches.items():
+                Pi = P_patches[(row, col)]
 
-                Yn = self._merge_patches(Ys)
+                if self.save_intermediate2:
+                    self._save_png(Xi, self.output_dir / f'{prefix}_layer{level}_X_{row}_{col}.png')
+                    self._save_png(Pi * 255, self.output_dir / f'{prefix}_layer{level}_P_{row}_{col}.png')
 
-            self.memory_cache[f'layer{level}_Y'] = Yn
+                # Resize 到模型输入尺寸
+                Xi_model = F.interpolate(Xi, size=(1024, 1024), mode='bilinear', align_corners=False)
+                Pi_model = F.interpolate(Pi, size=(256, 256), mode='bilinear', align_corners=False)
+
+                with torch.no_grad():
+                    Yi_model = torch.sigmoid(self.prompt_net(Xi_model, Pi_model))
+                # Resize 回原始 patch 尺寸，然后二值化
+                Yi = F.interpolate(Yi_model, size=(Xi.shape[2], Xi.shape[3]), mode='bilinear', align_corners=False)
+                Yi = (Yi > 0.5).float()
+
+                Y_patches[(row, col)] = Yi
+                if self.save_intermediate2:
+                    self._save_png(Yi * 255, self.output_dir / f'{prefix}_layer{level}_Y_{row}_{col}.png')
+                print(f"[Inference] Patch ({row},{col}): Xi_in={Xi.shape}, Pi_in={Pi.shape}, model_in=1024x1024/256x256, Yi_out={Yi.shape}, positive={(Yi > 0).sum().item()}")
+
+            # 合并 patches
+            Y_level = self._merge_patches(Y_patches)
+            self.memory_cache[f'layer{level}_Y'] = Y_level
+            print(f"[Inference] Level {level} merged output: {Y_level.shape}, positive pixels={(Y_level > 0).sum().item()}")
+
             if self.save_intermediate:
-                self._save_png(Yn*255, self.output_dir / f'{prefix}_layer{level}_Y.png')
+                self._save_png(Y_level * 255, self.output_dir / f'{prefix}_layer{level}_Y.png')
 
-        final_result = Yn[:, :, :orig_size[0], :orig_size[1]]
-        self._save_png(final_result*255, self.output_dir / f'{prefix}_final_result.png')
+        # 最终结果
+        final_result = self.memory_cache['layer0_Y'][:, :, :orig_size[0], :orig_size[1]]
+        final_path = self.output_dir / f'{prefix}_final_result.png'
+        self._save_png(final_result * 255, final_path)
+        print(f"[Output] Final result saved: {final_path}, shape={final_result.shape}, positive pixels={(final_result > 0).sum().item()}")
 
         self.memory_cache.clear()
-        del image, prompt, X, P, Yn
-
+        del image, prompt, X, P
         return final_result
 
 
@@ -199,16 +198,33 @@ def main():
     start_time = time.time()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    prompt_net = SPPromptWaterNet(args.promptcp, args.SwintransformerPretrain, freeze_prompt=True).to(device)
+    print("=" * 60)
+    print("[Config] Pyramid Prompt Segmentation - Startup Config")
+    print("=" * 60)
+    print(f"[Config] Device:              {device}")
+    print(f"[Config] Image folder:        {args.image_folder}")
+    print(f"[Config] Prompt path:         {args.prompt_path if args.prompt_path else 'None (ZERO PROMPT)'}")
+    print(f"[Config] Resume weight:       {args.resume if args.resume else 'None'}")
+    print(f"[Config] Resume dir:          {args.resume_dir}")
+    print(f"[Config] Output dir:          {args.output_dir}")
+    print(f"[Config] Swin pretrain:       {args.SwintransformerPretrain}")
+    print(f"[Config] SAM checkpoint:      {args.promptcp if args.promptcp else 'None'}")
+    print("=" * 60)
+
+    prompt_net = SPPromptWaterNet(args.promptcp if args.promptcp else None, args.SwintransformerPretrain, freeze_prompt=True).to(device)
 
     # fallback: load global resume if provided
     if args.resume and os.path.isfile(args.resume):
-        print(f"[Init] load base weight: {args.resume}")
+        print(f"[Init] Loading TRAINED weight: {args.resume}")
         ckpt = torch.load(args.resume, map_location=device)
         if "model" in ckpt:
             prompt_net.load_state_dict(ckpt["model"])
+            print(f"[Init] Loaded 'model' key from checkpoint")
         else:
             prompt_net.load_state_dict(ckpt)
+            print(f"[Init] Loaded full checkpoint")
+    else:
+        print(f"[WARNING] No trained weight loaded! Using random init for non-backbone parts.")
 
     segmenter = PyramidSegmenterPNG(
         prompt_net,

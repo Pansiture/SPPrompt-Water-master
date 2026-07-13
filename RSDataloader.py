@@ -94,6 +94,9 @@ class PromptDataset_GID5(Dataset):
         # Apply online augmentation during training
         if not self.inference:
             img_1024, gt, prompt_img = self._augment(img_1024, gt, prompt_img)
+            # Paper-style default prompt token: 15% zero-prompt for robust top-layer inference
+            if random.random() < 0.15:
+                prompt_img = np.zeros_like(prompt_img)
 
         if self.inference:
             return (torch.tensor(img_1024).float(),torch.tensor(prompt_img).float(),join(self.gt_path, img_name))
@@ -149,7 +152,7 @@ class PromptDataset_old(Dataset):
         # convert the shape to (3, H, W)
 
         img_1024 = np.transpose(img_1024, (2, 0, 1))
-        prompt_img= io.imread(join(self.prompt_path, img_name))  # (1024, 1024, 1)我猜的
+        prompt_img= io.imread(join(self.prompt_path, img_name))  # (1024, 1024, 1)
         prompt_img = np.expand_dims(prompt_img, axis=0)
         prompt_img = prompt_img / 255
 
@@ -157,13 +160,10 @@ class PromptDataset_old(Dataset):
         gt = np.expand_dims(gt, axis=0)
         gt = gt / 255
 
-        # prompt_gts = io.imread(join(self.prompt_gts_path, img_name)) # multiple labels [0, 1,4,5...], (256,256)
-        # prompt_gts = np.expand_dims(prompt_gts, axis=0)
-        # prompt_gts = prompt_gts / 255
-        #
-        # swin_gts = io.imread(join(self.swin_gts_path, img_name)) # multiple labels [0, 1,4,5...], (256,256)
-        # swin_gts = np.expand_dims(swin_gts, axis=0)
-        # swin_gts = swin_gts / 255
+        if not self.inference:
+            # Paper-style default prompt token: 15% zero-prompt for robust top-layer inference
+            if random.random() < 0.15:
+                prompt_img = np.zeros_like(prompt_img)
 
         if self.inference:
             return (torch.tensor(img_1024).float(),torch.tensor(prompt_img).float(),join(self.gt_path, img_name))
@@ -293,36 +293,19 @@ class GIDDataset(Dataset):
         # ), "image should be normalized to [0, 1]"
 
 
-        prompt_1024= io.imread(join(self.prompt_path, img_name))  # (1024, 1024, 1)我猜的
+        prompt_1024= io.imread(join(self.prompt_path, img_name))  # (1024, 1024, 1)
         prompt_1024 = np.expand_dims(prompt_1024, axis=0)
         prompt_1024 = prompt_1024 / 255
-
-
-
 
         gt = io.imread(join(self.gt_path, img_name)) # multiple labels [0, 1,4,5...], (256,256)
         gt = np.expand_dims(gt, axis=0)
         gt = gt / 255
 
-        # assert img_name == os.path.basename(self.gt_path_files[index]), (
-        #     "img gt name error" + self.gt_path_files[index] + self.npy_files[index]
-        # )
+        if not self.inference:
+            # Paper-style default prompt token: 15% zero-prompt for robust top-layer inference
+            if random.random() < 0.15:
+                prompt_1024 = np.zeros_like(prompt_1024)
 
-        # label_ids = np.unique(gt)[1:]
-        # gt2D = np.uint8(
-        #     gt == random.choice(label_ids.tolist())
-        # )  # only one label, (256, 256)
-        # assert np.max(gt2D) == 1 and np.min(gt2D) == 0.0, "ground truth should be 0, 1"
-        # y_indices, x_indices = np.where(gt2D > 0)
-        # x_min, x_max = np.min(x_indices), np.max(x_indices)
-        # y_min, y_max = np.min(y_indices), np.max(y_indices)
-        # # add perturbation to bounding box coordinates
-        # H, W = gt2D.shape
-        # x_min = max(0, x_min - random.randint(0, self.bbox_shift))
-        # x_max = min(W, x_max + random.randint(0, self.bbox_shift))
-        # y_min = max(0, y_min - random.randint(0, self.bbox_shift))
-        # y_max = min(H, y_max + random.randint(0, self.bbox_shift))
-        # bboxes = np.array([x_min, y_min, x_max, y_max])
         if self.inference:
             return (torch.tensor(img_1024).float(),torch.tensor(prompt_1024).float(),join(self.gt_path, img_name))
         else:
