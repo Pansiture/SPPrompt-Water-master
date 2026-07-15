@@ -1,0 +1,960 @@
+@inproceedings{NIPS2017_3f5ee243,
+author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
+booktitle = {Advances in Neural Information Processing Systems},
+editor = {I. Guyon and U. Von Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+pages = {},
+publisher = {Curran Associates, Inc.},
+title = {Attention is All you Need},
+url = {https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf},
+volume = {30},
+year = {2017},
+abstract = { The dominant sequence transduction models are based on complex recurrent orconvolutional neural networks in an encoder and decoder configuration. The best performing such models also connect the encoder and decoder through an attentionm echanisms. We propose a novel, simple network architecture based solely onan attention mechanism, dispensing with recurrence and convolutions entirely.Experiments on two machine translation tasks show these models to be superiorin quality while being more parallelizable and requiring significantly less timeto train. Our single model with 165 million parameters, achieves 27.5 BLEU onEnglish-to-German translation, improving over the existing best ensemble result by over 1 BLEU. On English-to-French translation, we outperform the previoussingle state-of-the-art with model by 0.7 BLEU, achieving a BLEU score of 41.1. }
+}
+
+@article{2020An,
+title={An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale},
+author={ Dosovitskiy, Alexey  and  Beyer, Lucas  and  Kolesnikov, Alexander  and  Weissenborn, Dirk  and  Houlsby, Neil },
+year={2020},
+abstract = {While the Transformer architecture has become the de-facto standard for natural language processing tasks, its applications to computer vision remain limited. In vision, attention is either applied in conjunction with convolutional networks, or used to replace certain components of convolutional networks while keeping their overall structure in place. We show that this reliance on CNNs is not necessary and a pure transformer applied directly to sequences of image patches can perform very well on image classification tasks. When pre-trained on large amounts of data and transferred to multiple mid-sized or small image recognition benchmarks (ImageNet, CIFAR-100, VTAB, etc.), Vision Transformer (ViT) attains excellent results compared to state-of-the-art convolutional networks while requiring substantially fewer computational resources to train. }
+}
+
+@article{2015U,
+title={U-Net: Convolutional Networks for Biomedical Image Segmentation},
+author={ Ronneberger, Olaf  and  Fischer, Philipp  and  Brox, Thomas },
+journal={Springer, Cham},
+year={2015},
+abstract = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net . }
+}
+
+@article{2017Rethinking,
+title={Rethinking Atrous Convolution for Semantic Image Segmentation},
+author={ Chen, Liang Chieh  and  Papandreou, George  and  Schroff, Florian  and  Adam, Hartwig },
+year={2017},
+abstract = {In this work, we revisit atrous convolution, a powerful tool to explicitly adjust filter's field-of-view as well as control the resolution of feature responses computed by Deep Convolutional Neural Networks, in the application of semantic image segmentation. To handle the problem of segmenting objects at multiple scales, we design modules which employ atrous convolution in cascade or in parallel to capture multi-scale context by adopting multiple atrous rates. Furthermore, we propose to augment our previously proposed Atrous Spatial Pyramid Pooling module, which probes convolutional features at multiple scales, with image-level features encoding global context and further boost performance. We also elaborate on implementation details and share our experience on training our system. The proposed `DeepLabv3' system significantly improves over our previous DeepLab versions without DenseCRF post-processing and attains comparable performance with other state-of-art models on the PASCAL VOC 2012 semantic image segmentation benchmark. }
+}
+
+@article{wang2026gift,
+title={A Gift from the Integration of Discriminative and Diffusion-based Generative Learning: Boundary Refinement Remote Sensing Semantic Segmentation},
+author={Wang, Hao and Hu, Keyan and Guo, Xin and Li, Haifeng and Tao, Chao},
+journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+year={2026},
+publisher={IEEE},
+abstract = { Remote sensing semantic segmentation must address both what the ground objects are within an image and where they are located. Consequently, segmentation models must ensure not only the semantic correctness of large-scale patches (low-frequency information) but also the precise localization of boundaries between patches (high-frequency information related to boundary components). However, most existing approaches rely heavily on discriminative learning, which excels at capturing low-frequency features, while overlooking its inherent limitations in learning high-frequency features for semantic segmentation. Recent studies have revealed that diffusion generative models excel at generating high-frequency details. Our theoretical analysis confirms that the diffusion denoising process significantly enhances the model's ability to learn high-frequency features; however, we also observe that these models exhibit insufficient semantic inference for low-frequency features when guided solely by the original image. Therefore, we integrate the strengths of both discriminative and generative learning, proposing the Integration of Discriminative and diffusion-based Generative learning for Boundary Refinement (IDGBR) framework. The framework first generates a coarse segmentation map using a discriminative backbone model. This map and the original image are fed into a conditioning guidance network to jointly learn a guidance representation subsequently leveraged by an iterative denoising diffusion process refining the coarse segmentation. Extensive experiments across five remote sensing semantic segmentation datasets (binary and multi-class segmentation) confirm our framework's capability of consistent boundary refinement for coarse results from diverse discriminative architectures. The source code is available at https://github.com/KeyanHu-git/IDGBR. }
+}
+
+@article{li2026frequency,
+title={Frequency-Guided Denoising Network for Semantic Segmentation of Remote Sensing Images},
+author={Li, Xin and Xu, Feng and Zhang, Jue and Zhang, Hongsheng and Lyu, Xin and Liu, Fan and Gao, Hongmin and Kaup, Andr{\'e}},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+volume={64},
+pages={TGRS--2025},
+year={2026},
+abstract = { Semantic segmentation of high-resolution remote sensing images (RSIs) remains challenging due to the degradation of high-frequency (HF) semantic cues during convolutional encoding and the lack of frequency consistency in multistage feature fusion. To address these issues, we propose a frequency-guided denoising network (FreDNet) that explicitly enhances frequency-sensitive representations throughout the segmentation process. Specifically, we introduce the denoising-bypassed residual block (DRB), which incorporates a frequency-guided cross-stage fusion module (FDM) and a frequency-aware fusion module (FFM) to suppress frequency-domain noise while preserving edge structures. Furthermore, we design a frequency-guided cross-stage fusion module (FCFM) that leverages frequency intensity response maps to adaptively fuse encoder and decoder features. These components work collaboratively to enhance the frequency robustness and spatial consistency of the segmentation predictions. Extensive experiments on three challenging benchmarks, ISPRS Vaihingen, ISPRS Potsdam, and LoveDA, demonstrate that FreDNet achieves superior performance, surpassing the latest state-of-the-art (SOTA) approaches by up to 0.8% in mean intersection over union (mIoU) and 0.9% in overall accuracy (OA), while maintaining a lightweight inference cost. In addition, ablation study confirms the contribution of each component of FreDNet.}
+}
+
+@ARTICLE{10900563,
+author={Lv, Xianwei and Persello, Claudio and Li, Wangbin and Huang, Xiao and Ming, Dongping and Stein, Alfred},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={Deep Merge: Deep-Learning-Based Region Merging for Remote Sensing Image Segmentation},
+year={2025},
+volume={63},
+number={},
+pages={1-20},
+keywords={Image segmentation;Merging;Remote sensing;Training;Accuracy;Data mining;Feature extraction;Deep learning;Artificial intelligence;Training data;Deep learning;image segmentation;region adjacency graph (RAG);region merging;scale parameter interpretability},
+doi={10.1109/TGRS.2025.3544549},
+abstract = { Image segmentation represents a fundamental step in analyzing very high-spatial-resolution (VHR) remote sensing imagery. Its objective is to partition an image into segments that best match with geo-objects. However, the diverse appearances of geospatial objects often lead to interobject homogeneity and intraobject heterogeneity. Existing segmentation methods often struggle to accurately segment geo-objects with varying shapes and scales. To address these challenges, we propose DeepMerge, a novel method that integrates deep learning and region adjacency graphs (RAGs) to accurately segment complete geo-objects in large VHR images. DeepMerge begins with an initial over-segmentation of the image and then iteratively merges similar regions to achieve complete geo-object segmentation. A deep learning model is employed to learn the similarity between adjacent superpixel pairs. This approach only requires labels indicating whether adjacent superpixels belong to the same geo-object eliminating the need for object-level annotations, enabling weakly supervised segmentation. A cross-scale module is incorporated to capture multiscale information, enhancing the representation of superpixels. In addition, the feature distances between neighboring super-pixels are deemed as scale parameters (thresholds) to control the merging procedure, thus yielding an interpretable, predictable, stable, and optimal scale parameter 0.5. DeepMerge can achieve high segmentation accuracy in a weakly supervised manner, which is validated on large-scale remote sensing images of 0.55-m resolution covering an area of 5660 km2. The experimental results demonstrate that DeepMerge achieves the highest F value (0.9552) and the lowest total error (TE) (0.0827), accurately segmenting geo-objects of varying sizes and outperforming all competing methods. }
+}
+
+@ARTICLE{10365190,
+author={Iizuka, Reo and Xia, Junshi and Yokoya, Naoto},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={Frequency-Based Optimal Style Mix for Domain Generalization in Semantic Segmentation of Remote Sensing Images},
+year={2024},
+volume={62},
+number={},
+pages={1-14},
+keywords={Frequency-domain analysis;Data models;Training;Semantic segmentation;Task analysis;Remote sensing;Predictive models;Domain generalization (DG);semantic segmentation;style randomization (SR)},
+doi={10.1109/TGRS.2023.3344670},
+abstract = { Supervised learning methods assume that training and test data are sampled from the same distribution. However, this assumption is not always satisfied in practical situations of land cover semantic segmentation when models trained in a particular source domain are applied to other regions. This is because domain shifts caused by variations in location, time, and sensor alter the distribution of images in the target domain from that of the source domain, resulting in significant degradation of model performance. To mitigate this limitation, domain generalization (DG) has gained attention as a way of generalizing from source domain features to unseen target domains. One approach is style randomization (SR), which enables models to learn domain-invariant features through randomizing styles of images in the source domain. Despite its potential, existing methods face several challenges, such as inflexible frequency decomposition, high computational and data preparation demands, slow speed of randomization, and lack of consistency in learning. To address these limitations, we propose a frequency-based optimal style mix (FOSMix), which consists of three components: 1) full mix (FM) enhances the data space by maximally mixing the style of reference images into the source domain; 2) optimal mix (OM) keeps the essential frequencies for segmentation and randomizes others to promote generalization; and 3) regularization of consistency ensures that the model can stably learn different images with the same semantics. Extensive experiments that require the model’s generalization ability, with domain shift caused by variations in regions and resolutions, demonstrate that the proposed method achieves superior segmentation in remote sensing. The source code is available at https://github.com/Reo-I/FOSMix. }
+}
+
+@ARTICLE{10684806,
+author={Liu, Yidan and Yue, Jun and Xia, Shaobo and Ghamisi, Pedram and Xie, Weiying and Fang, Leyuan},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={Diffusion Models Meet Remote Sensing: Principles, Methods, and Perspectives},
+year={2024},
+volume={62},
+number={},
+pages={1-22},
+keywords={Diffusion models;Training;Remote sensing;Diffusion processes;Noise reduction;Reviews;Gaussian distribution;Deep learning;diffusion models;generative models;remote sensing (RS)},
+doi={10.1109/TGRS.2024.3464685},
+abstract = {As a newly emerging advance in deep generative models, diffusion models have achieved state-of-the-art results in many fields, including computer vision, natural language processing, and molecule design. The remote sensing (RS) community has also noticed the powerful ability of diffusion models and quickly applied them to a variety of tasks for image processing. Given the rapid increase in research on diffusion models in the field of RS, it is necessary to conduct a comprehensive review of existing diffusion model-based RS papers, to help researchers recognize the potential of diffusion models and provide some directions for further exploration. Specifically, this article first introduces the theoretical background of diffusion models, and then systematically reviews the applications of diffusion models in RS, including image generation, enhancement, and interpretation. Finally, the limitations of existing RS diffusion models and worthy research directions for further exploration are discussed and summarized.}
+}
+
+@ARTICLE{10462184,
+author={Roy, Swalpa Kumar and Sukul, Atri and Jamali, Ali and Haut, Juan M. and Ghamisi, Pedram},
+journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+title={Cross Hyperspectral and LiDAR Attention Transformer: An Extended Self-Attention for Land Use and Land Cover Classification}, 
+year={2024},
+volume={62},
+number={},
+pages={1-15},
+keywords={Laser radar;Transformers;Feature extraction;Land surface;Hyperspectral imaging;Task analysis;Fuses;Convolutional neural networks (CNNs);deep learning;hyperspectral (HS) image classification;vision transformers (ViTs)},
+doi={10.1109/TGRS.2024.3374324},
+abstract = { The successes of attention-driven deep models like the vision transformer (ViT) have sparked interest in cross-domain exploration. However, current transformer-based techniques in remote sensing (RS) primarily focus on single-modal data, limiting their potential to exploit the growing array of multimodal Earth observation (EO) data fully. Enhancing these models for multimodal integration is crucial for comprehensive RS applications. To achieve this, we extend the traditional self-attention mechanism by introducing cross hyperspectral and light detection and ranging (LiDAR) (Cross-HL) attention. We present a novel multimodal deep learning framework that effectively fuses RS data, intending to improve land use and land cover (LULC) recognition. To enhance the accurate exchange of information across different modalities, we fuse their patch projections using the Cross-HL self-attention module. In this process, LiDAR patch tokens serve as queries (Q), while keys (K) and values (V) are derived from HS patch tokens. To demonstrate the superiority of Cross-HL in the proposed multimodal deep learning framework, we conducted extensive experiments on three multimodal RS benchmark datasets: Houston, Trento, and MUUFL. These datasets contain hyperspectral (HS) and LiDAR data. The source code for Cross-HL will be made available publicly at https://github.com/AtriSukul1508/Cross-HL. }
+}
+
+@ARTICLE{9568862,
+author={Zuo, Renxiang and Zhang, Guangyun and Zhang, Rongting and Jia, Xiuping},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={A Deformable Attention Network for High-Resolution Remote Sensing Images Semantic Segmentation},
+year={2022},
+volume={60},
+number={},
+pages={1-14},
+keywords={Semantics;Feature extraction;Visualization;Dams;Task analysis;Image segmentation;Residual neural networks;Deformable convolutional networks (DCNs);high-resolution remote sensing (HRRS) images;multiscale;spatialwise attention mechanism},
+doi={10.1109/TGRS.2021.3119537},
+abstract = { Deformable convolutional networks (DCNs) can mitigate the inherent limited geometric transformation. We reformulate the spatialwise attention mechanism using DCNs in this article for semantic segmentation of high-resolution remote sensing (HRRS) images. It combines the sparse spatial sampling strategy and the long-range relationship modeling capability, namely, deformable attention module (DAM). Such locality awareness, more adaptable to HRRS image structures, can capture each pixel’s neighboring structural information. A reasonable multiscale deformable attention net (MDANet) is designed for the HRRS image semantic segmentation with a slightly increased computational cost based on the proposed DAM. Specifically, standard convolutional layers in the raw ResNet50 are equipped with a DAM to control sampling over a broader range of feature levels and aggregate multiscale context information. The experimental results evaluated on Vaihingen and DeepGlobe Land Cover Classification datasets show that the performance accuracy of MDANet is improved by 7.77% and 8.45% compared with the backbone network (ResNet50) in terms of Miou evaluation, respectively. Furthermore, a DAM can perform better than a global spatial attention mechanism with less computation on the 3×64×64 feature map. In addition, the added ablation studies demonstrate the effectiveness and efficiency of the DAM and multiscale strategy, respectively. Moreover, the sensitivity of critical hyperparameters is analyzed. }
+}
+
+@article{cong2022satmae,
+title={Satmae: Pre-training transformers for temporal and multi-spectral satellite imagery},
+author={Cong, Yezhen and Khanna, Samar and Meng, Chenlin and Liu, Patrick and Rozi, Erik and He, Yutong and Burke, Marshall and Lobell, David and Ermon, Stefano},
+journal={Advances in Neural Information Processing Systems},
+volume={35},
+pages={197--211},
+year={2022},
+abstract = {Unsupervised pre-training methods for large vision models have shown to enhance performance on downstream supervised tasks. Developing similar techniques for satellite imagery presents significant opportunities as unlabelled data is plentiful and the inherent temporal and multi-spectral structure provides avenues to further improve existing pre-training strategies. In this paper, we present SatMAE, a pre-training framework for temporal or multi-spectral satellite imagery based on Masked Autoencoder (MAE). To leverage temporal information, we include a temporal embedding along with independently masking image patches across time. In addition, we demonstrate that encoding multi-spectral data as groups of bands with distinct spectral positional encodings is beneficial. Our approach yields strong improvements over previous state-of-the-art techniques, both in terms of supervised learning performance on benchmark datasets (up to ↑7%), and transfer learning performance on downstream remote sensing tasks, including land cover classification (up to ↑14%) and semantic segmentation. Code and data are available on the project website: https://sustainlab-group.github.io/SatMAE/}
+}
+
+@ARTICLE{11359569,
+author={Li, Xuyang and Li, Chenyu and Ghamisi, Pedram and Hong, Danfeng and Benediktsson, Jón Atli and Chanussot, Jocelyn},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={FlexiMo: A Flexible Remote Sensing Foundation Model},
+year={2026},
+volume={64},
+number={},
+pages={1-16},
+keywords={Spatial resolution;Remote sensing;Adaptation models;Foundation models;Computational modeling;Transformers;Sensors;Tokenization;Computer architecture;Feature extraction;Deep learning;fine-tune technique;foundation model;remote sensing;Vision Transformer (ViT)},
+doi={10.1109/TGRS.2026.3656362}
+abstract = { The rapid expansion of multisource satellite imagery is driving innovation in Earth observation, opening unprecedented opportunities for remote sensing foundation models (RSFMs) to harness diverse data. However, many existing models remain constrained by fixed spatial resolutions and patch sizes, limiting their ability to fully exploit the heterogeneous spatial characteristics inherent in satellite imagery. To address these challenges, we propose FlexiMo, a flexible RSFM that endows the pretrained model with the flexibility to adapt to arbitrary spatial resolutions. Central to FlexiMo is a spatial resolution-aware module that employs a parameter-free alignment embedding mechanism to dynamically recalibrate patch embeddings based on the resolution and dimensions of the input images. This design not only preserves the geometric fidelity of tokenization under varying image sizes, resolutions, and patch granularities but also enables efficient feature extraction without requiring modifications to the underlying network architecture. In addition, FlexiMo incorporates a lightweight channel adaptation module that leverages prior spectral information from sensors. This mechanism allows the model to process images with varying numbers of channels while maintaining the data’s intrinsic physical properties. Extensive experiments on diverse multimodal, multiresolution, and multiscale datasets demonstrate that FlexiMo significantly enhances model generalization and robustness. In particular, the proposed method achieves outstanding performance across a range of downstream tasks, including scene classification, land cover classification, urban building segmentation, and cloud detection. We also explicitly validate physical consistency through wavelength–channel permutation and wavelength-perturbation tests, showing that FlexiMo is sensitive to physically incorrect spectral metadata while remaining robust to small wavelength deviations. By enabling parameter-efficient and physically consistent adaptation, FlexiMo improves the practical deployability of RSFMs under real-world sensor heterogeneity and scale variations. }
+}
+
+@INPROCEEDINGS{10378323,
+author={Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Dollár, Piotr and Girshick, Ross},
+booktitle={2023 IEEE/CVF International Conference on Computer Vision (ICCV)}, 
+title={Segment Anything}, 
+year={2023},
+volume={},
+number={},
+pages={3992-4003},
+keywords={Image segmentation;Computer vision;Data privacy;Computational modeling;Data collection;Data models;Task analysis},
+doi={10.1109/ICCV51070.2023.00371},
+abstract = { We introduce the Segment Anything (SA) project: a new task, model, and dataset for image segmentation. Using our efficient model in a data collection loop, we built the largest segmentation dataset to date (by far), with over 1 billion masks on 11M licensed and privacy respecting images. The model is designed and trained to be promptable, so it can transfer zero-shot to new image distributions and tasks. We evaluate its capabilities on numerous tasks and find that its zero-shot performance is impressive – often competitive with or even superior to prior fully supervised results. We are releasing the Segment Anything Model (SAM) and corresponding dataset (SA-1B) of 1B masks and 11M images at segment-anything.com to foster research into foundation models for computer vision. We recommend reading the full paper at: arxiv.org/abs/2304.02643. }
+}
+
+@article{Ravi2024SAM2S,
+title={SAM 2: Segment Anything in Images and Videos},
+author={Nikhila Ravi and Valentin Gabeur and Yuan-Ting Hu and Ronghang Hu and Chaitanya K. Ryali and Tengyu Ma and Haitham Khedr and Roman R{\"a}dle and Chlo{\'e} Rolland and Laura Gustafson and Eric Mintun and Junting Pan and Kalyan Vasudev Alwala and Nicolas Carion and Chao Wu and Ross B. Girshick and Piotr Doll'ar and Christoph Feichtenhofer},
+journal={ArXiv},
+year={2024},
+volume={abs/2408.00714},
+url={https://api.semanticscholar.org/CorpusID:271601113},
+abstract = { We present Segment Anything Model 2 (SAM 2), a foundation model towards solving promptable visual segmentation in images and videos. We build a data engine, which improves model and data via user interaction, to collect the largest video segmentation dataset to date. Our model is a simple transformer architecture with streaming memory for real-time video processing. SAM 2 trained on our data provides strong performance across a wide range of tasks. In video segmentation, we observe better accuracy, using 3x fewer interactions than prior approaches. In image segmentation, our model is more accurate and 6x faster than the Segment Anything Model (SAM). We believe that our data, model, and insights will serve as a significant milestone for video segmentation and related perception tasks. We are releasing our main model, the dataset, an interactive demo and code. }
+}
+
+@article{WAN2025436,
+title = {A systematic survey and meta-analysis of the segment anything model in remote sensing image processing: Challenges, advances, applications, and opportunities},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {229},
+pages = {436-466},
+year = {2025},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2025.08.023},
+url = {https://www.sciencedirect.com/science/article/pii/S092427162500334X},
+author = {Zhipeng Wan and Sheng Wang and Wei Han and Yuewei Wang and Xiaohui Huang and Xiaohan Zhang and Xiaodao Chen and Yunliang Chen},
+keywords = {Segment anything model, Remote sensing, Foundation model, Meta-analysis},
+abstract = {In recent years, artificial intelligence (AI) technology has profoundly revolutionized the domain of remote sensing (RS), bringing transformative changes from data collection to analysis. Traditional remote sensing image interpretation (RSII) relies on manual interpretation and task-specific models, which suffer from low efficiency, high costs, and poor generalization, making them inadequate for large-scale data processing and complex tasks. With the emergence of foundational models (FMs) (i.e., large pre-trained AI models), not only has efficiency and accuracy been significantly improved, but diverse tasks can also be executed efficiently. Notably, the segment anything model (SAM) has challenged traditional visual paradigms, sparking widespread interest in task-agnostic visual FMs. Its exceptional zero-shot generalization capability has demonstrated outstanding performance in natural scenes, offering new perspectives and methodologies for the automation and intelligence of RSII. However, there are significant differences in spatial characteristics and data structures between RS images and natural images, meaning the application potential of SAM in RSII has yet to be comprehensively evaluated. Although existing studies have demonstrated SAM’s adaptability in RSII, the current literature lacks systematic and in-depth reviews. To fill this gap, this study conducts a comprehensive review and meta-analysis for the first time, focusing on the challenges, advances, applications, and potential of SAM in RSII. The paper first reviews SAM’s advances in RS and compiles relevant research findings. It then analyzes the inherent challenges of RS and explores the bottlenecks of SAM in RS, including semantic information loss, discrepancies between training and target domains, prompt dependency and design complexity, and insufficient robustness. Next, it outlines the details of the meta-analysis conducted to reveal the research status of SAM in RS. Following that, the paper delves into the adaptation methods of SAM in RS image processing and evaluates its performance in both general and specific RS tasks. Finally, future research directions are summarized. Additionally, to support the continued development of this field, a dedicated repository has been created and maintained (https://github.com/WanZhan-lucky/WanSAM4RS-Tracker).}
+}
+
+@article{MA2026104054,
+title = {SaSAM: Scale-aware segmentation anything model for multimodal remote sensing images},
+journal = {Information Fusion},
+volume = {129},
+pages = {104054},
+year = {2026},
+issn = {1566-2535},
+doi = {https://doi.org/10.1016/j.inffus.2025.104054},
+url = {https://www.sciencedirect.com/science/article/pii/S1566253525011169},
+author = {You Ma and Hongwei Tong and Lin Chai and Shihan Mao and Yucheng Zhang},
+keywords = {Remote sensing, Semantic segmentation, Multimodal fusion, Segment anything model (SAM), Multi-scale},
+abstract = {The segment anything model (SAM) has achieved remarkable progress in remote sensing image segmentation tasks due to its exceptional segmentation performance and generalization ability. However, existing SAM-based methods primarily focus on modeling single-modal data, which limits the feature representation of the model in complex scenarios. Additionally, these methods fail to fully exploit multi-scale information during fine-tuning and lack collaborative utilization of multi-level features. To address these issues, we propose the scale-aware SAM (SaSAM) framework, aiming to explore the potential of SAM for semantic segmentation of multimodal remote sensing images. Specifically, we first employ a dual attention feature fusion module to integrate multimodal features into a unified feature, enabling the adaptation of SAM to multimodal tasks without altering its original structure. Next, we design a mixture of multi-scale LoRA experts module that captures object features at different scales through multiple lightweight LoRA experts to enhance the scale-aware capability of the model. Subsequently, we introduce a multi-level feature adaptive aggregation module to fully utilize the multi-granularity features in the SAM encoder. Finally, the multi-scale features are input into the masked decoder to generate accurate segmentation results. Extensive experiments on three multimodal remote sensing datasets demonstrate the superiority of our method. The source code is available at https://github.com/MaYou1997/SaSAM.}
+}
+
+@article{ZHANG2025594,
+title = {FlexiSAM: A flexible SAM-based semantic segmentation model for land cover classification using high-resolution multimodal remote sensing imagery},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {227},
+pages = {594-612},
+year = {2025},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2025.05.028},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271625002151},
+author = {Zhan Zhang and Daoyu Shu and Cunyi Liao and Chengzhi Liu and Yuanxin Zhao and Ru Wang and Xiao Huang and Mi Zhang and Jianya Gong},
+keywords = {Land use and land cover (LULC) classification, Multimodal remote sensing (RS) imagery, Semantic segmentation model, Segment anything model (SAM)},
+abstract = {Fine-grained land use and land cover (LULC) classification using high-resolution remote sensing (RS) imagery is fundamental to scientific research. Recently, the Segment Anything Model (SAM) has emerged as a major advance in deep learning-based LULC classification due to its robust segmentation and generalization capabilities. However, existing SAM-based models predominantly rely on single-modal inputs (e.g., optical RGB or SAR), limiting their ability to fully capture the complex spatial and spectral characteristics of RS imagery. Although multimodal RS data can provide complementary information to enhance classification accuracy, integrating multiple modalities into SAM presents significant challenges, including modality adaptation, semantic interference, and domain gaps. Building on this, we propose FlexiSAM, a SAM-based multimodal semantic segmentation model designed to overcome these challenges. FlexiSAM uses RGB as the primary modality while seamlessly integrating auxiliary RS modalities through a modular pipeline. Key innovations include the Dynamic Multimodal Feature Fusion Unit (DMMFU) and Dynamic Attention and the Context Aggregation Mixer (DACAM) for robust cross-modal feature fusion and refinement, and the Semantic Cross-Modal Integration Module (SCMII) for mitigating modality-induced feature misalignments and ensuring coherent multimodal integration. These are then processed by the adapted SAM encoder, enhanced with a lightweight adapter tailored for RS data, and followed by a dedicated decoder that produces precise classification outputs. Extensive experiments on the Korea, Houston2018, and Mini-FLAIR datasets, conducted using LuoJiaNET for core evaluations and PyTorch for cross-method comparisons, demonstrate FlexiSAM’s effectiveness and superiority, surpassing state-of-the-art models by at least 1.58% on Korea, 0.77% on Houston2018, and 1.14% in mIoU. Importantly, the LuoJiaNET framework delivers higher accuracy and efficiency compared to PyTorch. FlexiSAM also demonstrates strong adaptability and robustness across diverse RS modalities, establishing it as a versatile solution for fine-grained LULC classification.}
+}
+
+@article{CAO2025104440,
+title = {A SAM-adapted weakly-supervised semantic segmentation method constrained by uncertainty and transformation consistency},
+journal = {International Journal of Applied Earth Observation and Geoinformation},
+volume = {137},
+pages = {104440},
+year = {2025},
+issn = {1569-8432},
+doi = {https://doi.org/10.1016/j.jag.2025.104440},
+url = {https://www.sciencedirect.com/science/article/pii/S1569843225000871},
+author = {Yinxia Cao and Xin Huang and Qihao Weng},
+keywords = {Segment anything model (SAM), Weakly supervised learning, Uncertainty, Transformation consistency, Semantic segmentation},
+abstract = {Semantic segmentation of remote sensing imagery is a fundamental task to generate pixel-wise category maps. Existing deep learning networks rely heavily on dense pixel-wise labels, incurring high acquisition costs. Given this challenge, this study introduces sparse point labels, a type of cost-effective weak labels, for semantic segmentation. Existing weakly-supervised methods often leverage low-level visual or high-level semantic features from networks to generate supervision information for unlabeled pixels, which can easily lead to the issue of label noises. Furthermore, these methods rarely explore the general-purpose foundation model, segment anything model (SAM), with strong zero-shot generalization capacity in image segmentation. In this paper, we proposed a SAM-adapted weakly-supervised method with three components: 1) an adapted EfficientViT-SAM network (AESAM) for semantic segmentation guided by point labels, 2) an uncertainty-based pseudo-label generation module to select reliable pseudo-labels for supervising unlabeled pixels, and 3) a transformation consistency constraint for enhancing AESAM’s robustness to data perturbations. The proposed method was tested on the ISPRS Vaihingen dataset (collected from airplane), the Zurich Summer dataset (satellite), and the UAVid dataset (drone). Results demonstrated a significant improvement in mean F1 (by 5.89 %–10.56 %) and mean IoU (by 5.95 %–11.13 %) compared to the baseline method. Compared to the closest competitors, there was an increase in mean F1 (by 0.83 %–5.29 %) and mean IoU (by 1.04 %–6.54 %). Furthermore, our approach requires only fine-tuning a small number of parameters (0.9 M) using cheap point labels, making it promising for scenarios with limited labeling budgets. The code is available at https://github.com/lauraset/SAM-UTC-WSSS.}
+}
+
+@article{yang2025domain,
+title={Domain-Adaptive Segment Anything Model for Cross-Domain Water Body Segmentation in Satellite Imagery},
+author={Yang, Lihong and Liu, Pengfei and Zhang, Guilong and Zhao, Huaici and Zhao, Chunyang},
+journal={Journal of Imaging},
+volume={11},
+number={12},
+pages={437},
+year={2025},
+publisher={MDPI},
+abstract = { Monitoring surface water bodies is crucial for environmental protection and resource management. Existing segmentation methods often struggle with limited generalization across different satellite domains. We propose DASAM, a domain-adaptive Segment Anything Model for cross-domain water body segmentation in satellite imagery. The core innovation of DASAM is a contrastive learning module that aligns features between source and style-augmented images, enabling robust domain generalization without requiring annotations from the target domain. Additionally, DASAM integrates a prompt-enhanced module and an encoder adapter to capture fine-grained spatial details and global context, further improving segmentation accuracy. Experiments on the China GF-2 dataset demonstrate superior performance over existing methods, while cross-domain evaluations on GLH-water and Sentinel-2 water body image datasets verify its strong generalization and robustness. These results highlight DASAM’s potential for large-scale, diverse satellite water body monitoring and accurate environmental analysis. }
+}
+
+@ARTICLE{10493013,
+author={Moghimi, Armin and Welzel, Mario and Celik, Turgay and Schlurmann, Torsten},
+journal={IEEE Access},
+title={A Comparative Performance Analysis of Popular Deep Learning Models and Segment Anything Model (SAM) for River Water Segmentation in Close-Range Remote Sensing Imagery},
+year={2024},
+volume={12},
+number={},
+pages={52067-52085},
+keywords={Image segmentation;Rivers;Feature extraction;Residual neural networks;Cameras;Biological system modeling;Task analysis;Deep learning;Water resources;Deep learning;segment anything model (SAM);river water segmentation;U-Net;DeepLabV3+;LinkNet;PSPNet;PAN;RiverSnap},
+doi={10.1109/ACCESS.2024.3385425},
+abstract = { Accurate segmentation of river water in close-range Remote Sensing (RS) images is vital for efficient environmental monitoring and management. However, this task poses significant difficulties due to the dynamic nature of water, which exhibits varying colors and textures reflecting the sky and surrounding structures along the riverbanks. This study addresses these complexities by evaluating and comparing several well-known deep-learning (DL) techniques on four river scene datasets. To achieve this, we fine-tuned the recently introduced “Segment Anything Model” (SAM) along with popular DL segmentation models such as U-Net, DeepLabV3+, LinkNet, PSPNet, and PAN, all using ResNet50 pre-trained on ImageNet as a backbone. Experimental results highlight the diverse performances of these models in river water segmentation. Notably, fine-tuned SAM demonstrates superior performance, followed by U-Net(ResNet50), despite their higher computational costs. In contrast, PSPNet(ResNet50), while less effective, proves to be the most efficient in terms of execution time. In addition to these findings, we introduce a novel river water segmentation dataset, LuFI-RiverSnap. v1 (Dataset link), characterized by a more diverse range of scenes and accurate masks compared to existing datasets. To facilitate reproducible research in remote sensing and computer vision, we release the implementations of the fine-tuned SAM model (Code link). The findings from this research, coupled with the presented dataset and the accuracy achieved by fine-tuned SAM segmentation, can support tracking river changes, understanding river water level trends, and exploring river ecosystem dynamics. These can also provide valuable insights for practitioners and researchers seeking models tailored to specific image characteristics with practical means in disaster risk reduction, such as rapid assessments of inundations during floods or automatic extractions of gauge data in watersheds. }
+}
+
+@article{zamboni2025we,
+title={Do we need to label large datasets for river water segmentation? Benchmark and stage estimation with minimum to non-labeled image time series},
+author={Zamboni, Pedro Alberto Pereira and Blanch, Xabier and Marcato Junior, Jos{\'e} and Gon{\c{c}}alves, Wesley Nunes and Eltner, Anette},
+journal={International Journal of Remote Sensing},
+volume={46},
+number={7},
+pages={2719--2747},
+year={2025},
+publisher={Taylor \& Francis},
+abstract = { Automatic water segmentation often relies on supervised deep learning, which requires large, annotated datasets. We investigate deep learning approaches for water segmentation and, consequently, water stage estimation that need minimal or non-annotated datasets. We evaluated the Space-Time Correspondence Network or STCN, Segment Anything (SAM), and a combination of SAM with Grounding DINO. We used images from three stationary camera gauges and one dynamic river image dataset captured with an unmanned aerial vehicle (UAV). Further, we retrieved the water level using the produced water marks for the static images. For the UAV dataset, our results show that STCN and SAM achieved similar performances for image segmentation. Our findings reveal that the models can produce realistic water masks and water stage measurements. STCN achieved the best results for the camera gauges, making it a suitable option for sub-hour monitoring. Our approaches can be viable tools for ad hoc water stage measurements. }
+}
+
+@article{LAO2026101950,
+title = {A deep learning model for water segmentation and intertidal topography reconstruction on turbid mudflats from shore-based video imagery},
+journal = {Remote Sensing Applications: Society and Environment},
+volume = {41},
+pages = {101950},
+year = {2026},
+issn = {2352-9385},
+doi = {https://doi.org/10.1016/j.rsase.2026.101950},
+url = {https://www.sciencedirect.com/science/article/pii/S2352938526000832},
+author = {Congcong Lao and Lucheng Zhan and Haifeng Cheng and Nan Xu and Pei Xin},
+keywords = {Mudflat, Intertidal topography, Deep learning model, Water segmentation, Video monitoring},
+abstract = {Although shore-based video imagery enables high-frequency monitoring of intertidal mudflat morphodynamics, high turbidity and low contrast made waterline extraction and topography reconstruction challenging. We proposed SAM2-UNet+, a deep learning–based segmentation model tailored to these conditions. Built on SAM2-UNet, the model retained the Segment Anything Model 2 (SAM2) Hiera backbone and a UNet-style multi-scale encoder–decoder. We further introduced a Semantic–Detail Injection (SDI) module with spatial–channel attention and an embedded Receptive Field Block (RFB) to strengthen skip-connection fusion. We evaluated the model at the Jiuduansha wetlands in the Yangtze Estuary, China. Experiments included closely related variants (SAM2-UNet, SAM2, SAM, and UNet V2), cross-architecture baselines (DeepLabV3+, SegFormer, and Mask2Former), and ablation studies. The results showed that SAM2-UNet + achieved the best segmentation performance, and ablation studies confirmed that the SDI module provided a substantial accuracy gain. On the muddy-coast dataset, SAM2-UNet + reached a mean IoU of 0.930, exceeding the two strongest baselines (SAM2-UNet and SegFormer) by 5% and 6%, respectively. By coupling the extracted waterlines with contemporaneous water levels, our method produced the most accurate intertidal topography reconstruction with minimal systematic elevation bias. Relative to RTK-GPS surveys, the vertical RMSE was 0.09 m, representing 31% and 53% reductions compared with SAM2-UNet and SegFormer, respectively. These results demonstrated robust water segmentation and accurate topographic reconstruction, supporting practical, high-frequency monitoring of mudflat morphology.}
+}
+
+@article{ZHANG2025208,
+title = {CSW-SAM: a cross-scale algorithm for very-high-resolution water body segmentation based on segment anything model 2},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {228},
+pages = {208-227},
+year = {2025},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2025.07.008},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271625002709},
+author = {Tianyi Zhang and Yi Ren and Weibin Li and Chenhao Qin and Licheng Jiao and Hua Su},
+keywords = {CSW-SAM, Cross-scale algorithm, Water body extraction, Automated clustering layer, SAM2},
+abstract = {Large-scale high-resolution water body (WB) extraction is one of the research hotspots in remote sensing image processing. However, accurate training labels for various WBs at Very-High-Resolution (VHR) are extremely scarce. Considering that low-resolution (LR) images and labels are more easily accessible, the challenge lies in fully leveraging LR data to guide high-precision WB extraction from VHR images. To address this issue, we propose a novel cross-scale CSW-SAM algorithm based on SAM2, which learns spectral information of WBs from easily accessible 10 m resolution LR images and maps it to 0.3 m resolution VHR remote sensing images for high-precision WB segmentation. In addition to fine-tuning the decoder, we enhance the encoder’s ability to effectively learn the mapping relationship between images of different resolutions by Adapter Tuning. We have designed the Automated Clustering Layer (ACL) based on the principle of feature similarity and local structure information clustering, to enhance the performance of SAM-based methods in cross-scale WB segmentation. To validate the robustness and generalization ability of the proposed CSW-SAM, we conducted extensive experiments on both a self-constructed cross-scale WB dataset and the publicly available GLH-Water dataset. The results confirm that CSW-SAM achieves strong performance across datasets with diverse WB conditions, demonstrating its potential for scalable and low-cost VHR WB mapping. Additionally, the model can be generalized with minimal cost, making it highly promising for large-scale global VHR WB mapping.}
+}
+
+@article{McFEETERS1996The,
+title={The use of the Normalized Difference Water Index (NDWI) in the delineation of open water features},
+author={McFEETERS and  S., K. },
+journal={International Journal of Remote Sensing},
+volume={17},
+number={7},
+pages={1425-1432},
+year={1996},
+abstract = {
+The Normalized Difference Water Index (NDWI) is a new method that has been developed to delineate open water features and enhance their presence in remotely-sensed digital imagery. The NDWI makes use of reflected near-infrared radiation and visible green light to enhance the presence of such features while eliminating the presence of soil and terrestrial vegetation features. It is suggested that the NDWI may also provide researchers with turbidity estimations of water bodies using remotely-sensed digital data.}
+}
+
+@article{2006Modification,
+title={Modification of normalised difference water index (NDWI) to enhance open water features in remotely sensed imagery},
+author={ Xu, Hanqiu },
+journal={International Journal of Remote Sensing},
+volume={27},
+number={14},
+pages={3025-3033},
+year={2006},
+abstract = { The normalized difference water index (NDWI) of McFeeters (1996) was modified by substitution of a middle infrared band such as Landsat TM band 5 for the near infrared band used in the NDWI. The modified NDWI (MNDWI) can enhance open water features while efficiently suppressing and even removing built‐up land noise as well as vegetation and soil noise. The enhanced water information using the NDWI is often mixed with built‐up land noise and the area of extracted water is thus overestimated. Accordingly, the MNDWI is more suitable for enhancing and extracting water information for a water region with a background dominated by built‐up land areas because of its advantage in reducing and even removing built‐up land noise over the NDWI. }
+}
+
+@article{0High,
+title={High-resolution mapping of global surface water and its long-term changes},
+author={ Pekel, Jean Franois  and  Cottam, Andrew  and  Gorelick, Noel  and  Belward, Alan S. },
+journal={Nature},
+abstract = { The location and persistence of surface water (inland and coastal) is both affected by climate and human activity and affects climate, biological diversity and human wellbeing. Global data sets documenting surface water location and seasonality have been produced from inventories and national descriptions, statistical extrapolation of regional data and satellite imagery, but measuring long-term changes at high resolution remains a challenge. Here, using three million Landsat satellite images, we quantify changes in global surface water over the past 32 years at 30-metre resolution. We record the months and years when water was present, where occurrence changed and what form changes took in terms of seasonality and persistence. Between 1984 and 2015 permanent surface water has disappeared from an area of almost 90,000 square kilometres, roughly equivalent to that of Lake Superior, though new permanent bodies of surface water covering 184,000 square kilometres have formed elsewhere. All continental regions show a net increase in permanent water, except Oceania, which has a fractional (one per cent) net loss. Much of the increase is from reservoir filling, although climate change is also implicated. Loss is more geographically concentrated than gain. Over 70 per cent of global net permanent water loss occurred in the Middle East and Central Asia, linked to drought and human actions including river diversion or damming and unregulated withdrawal. Losses in Australia and the USA linked to long-term droughts are also evident. This globally consistent, validated data set shows that impacts of climate change and climate oscillations on surface water occurrence can be measured and that evidence can be gathered to show how surface water is altered by human activities. We anticipate that this freely available data will improve the modelling of surface forcing, provide evidence of state and change in wetland ecotones (the transition areas between biomes), and inform water-management decision-making. }
+}
+
+@article{meng2026breaking,
+title={Breaking the Scale Barrier: A Scale-Progressive Water Body Extraction Framework Inspired by Human Cognitive Mechanisms},
+author={Meng, Fanlin and Zhang, Guo and Cui, Hao and Gao, Gui and Liu, Wenxuan and Li, Haifeng and Wang, Wei and Hu, Zekun},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+year={2026},
+publisher={IEEE},
+abstract = { Water bodies are typical natural features that exhibit significant variations in scale and appearance in high-resolution remote sensing imagery due to the influence of factors such as topography, temperature, sediment content, and aquatic vegetation. Existing deep learning-based water body segmentation networks typically adopt a local sliding-window approach for training and inference. However, this strategy limits the receptive field and hampers the model’s ability to utilize contextual information for identifying large-scale, complex-textured water bodies, often resulting in misclassification. To address these limitations, we propose a scale-progressive prompt water body extraction framework (SPPrompt-Water), inspired by the hierarchical “global-to-local” cognitive mechanisms of human vision. The framework employs progressive prompting to facilitate cross-scale contextual knowledge transfer, thereby enabling high-precision water body extraction. To support this framework, we design an enforced prompt-based parallel simulation training strategy, which leverages cross-scale sample simulation and label decomposition to obtain object-level supervision within the same scene. Through parallel contrastive training, the model learns to perform segmentation with enforced prompt guidance. Extensive experiments conducted on the GID, Complex Water Bodies Segmentation Dataset (CWBSD) and GLH-Water datasets demonstrate that the proposed method effectively balances spatial continuity in large-scale water bodies with boundary precision in small-scale ones. Our method achieves mean Intersection over Union (mIoU) scores of 83.22%, 92.27%, and 86.91% on the respective datasets, outperforming existing approaches by 8.1%, 6.65%, and 6.79%. These results validate the effectiveness of the proposed framework and offer a novel solution for high-precision dynamic monitoring of water bodies using remote sensing imagery. The source code and datasets will be made publicly available at https://github.com/XinMe/SPPrompt-Wate }
+}
+
+@ARTICLE{11355453,
+author={Li, Zhenxuan and Huang, Miner and Wu, Hao and Lv, Zhiyong and Shi, Wenzhong and Tao, Tingye and Wu, Zhaofu and Zhu, Yongchao and Li, Shuiping and Qu, Xiaochuan},
+journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+title={TA-TransUNet: An Improved Deep Learning Network Model for Water Body Extraction From Remote Sensing Images}, 
+year={2026},
+volume={64},
+number={},
+pages={1-15},
+keywords={Feature extraction;Accuracy;Remote sensing;Water resources;Data mining;Deep learning;Noise;Image edge detection;Transformers;Synthetic aperture radar;Deep learning;semantic segmentation;TransUNet;triplet attention (TA) module;water body extraction},
+doi={10.1109/TGRS.2026.3654523},
+abstract = { Water body extraction, a critical task in environmental monitoring and resource management, has gained extensive research and application in recent years through the use of remote sensing image semantic segmentation. However, due to the complexity of spectral information of ground objects in remote sensing images, water extraction faces challenges, such as inaccurate edge extraction and low extraction accuracy (ACC). This article proposed an improved model, namely, triplet attention (TA)-TransUNet, to address these issues, particularly poor edge recognition and difficulty in identifying water bodies, such as lakes and ponds. First, the model uses an encoder–decoder architecture, with a transformer-based encoder that enhances the ability to capture global features. Second, the TA module is introduced into the model to improve the processing and understanding of input data by integrating local, global, and cross-channel attention mechanisms, thereby enhancing the performance of water extraction. At last, the designed module is applied to the upsampling stage of the TransUNet decoder, enhancing the expressive power of different features by fusing spatial, channel, and dimensional features. By merging upsampled features with those from the encoder, the model integrates local details and global semantic information, improving edge detection ACC and distinguishing complex land cover types. To validate the effectiveness of the proposed model, two publicly available datasets, GID and LoveDA, were used to test the performance of the model. Experimental results showed that TA-TransUNet outperforms the state-of-the-art algorithm models in edge detection and spatial detail capture. }
+}
+
+@ARTICLE{11153852,
+author={Zhang, Yonghong and Han, Hongtao and Xu, Peigang and Ran, Longsi and Sun, Youzheng},
+journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+title={Multiscale Feature Enhancement for Water Body Segmentation in High-Resolution Remote Sensing Images},
+year={2025},
+volume={18},
+number={},
+pages={25781-25793},
+keywords={Remote sensing;Image segmentation;Feature extraction;Transformers;Accuracy;Water resources;Computational modeling;Semantic segmentation;Optimization;Monitoring;ConvNeXt;multiscale feature fusion;remote sensing imagery;water body segmentation},
+doi={10.1109/JSTARS.2025.3607852},
+abstract = { This study addresses the challenges of limited automation in water body extraction, inadequate delineation of edge details, and insufficient feature extraction in multiregional high-resolution remote sensing images. To address these issues, we propose a novel multiscale feature enhancement water body segmentation (MSFE-WaterSeg) framework, tailored for high-resolution remote sensing images. The method uses ConvNeXt as the backbone network, integrates UPerNet for multiscale feature fusion, and introduces the LovaszLoss loss function to enhance segmentation precision in complex water body edge areas. The model is trained on a custom-built dataset of 80 000 high-resolution remote sensing images from multiple countries, and evaluated on 8500 images at a cartographic scale of 1:50 000. The results demonstrate that the MSFE-WaterSeg method achieves an accuracy of 99.43% and an intersection over union (IoU) of 90.20%. Compared to benchmark models UPerNet-Swin-T and UPerNet-ResNet-34, MSFE-WaterSeg yields IoU improvements of 1.29% and 6.8% and F1-Score gains of 0.71% and 4.34%, respectively. The method exhibits superior performance in intricate water body boundaries, narrow fluvial structures, and water–land transition zones. These findings offer efficient and reliable technical support for multiregional water body interpretation and global water resource monitoring, while also providing a feasible optimization strategy for large-scale remote sensing image semantic segmentation tasks. }
+}
+
+@ARTICLE{11006939,
+author={Ni, Hao and Li, Jianfeng and Wang, Chenxu and Zhou, Zhiquan and Wang, Xinsheng},
+journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+title={SDNet: Sandwich Decoder Network for Waterbody Segmentation in Remote Sensing Imagery},
+year={2025},
+volume={18},
+number={},
+pages={13895-13911},
+keywords={Decoding;Image segmentation;Transformers;Feature extraction;Computational modeling;Remote sensing;Accuracy;Kernel;Shape;Convolutional neural networks;Fusion perception;sandwich decoder;selective attention;semantic segmentation;waterbody extraction},
+doi={10.1109/JSTARS.2025.3571455},
+abstract = { Waterbody extraction is essential for monitoring surface changes and supporting disaster response. However, differences in morphology, dimensions, and spectral reflectance make it problematic to segregate waterbodies accurately in remote sensing (RS) photographs. Although self-attention (SA) and convolutional neural networks have demonstrated strong modeling capabilities on RS image recognition, their efficiency and expressiveness still deserve further optimization. In this article, we propose SDNet, an innovative deep learning structure designed to improve segmentation accuracy and scalability in waterbody extraction while minimizing computational costs. SDNet introduces a two-step SA strategy to selectively aggregate spatial features and a sparse-tight pattern fusion module to capture context across various manipulation spaces, enhancing axial and space information fusion. The network’s sandwich-shaped decoder structure allows for easy integration with mainstream encoders. Compared to previous influential methods, SDNet exhibits superior sensitivity in detecting small waterbodies and delivers better overall performance. Experiments performed on public benchmark datasets, such as MSRWD, UAVid, and LoveDA, indicate that SDNet exceeds prior state-of-the-art techniques, with a 2–10% increase in mean intersection over union (IoU) and a 3–9% improvement in F1-score. On the MSRWD, SDNet attained an IoU of 94.21% for the water class, with an F1-score of 97.03% and an overall accuracy of 98.87% . }
+}
+
+@ARTICLE{8013683,
+author={Isikdogan, Furkan and Bovik, Alan C. and Passalacqua, Paola},
+journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+title={Surface Water Mapping by Deep Learning},
+year={2017},
+volume={10},
+number={11},
+pages={4909-4918},
+keywords={Remote sensing;Earth;Satellites;Image segmentation;Water;Biological neural networks;Computer vision;convolutional neural networks;landsat;machine learning;remote sensing},
+doi={10.1109/JSTARS.2017.2735443},
+abstract = {Mapping of surface water is useful in a variety of remote sensing applications, such as estimating the availability of water, measuring its change in time, and predicting droughts and floods. Using the imagery acquired by currently active Landsat missions, a surface water map can be generated from any selected region as often as every 8 days. Traditional Landsat water indices require carefully selected threshold values that vary depending on the region being imaged and on the atmospheric conditions. They also suffer from many false positives, arising mainly from snow and ice, and from terrain and cloud shadows being mistaken for water. Systems that produce high-quality water maps usually rely on ancillary data and complex rule-based expert systems to overcome these problems. Here, we instead adopt a data-driven, deep-learning-based approach to surface water mapping. We propose a fully convolutional neural network that is trained to segment water on Landsat imagery. Our proposed model, named DeepWaterMap, learns the characteristics of water bodies from data drawn from across the globe. The trained model separates water from land, snow, ice, clouds, and shadows using only Landsat bands as input.}
+}
+
+@ARTICLE{8913594,
+author={Isikdogan, Leo F. and Bovik, Alan and Passalacqua, Paola},
+journal={IEEE Geoscience and Remote Sensing Letters},
+title={Seeing Through the Clouds With DeepWaterMap},
+year={2020},
+volume={17},
+number={10},
+pages={1662-1666},
+keywords={Earth;Remote sensing;Artificial satellites;Data models;Atmospheric modeling;Training;Sea surface;Computer vision;image processing;machine learning;oceans;remote sensing;water resources},
+doi={10.1109/LGRS.2019.2953261},
+abstract = {We present our next-generation surface water mapping model, DeepWaterMapV2, which uses improved model architecture, data set, and a training setup to create surface water maps at lower cost, with higher precision and recall. We designed DeepWaterMapV2 to be memory efficient for large inputs. Unlike earlier models, our new model is able to process a full Landsat scene in one-shot and without dividing the input into tiles. DeepWaterMapV2 is robust against a variety of natural and artificial perturbations in the input, such as noise, different sensor characteristics, and small clouds. Our model can even “see” through the clouds without relying on any active sensor data, in cases where the clouds do not fully obstruct the scene. Although we trained the model on Landsat-8 images only, it also supports data from a variety of other Earth observing satellites, including Landsat-5, Landsat-7, and Sentinel-2, without any further training or calibration. Our code and trained model are available at https://github.com/isikdogan/deepwatermap.}
+}
+
+@inproceedings{3045390.3045502,
+author = {Gal, Yarin and Ghahramani, Zoubin},
+title = {Dropout as a Bayesian approximation: representing model uncertainty in deep learning},
+year = {2016},
+publisher = {JMLR.org},
+abstract = {Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs - extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout's uncertainty. Various network architectures and nonlinearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout's uncertainty in deep reinforcement learning.},
+booktitle = {Proceedings of the 33rd International Conference on International Conference on Machine Learning - Volume 48},
+pages = {1050–1059},
+numpages = {10},
+location = {New York, NY, USA},
+series = {ICML'16},
+abstract = {Deep learning tools have gained tremendous attention in applied machine learning. However such tools for regression and classification do not capture model uncertainty. In comparison, Bayesian models offer a mathematically grounded framework to reason about model uncertainty, but usually come with a prohibitive computational cost. In this paper we develop a new theoretical framework casting dropout training in deep neural networks (NNs) as approximate Bayesian inference in deep Gaussian processes. A direct result of this theory gives us tools to model uncertainty with dropout NNs - extracting information from existing models that has been thrown away so far. This mitigates the problem of representing uncertainty in deep learning without sacrificing either computational complexity or test accuracy. We perform an extensive study of the properties of dropout's uncertainty. Various network architectures and nonlinearities are assessed on tasks of regression and classification, using MNIST as an example. We show a considerable improvement in predictive log-likelihood and RMSE compared to existing state-of-the-art methods, and finish by using dropout's uncertainty in deep reinforcement learning.}
+}
+
+@article{kendall2017uncertainties,
+title={What uncertainties do we need in bayesian deep learning for computer vision?},
+author={Kendall, Alex and Gal, Yarin},
+journal={Advances in neural information processing systems},
+volume={30},
+year={2017},
+abstract = { There are two major types of uncertainty one can model. Aleatoric uncertainty captures noise inherent in the observations. On the other hand, epistemic uncertainty accounts for uncertainty in the model-uncertainty which can be explained away given enough data. Traditionally it has been difficult to model epistemic uncertainty in computer vision, but with new Bayesian deep learning tools this is now possible. We study the benefits of modeling epistemic vs. aleatoric uncertainty in Bayesian deep learning models for vision tasks. For this we present a Bayesian deep learning framework combining input-dependent aleatoric uncertainty together with epistemic uncertainty. We study models under the framework with per-pixel semantic segmentation and depth regression tasks. Further, our explicit uncertainty formulation leads to new loss functions for these tasks, which can be interpreted as learned attenuation. This makes the loss more robust to noisy data, also giving new state-of-the-art results on segmentation and depth regression benchmarks. }
+}
+
+@inproceedings{3295222.3295387,
+author = {Lakshminarayanan, Balaji and Pritzel, Alexander and Blundell, Charles},
+title = {Simple and scalable predictive uncertainty estimation using deep ensembles},
+year = {2017},
+isbn = {9781510860964},
+publisher = {Curran Associates Inc.},
+address = {Red Hook, NY, USA},
+booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+pages = {6405–6416},
+numpages = {12},
+location = {Long Beach, California, USA},
+series = {NIPS'17},
+abstract = {Deep neural networks (NNs) are powerful black box predictors that have recently achieved impressive performance on a wide spectrum of tasks. Quantifying predictive uncertainty in NNs is a challenging and yet unsolved problem. Bayesian NNs, which learn a distribution over weights, are currently the state-of-the-art for estimating predictive uncertainty; however these require significant modifications to the training procedure and are computationally expensive compared to standard (non-Bayesian) NNs. We propose an alternative to Bayesian NNs that is simple to implement, readily parallelizable, requires very little hyperparameter tuning, and yields high quality predictive uncertainty estimates. Through a series of experiments on classification and regression benchmarks, we demonstrate that our method produces well-calibrated uncertainty estimates which are as good or better than approximate Bayesian NNs. To assess robustness to dataset shift, we evaluate the predictive uncertainty on test examples from known and unknown distributions, and show that our method is able to express higher uncertainty on out-of-distribution examples. We demonstrate the scalability of our method by evaluating predictive uncertainty estimates on ImageNet.}
+}
+
+@article{sensoy2018evidential,
+title={Evidential deep learning to quantify classification uncertainty},
+author={Sensoy, Murat and Kaplan, Lance and Kandemir, Melih},
+journal={Advances in neural information processing systems},
+volume={31},
+year={2018},
+abstract = { Deterministic neural nets have been shown to learn effective predictors on a wide range of machine learning problems. However, as the standard approach is to train the network to minimize a prediction loss, the resultant model remains ignorant to its prediction confidence. Orthogonally to Bayesian neural nets that indirectly infer prediction uncertainty through weight uncertainties, we propose explicit modeling of the same using the theory of subjective logic. By placing a Dirichlet distribution on the class probabilities, we treat predictions of a neural net as subjective opinions and learn the function that collects the evidence leading to these opinions by a deterministic neural net from data. The resultant predictor for a multi-class classification problem is another Dirichlet distribution whose parameters are set by the continuous output of a neural net. We provide a preliminary analysis on how the peculiarities of our new loss function drive improved uncertainty estimation. We observe that our method achieves unprecedented success on detection of out-of-distribution queries and endurance against adversarial perturbations. }
+}
+
+@article{cheon2026brain,
+title={Brain-inspired warm-up training with random noise for uncertainty calibration},
+author={Cheon, Jeonghwan and Paik, Se-Bum},
+journal={Nature Machine Intelligence},
+pages={1--12},
+year={2026},
+publisher={Nature Publishing Group UK London},
+abstract = {Uncertainty calibration, the alignment of predictive confidence with accuracy, is essential for the reliable deployment of machine learning systems in real-world applications. However, current models often fail to achieve this goal, generating responses that are overconfident, inaccurate or even fabricated. Here we show that the widely adopted initialization method in deep learning—long regarded as standard practice—is, in fact, a primary source of overconfidence. To address this problem, we introduce a neurodevelopment-inspired warm-up strategy that inherently resolves uncertainty-related issues without requiring pre- or post-processing. In our approach, networks are first briefly trained on random noise and random labels before being exposed to real data. This warm-up phase yields optimal calibration, ensuring that confidence remains well aligned with accuracy throughout subsequent training. Moreover, the resulting networks demonstrate high proficiency in the identification of ‘unknown’ inputs, providing a robust solution for uncertainty calibration in both in-distribution and out-of-distribution contexts. }
+}
+
+@inproceedings{xu2024reliable,
+title={Reliable conflictive multi-view learning},
+author={Xu, Cai and Si, Jiajun and Guan, Ziyu and Zhao, Wei and Wu, Yue and Gao, Xiyue},
+booktitle={Proceedings of the AAAI conference on artificial intelligence},
+volume={38},
+number={14},
+pages={16129--16137},
+year={2024},
+abstract = { Multi-view learning aims to combine multiple features to achieve more comprehensive descriptions of data. Most previous works assume that multiple views are strictly aligned. However, real-world multi-view data may contain low-quality conflictive instances, which show conflictive information in different views. Previous methods for this problem mainly focus on eliminating the conflictive data instances by removing them or replacing conflictive views. Nevertheless, real-world applications usually require making decisions for conflictive instances rather than only eliminating them. To solve this, we point out a new Reliable Conflictive Multi-view Learning (RCML) problem, which requires the model to provide decision results and attached reliabilities for conflictive multi-view data. We develop an Evidential Conflictive Multi-view Learning (ECML) method for this problem. ECML first learns view-specific evidence, which could be termed as the amount of support to each category collected from data. Then, we can construct view-specific opinions consisting of decision results and reliability. In the multi-view fusion stage, we propose a conflictive opinion aggregation strategy and theoretically prove this strategy can exactly model the relation of multi-view common and view-specific reliabilities. Experiments performed on 6 datasets verify the effectiveness of ECML. The code is released at https://github.com/jiajunsi/RCML. }
+}
+
+@article{dechesne2021bayesian,
+title={Bayesian u-net: Estimating uncertainty in semantic segmentation of earth observation images},
+author={Dechesne, Cl{\'e}ment and Lassalle, Pierre and Lef{\`e}vre, S{\'e}bastien},
+journal={Remote Sensing},
+volume={13},
+number={19},
+pages={3836},
+year={2021},
+publisher={MDPI},
+abstract = { In recent years, numerous deep learning techniques have been proposed to tackle the semantic segmentation of aerial and satellite images, increase trust in the leaderboards of main scientific contests and represent the current state-of-the-art. Nevertheless, despite their promising results, these state-of-the-art techniques are still unable to provide results with the level of accuracy sought in real applications, i.e., in operational settings. Thus, it is mandatory to qualify these segmentation results and estimate the uncertainty brought about by a deep network. In this work, we address uncertainty estimations in semantic segmentation. To do this, we relied on a Bayesian deep learning method, based on Monte Carlo Dropout, which allows us to derive uncertainty metrics along with the semantic segmentation. Built on the most widespread U-Net architecture, our model achieves semantic segmentation with high accuracy on several state-of-the-art datasets. More importantly, uncertainty maps are also derived from our model. While they allow for the performance of a sounder qualitative evaluation of the segmentation results, they also include valuable information to improve the reference databases. }
+}
+
+@article{rey2025uncertainty,
+title={Uncertainty evaluation of segmentation models for Earth observation},
+author={Rey, Melanie and Mnih, Andriy and Neumann, Maxim and Overlan, Matt and Purves, Drew},
+journal={arXiv preprint arXiv:2510.19586},
+year={2025},
+abstract = { This paper investigates methods for estimating uncertainty in semantic segmen- tation predictions derived from satellite imagery. Estimating uncertainty for seg- mentation presents unique challenges compared to standard image classification, requiring scalable methods producing per-pixel estimates. While most research on this topic has focused on scene understanding or medical imaging, this work benchmarks existing methods specifically for remote sensing and Earth observa- tion applications. Our evaluation focuses on the practical utility of uncertainty measures, testing their ability to identify prediction errors and noise-corrupted input image regions. Experiments are conducted on two remote sensing datasets, PASTIS and ForTy, selected for their differences in scale, geographic coverage, and label confidence. We perform an extensive evaluation featuring several models, such as Stochastic Segmentation Networks and ensembles, in combination with a number of neural architectures and uncertainty metrics. We make a number of practical recommendations based on our findings. }
+}
+
+@article{Zhang2026FedEUEU,
+title={FedEU: Evidential Uncertainty-Driven Federated Fine-Tuning of Vision Foundation Models for Remote Sensing Image Segmentation},
+author={Xiaokang Zhang and Xuran Xiong and Jianzhong Huang and Lefei Zhang},
+journal={ArXiv},
+year={2026},
+volume={abs/2603.07468},
+url={https://api.semanticscholar.org/CorpusID:286377437},
+abstract = { This paper investigates methods for estimating uncertainty in semantic segmen- tation predictions derived from satellite imagery. Estimating uncertainty for seg- mentation presents unique challenges compared to standard image classification, requiring scalable methods producing per-pixel estimates. While most research on this topic has focused on scene understanding or medical imaging, this work benchmarks existing methods specifically for remote sensing and Earth observa- tion applications. Our evaluation focuses on the practical utility of uncertainty measures, testing their ability to identify prediction errors and noise-corrupted input image regions. Experiments are conducted on two remote sensing datasets, PASTIS and ForTy, selected for their differences in scale, geographic coverage, and label confidence. We perform an extensive evaluation featuring several models, such as Stochastic Segmentation Networks and ensembles, in combination with a number of neural architectures and uncertainty metrics. We make a number of practical recommendations based on our findings. }
+}
+
+@article{wang2023uncertainty,
+title={Uncertainty-inspired open set learning for retinal anomaly identification},
+author={Wang, Meng and Lin, Tian and Wang, Lianyu and Lin, Aidi and Zou, Ke and Xu, Xinxing and Zhou, Yi and Peng, Yuanyuan and Meng, Qingquan and Qian, Yiming and others},
+journal={Nature Communications},
+volume={14},
+number={1},
+pages={6757},
+year={2023},
+publisher={Nature Publishing Group UK London},
+abstract = { Failure to recognize samples from the classes unseen during training is a major limitation of artificial intelligence in the real-world implementation for recognition and classification of retinal anomalies. We establish an uncertainty-inspired open set (UIOS) model, which is trained with fundus images of 9 retinal conditions. Besides assessing the probability of each category, UIOS also calculates an uncertainty score to express its confidence. Our UIOS model with thresholding strategy achieves an F1 score of 99.55%, 97.01% and 91.91% for the internal testing set, external target categories (TC)-JSIEC dataset and TC-unseen testing set, respectively, compared to the F1 score of 92.20%, 80.69% and 64.74% by the standard AI model. Furthermore, UIOS correctly predicts high uncertainty scores, which would prompt the need for a manual check in the datasets of non-target categories retinal diseases, low-quality fundus images, and non-fundus images. UIOS provides a robust method for real-world screening of retinal anomalies.}
+}
+
+@article{zhou2025medsam,
+title={Medsam-u: Uncertainty-guided auto multi-prompt adaptation for reliable medsam},
+author={Zhou, Nan and Zou, Ke and Ren, Kai and Luo, Mengting and He, Linchao and Wang, Meng and Chen, Yidi and Zhang, Yi and Chen, Hu and Fu, Huazhu},
+journal={IEEE Transactions on Circuits and Systems for Video Technology},
+year={2025},
+publisher={IEEE},
+abstract = { The Medical Segment Anything Model (MedSAM) has demonstrated strong performance in medical image segmentation, attracting increasing attention in the medical imaging domain. However, as with many prompt-based segmentation models, its performance is highly sensitive to the type and location of input prompts. This sensitivity often leads to suboptimal segmentation outcomes and necessitates labor-intensive manual prompt tuning, which hampers both efficiency and robustness. To address this challenge, this paper proposes MedSAM-U, an uncertainty-guided framework designed to automatically refine prompt inputs and enhance segmentation reliability. Specifically, a Multi-Prompt Adapter is integrated into MedSAM, resulting in MPA-MedSAM, which enables the model to effectively accommodate diverse multi-prompt inputs. An uncertainty estimation module is then introduced to evaluate the reliability of the prompts and their initial segmentation results. Based on this, a novel uncertainty-guided prompt adaptation strategy is applied to automatically generate refined prompts and more accurate segmentation outputs. The proposed MedSAM-U framework is evaluated across multiple medical imaging modalities. Experimental results on five diverse datasets demonstrate that MedSAM-U achieves consistent performance improvements ranging from 1.7% to 20.5% over the baseline MedSAM, confirming its effectiveness and practicality for robust and efficient medical image segmentation. }
+}
+
+@article{geng2025feu,
+title={FEU-Diff: A Diffusion Model With Fuzzy Evidence-Driven Dynamic Uncertainty Fusion for Medical Image Segmentation},
+author={Geng, Sheng and Jiang, Shu and Hou, Tao and Yao, Hongcheng and Huang, Jiashuang and Ding, Weiping},
+journal={IEEE Transactions on Neural Networks and Learning Systems},
+year={2025},
+publisher={IEEE},
+abstract = {Diffusion models, as a class of generative frameworks based on step-wise denoising, have recently attracted significant attention in the field of medical image segmentation. However, existing diffusion-based methods typically rely on static fusion strategies to integrate conditional priors with denoised features, making them difficult to adaptively balance their respective contributions at different denoising stages. Moreover, these methods often lack explicit modeling of pixel-level uncertainty in ambiguous regions, which may lead to the loss of structural details during the iterative denoising process, ultimately compromising the accuracy (Acc) and completeness of the final segmentation results. To this end, we propose FEU-Diff, a diffusion-based segmentation framework that integrates fuzzy evidence modeling and uncertainty fusion (UF) mechanisms. Specifically, a fuzzy semantic enhancement (FSE) module is designed to model pixel-level uncertainty through Gaussian membership functions and fuzzy logic rules, enhancing the model’s ability to identify and represent ambiguous boundaries. An evidence dynamic fusion (EDF) module estimates feature confidence via a Dirichlet-based distribution and adaptively guides the fusion of conditional information and denoised features across different denoising stages. Furthermore, the UF module quantifies discrepancies among multisource predictions to compensate for structural detail loss during the iterative denoising process. Extensive experiments on four public datasets show that FEU-Diff consistently outperforms state-of-the-art (SOTA) methods, achieving an average gain of 1.42% in the Dice similarity coefficient (DSC), 1.47% in intersection over union (IoU), and a 2.26 mm reduction in the 95th percentile Hausdorff distance (HD95). In addition, our method generates uncertainty maps that enhance clinical interpretability.}
+}
+
+@Article{rs18081210,
+AUTHOR = {Xu, Qiao and Wang, Huifan and Zhong, Pengcheng and Xiao, Yao and Jiang, Yuxin and Meng, Yan and Zhang, Qi and Zeng, Cheng and Sun, Yangjie and Liu, Yuxuan},
+TITLE = {An Uncertainty-Aware Hybrid CNN–Transformer Network for Accurate Water Body Extraction from High-Resolution Remote Sensing Images in Complex Scenarios},
+JOURNAL = {Remote Sensing},
+VOLUME = {18},
+YEAR = {2026},
+NUMBER = {8},
+ARTICLE-NUMBER = {1210},
+URL = {https://www.mdpi.com/2072-4292/18/8/1210},
+ISSN = {2072-4292},
+ABSTRACT = {Timely and accurate monitoring of surface water dynamics via remote sensing is critical, given water resources’ importance. However, accurate water body delineation based on high-resolution remotely sensed imagery is still challenging due to the complexity of water bodies’ boundaries and the diversity of their shapes and sizes, which can lead to boundary ambiguity and varying degrees of confusion with near-water vegetation in water body maps. To address this challenge, we introduce an uncertainty-aware hybrid CNN–Transformer model for delineating water bodies using remotely sensed imagery. In our designed network, a multi-scale transformer (MST) module is first designed to effectively model and refine the multi-scale global semantic dependencies of water bodies. Subsequently, an uncertainty-guided multi-scale information fusion (MSIF) module is constructed to extract water body mapping information from these multi-scale features output from the MST module and fuse them adaptively. Across different scales, the extracted features differ in their ability to distinguish water bodies from non-water bodies and in their levels of uncertainty. Consequently, during the adaptive fusion of multi-scale water body information in the MSIF module, the mapping uncertainty is quantified and suppressed to minimize its impact, thus yielding enhanced precision in water body delineation. Ultimately, a comprehensive loss function is designed for model optimization to generate the final water body map. Furthermore, to promote water body segmentation models’ development, this study also presents the HBD_Water water body sample dataset, which contains 44 multispectral, 5000 × 5000-pixel images at 2 m spatial resolution, and will be released on the LuojiaSET platform soon. Finally, to verify the proposed model and its constituent MST and MSIF modules, extensive water mapping experiments were performed on three datasets. The experimental results substantiate their effectiveness. Furthermore, comparative experiment results demonstrate that the proposed model performs better at water body extraction than advanced networks including TransUNet, DeeplabV3+, and ADCNN.},
+DOI = {10.3390/rs18081210}
+},
+
+@ARTICLE{10409293,
+author={Zhang, Jiaxu and Cui, Qi and Ma, Xiaojian},
+journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+title={Deep Evidential Remote Sensing Landslide Image Classification With a New Divergence, Multiscale Saliency and an Improved Three-Branched Fusion},
+year={2024},
+volume={17},
+number={},
+pages={3799-3820},
+keywords={Terrain factors;Remote sensing;Evidence theory;Image classification;Deep learning;Visualization;Image recognition;Evidence theory;evidential deep learning;Jensen–Renyi (JR) divergence measure;multisource decision fusion;remote sensing landslide image classification},
+doi={10.1109/JSTARS.2024.3354455}}
+
+@article{Lin2022TeachingMT,
+  title={Teaching Models to Express Their Uncertainty in Words},
+  author={Stephanie C. Lin and Jacob Hilton and Owain Evans},
+  journal={Trans. Mach. Learn. Res.},
+  year={2022},
+  volume={2022},
+  url={https://api.semanticscholar.org/CorpusID:249191391},
+abstract = {We show that a GPT-3 model can learn to express uncertainty about its own answers in natural language -- without use of model logits. When given a question, the model generates both an answer and a level of confidence (e.g."90% confidence"or"high confidence"). These levels map to probabilities that are well calibrated. The model also remains moderately calibrated under distribution shift, and is sensitive to uncertainty in its own answers, rather than imitating human examples. To our knowledge, this is the first time a model has been shown to express calibrated uncertainty about its own answers in natural language. For testing calibration, we introduce the CalibratedMath suite of tasks. We compare the calibration of uncertainty expressed in words ("verbalized probability") to uncertainty extracted from model logits. Both kinds of uncertainty are capable of generalizing calibration under distribution shift. We also provide evidence that GPT-3's ability to generalize calibration depends on pre-trained latent representations that correlate with epistemic uncertainty over its answers.}
+}
+
+@inproceedings{sun2025two,
+title={Two losses, one goal: Balancing conflict gradients for semi-supervised semantic segmentation},
+author={Sun, Rui and Mai, Huayu and Li, Wangkai and Chen, Yujia and Wang, Yuan},
+booktitle={Proceedings of the IEEE/CVF international conference on computer vision},
+pages={20357--20367},
+year={2025},
+abstract = { Semi-supervised semantic segmentation has attracted con- siderable attention as it alleviates the need for extensive pixel-level annotations. However, existing methods often overlook the potential optimization conflict between super- vised and unsupervised learning objectives, leading to sub- optimal performance. In this paper, we identify this under- explored issue and propose a novel Pareto Optimization Strategy (POS) to tackle it. POS aims to find a descent gradient direction that benefits both learning objectives, thereby facilitating model training. By dynamically assign- ing weights to the gradients at each iteration based on the model’s learning status, POS effectively reconciles the in- trinsic tension between the two objectives. Furthermore, we analyze POS from the perspective of gradient descent in random batch sampling and propose the Magnitude En- hancement Operation (MEO) to further unleash its poten- tial by considering both direction and magnitude during gradient integration. Extensive experiments on challeng- ing benchmarks demonstrate that integrating POS into ex- isting semi-supervised segmentation methods yields consis- tent improvements across different data splits and architec- tures (CNN, Transformer), showcasing its effectiveness.}
+}
+
+@article{cong2025lightweight,
+title={Lightweight class incremental semantic segmentation without catastrophic forgetting},
+author={Cong, Wei and Cong, Yang and Ren, Yu},
+journal={IEEE Transactions on Image Processing},
+year={2025},
+publisher={IEEE},
+abstract = { Class incremental semantic segmentation (CISS) aims to progressively segment newly introduced classes while preserving the memory of previously learned ones. Traditional CISS methods directly employ advanced semantic segmentation models (e.g., Deeplab-v3) as continual learners. However, these methods require substantial computational and memory resources, limiting their deployment on edge devices. In this paper, we propose a Lightweight Class Incremental Semantic Segmentation (LISS) model tailored for resource-constrained scenarios. Specifically, we design an automatic knowledge-preservation pruning strategy based on the Hilbert-Schmidt Independence Criterion (HSIC) Lasso, which automatically compresses the CISS model by searching for global penalty coefficients. Nonetheless, reducing model parameters exacerbates catastrophic forgetting during incremental learning. To mitigate this challenge, we develop a clustering-based pseudo labels generator to obtain high-quality pseudo labels by considering the feature space structure of old classes. It adjusts predicted probabilities from the old model according to the feature proximity to nearest sub-cluster centers for each class. Additionally, we introduce a customized soft labels module that distills the semantic relationships between classes separately. It decomposes soft labels into target probabilities, background probabilities, and other probabilities, thereby maintaining knowledge of previously learned classes in a fine-grained manner. Extensive experiments on two benchmark datasets demonstrate that our LISS model outperforms state-of-the-art approaches in both effectiveness and efficiency. }
+}
+
+@ARTICLE{10597372,
+author={Zhao, Yuanhao and Sun, Genyun and Ling, Ziyan and Zhang, Aizhu and Jia, Xiuping},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={Point-Based Weakly Supervised Deep Learning for Semantic Segmentation of Remote Sensing Images},
+year={2024},
+volume={62},
+number={},
+pages={1-16},
+keywords={Remote sensing;Semantics;Annotations;Semantic segmentation;Feature extraction;Accuracy;Image edge detection;Point annotated semantic label;remote sensing;semantic segmentation;weakly supervised learning},
+doi={10.1109/TGRS.2024.3409903},
+abstract = { Weakly supervised semantic segmentation methods can effectively alleviate the problem of high cost and difficult access to annotation in traditional methods. Among these approaches, point annotated semantic label not only offers a more affordable option but also provides accurate location and category information, playing an indispensable role in current research. However, point annotation labeling encounters challenges such as missing global and texture information, and limiting segmentation accuracy and efficiency while being susceptible to noise interference. For the above problems, a weakly supervised remote sensing image classification framework based on point annotated semantic label is proposed, which consists of three components: data augmentation, Pixel-Net, and iterative superpixel-based sample expansion (ISSE). First, the data augmentation method is used to generate a sufficient number of training samples. Subsequently, the weakly supervised network Pixel-Net is trained using point annotated semantic labels. Pixel-Net incorporates traditional image processing techniques such as edge detection and blurring into deep learning, enabling effective learning of edge and spectral semantic details while reducing the impact of noise on classification results. Finally, ISSE leverages contextual information from superpixels and pseudo-labels to enrich the valuable information in weakly supervised labels, thereby improving the model’s classification performance. In the experiments, existing semantic segmentation methods and Pixel-Net are evaluated on the Vaihingen and Zurich Summer datasets, and the effectiveness of ISSE is verified. The results show that Pixel-Net achieves the best segmentation accuracy on both datasets, while ISSE can effectively utilize the existing point annotation labels to mitigate the effect of noise and thus improve the accuracy of weakly supervised semantic segmentation. }
+}
+
+@ARTICLE{10354347,
+author={Huang, Xin and Wang, Wenrui and Li, Jiayi and Wang, Leiguang and Xie, Xing},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={A Stepwise Refining Image-Level Weakly Supervised Semantic Segmentation Method for Detecting Exposed Surface for Buildings (ESB) From Very High-Resolution Remote Sensing Images},
+year={2024},
+volume={62},
+number={},
+pages={1-17},
+keywords={Image classification;Semantic segmentation;Urban areas;Semantics;Remote sensing;Training;Noise measurement;Exposed surface for buildings (ESB);image-level samples;very high-resolution remote sensing (VHR) images;weakly supervised semantic segmentation},
+doi={10.1109/TGRS.2023.3342019},
+abstract = { Exposed surface for buildings (ESB), which refers to exposed surfaces with traces of building construction, often leads to urban dust. Accurate ESB detection is important for planning urban development and improving urban environment. Fine-grained monitoring of ESB typically needs massive high-quality pixel-level labels, which are demanding and expensive. In contrast, obtaining cost-efficient image-level labels is more promising. Most image-level weakly supervised methods can extract pixel-level pseudo labels using the class activation map (CAM) generated by the classification network. Subsequently, these labels are applied to train the semantic segmentation network. However, the CAM is easy to miss fine-grained information, which leads to label noise. Moreover, the downsampling in the segmentation networks will further loss the spatial information. Furthermore, the sparse distribution and irregular shape of ESB pose additional challenges. Given these problems, we propose a stepwise refining image-level weakly supervised semantic segmentation method (SRIWS): 1) we introduce a new data augmentation method called SRMix to oversample the classification dataset; 2) we propose a two-branch network with a superpixel pooling layer (SPNet) as the semantic segmentation network to capture both global semantic information and spatial details; and 3) to alleviate the impact of potential noise in the initial labels, we design the high-confidence sample filtering operation (HSF) during the SPNet training. The evaluation experiments for the SRIWS were performed on three datasets. The results confirm that our proposed SRIWS presents a superior performance in recognizing ESB compared with existing state-of-the-art methods. In addition, numerous ablation experimental results indicate the effectiveness and robustness of our SRIWS. }
+}
+
+@article{CAO2023113779,
+title = {A multi-scale weakly supervised learning method with adaptive online noise correction for high-resolution change detection of built-up areas},
+journal = {Remote Sensing of Environment},
+volume = {297},
+pages = {113779},
+year = {2023},
+issn = {0034-4257},
+doi = {https://doi.org/10.1016/j.rse.2023.113779},
+url = {https://www.sciencedirect.com/science/article/pii/S0034425723003309},
+author = {Yinxia Cao and Xin Huang and Qihao Weng},
+keywords = {Built-up areas, Digital change detection, Weakly supervised learning, Class activation map, Noise correction, ZY-3},
+abstract = {Accurate change detection of built-up areas (BAs) fosters a comprehensive understanding of urban development. The post-classification comparison (PCC) is a widely-used change detection method by classification and temporal comparison. For classification, image-level labeling is an efficient alternative to pixel-level one for pixel-wise weakly supervised segmentation, which frequently applies pixel-level pseudo labels generated from class activation map (CAM) to train semantic segmentation networks. CAM can be obtained from classification networks trained with image-level labels and can indicate the spatial location of objects. The existing studies are subject to the following issues: 1) They only rely on the single-scale and low-resolution CAM, but ignore the multi-scale property of BAs; 2) Pixel-level pseudo labels usually contain noises (e.g., omissions and false alarms); 3) The temporal correlation between multi-temporal images is less considered in PCC. To address these limitations, this paper proposed a multi-scale weakly supervised learning method, which utilized a large number of single-temporal high-resolution images and image-level labels to detect BA changes. This method consisted of three modules: 1) multi-scale CAM for BA pseudo label generation; 2) adaptive online noise correction for BA detection; and 3) generation of reliable pseudo labels for BA change detection. Based on ZY-3 images (2.5 m), we constructed the first multi-view datasets for both BA detection and change detection. Each ZY-3 image includes a multi-spectral image with red, green, blue, and near-infrared bands and a multi-view image with nadir-, forward-, and backward-views. The BA detection dataset contained 86,166 image-level samples (256 × 256 pixels for each sample), covering 48 major cities in China, while the BA change detection dataset consisted of ZY-3 bi-temporal images at rapidly urbanizing areas (i.e., Beijing and Shanghai). Experiments showed that the proposed method can detect BA changes and suppress pseudo changes effectively, yielding 88.2% F1-score in BA detection and 79.3% for Shanghai and 78.5% for Beijing in change detection. Further analysis demonstrated the proposed method to be advantageous in the following two fronts: 1) the image-level weak labels can achieve pixel-wise BA change detection at low cost; and 2) the multi-scale CAM and temporal correlation are effective in the scenarios with limited labels. Datasets and codes will be accessed at https://github.com/lauraset/MSWS.}
+}
+
+@article{LI2024103942,
+title = {CaSaFormer: A cross- and self-attention based lightweight network for large-scale building semantic segmentation},
+journal = {International Journal of Applied Earth Observation and Geoinformation},
+volume = {130},
+pages = {103942},
+year = {2024},
+issn = {1569-8432},
+doi = {https://doi.org/10.1016/j.jag.2024.103942},
+url = {https://www.sciencedirect.com/science/article/pii/S1569843224002966},
+author = {Jiayi Li and Yuping Hu and Xin Huang},
+keywords = {Large-scale building extraction, Remote sensing, Lightweight network, Attention mechanism, Semantic segmentation},
+abstract = {Buildings play a crucial role in geographic information systems, and advancements in the resolution of remote sensing imagery have facilitated their extraction on a larger scale. However, this progress has simultaneously heightened the requirements for methods to demonstrate efficiency and enhanced generalization performance. For this purpose, we propose a lightweight building semantic segmentation network, named CaSaFormer. Specifically, we propose an efficient module composed of Cross-attention and Self-attention Blocks connected in series (CaSa Block), to extract valuable semantic information from the feature pyramid. Furthermore, a novel Cross-Attention Gate Fusion (CAGF) module was developed to effectively integrate complementary components from global semantic features and local spatial features. Experiment results have demonstrated that our CaSaFormer outperforms state-of-the-art (SOTA) lightweight methods with best trade-off between accuracy and efficiency, showing a 1.92 % improvement in IoU and 16 % of the computation complexity. When compared to non-lightweight methods under equivalent computational resources, an impressive 1.69 % IoU gain is also achieved with only 1.7 % of the computation complexity. The code is available at: https://github.com/YpingHu/CaSaFormer.}
+}
+
+@article{2021Learning,
+title={Learning Transferable Visual Models From Natural Language Supervision},
+author={ Radford, Alec  and  Kim, Jong Wook  and  Hallacy, Chris  and  Ramesh, Aditya  and  Goh, Gabriel  and  Agarwal, Sandhini  and  Sastry, Girish  and  Askell, Amanda  and  Mishkin, Pamela  and  Clark, Jack },
+year={2021},
+abstract = {State-of-the-art computer vision systems are trained to predict a fixed set of predetermined object categories. This restricted form of supervision limits their generality and usability since additional labeled data is needed to specify any other visual concept. Learning directly from raw text about images is a promising alternative which leverages a much broader source of supervision. We demonstrate that the simple pre-training task of predicting which caption goes with which image is an efficient and scalable way to learn SOTA image representations from scratch on a dataset of 400 million (image, text) pairs collected from the internet. After pre-training, natural language is used to reference learned visual concepts (or describe new ones) enabling zero-shot transfer of the model to downstream tasks. We study the performance of this approach by benchmarking on over 30 different existing computer vision datasets, spanning tasks such as OCR, action recognition in videos, geo-localization, and many types of fine-grained object classification. The model transfers non-trivially to most tasks and is often competitive with a fully supervised baseline without the need for any dataset specific training. For instance, we match the accuracy of the original ResNet-50 on ImageNet zero-shot without needing to use any of the 1.28 million training examples it was trained on. We release our code and pre-trained model weights at this https URL }
+}
+
+@article{zhu2025llafs++,
+title={Llafs++: Few-shot image segmentation with large language models},
+author={Zhu, Lanyun and Chen, Tianrun and Ji, Deyi and Xu, Peng and Ye, Jieping and Liu, Jun},
+journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+year={2025},
+publisher={IEEE},
+abstract = { Despite the rapid advancements in few-shot segmentation (FSS), most of existing methods in this domain are hampered by their reliance on the limited and biased information from only a small number of labeled samples. This limitation inherently restricts their capability to achieve sufficiently high levels of performance. To address this issue, this paper proposes a pioneering framework named LLaFS++, which, for the first time, applies large language models (LLMs) into FSS and achieves notable success. LLaFS++ leverages the extensive prior knowledge embedded by LLMs to guide the segmentation process, effectively compensating for the limited information contained in the few-shot labeled samples and thereby achieving superior results. To enhance the effectiveness of the text-based LLMs in FSS scenarios, we present several innovative and task-specific designs within the LLaFS++ framework. Specifically, we introduce an input instruction that allows the LLM to directly produce segmentation results represented as polygons, and propose a region-attribute corresponding table to simulate the human visual system and provide multi-modal guidance. We also synthesize pseudo samples and use curriculum learning for pretraining to augment data and achieve better optimization, and propose a novel inference method to mitigate potential oversegmentation hallucinations caused by the regional guidance information. Incorporating these designs, LLaFS++ constitutes an effective framework that achieves state-of-the-art results on multiple datasets including PASCAL-, COCO-, and FSS-1000. Our superior performance showcases the remarkable potential of applying LLMs to process few-shot vision tasks. }
+}
+
+@article{li2026vt,
+title={Vt-fsl: Bridging vision and text with llms for few-shot learning},
+author={Li, Wenhao and Wang, Qiangchang and Meng, Xianjing and Wu, Zhibin and Yin, Yilong},
+journal={Advances in Neural Information Processing Systems},
+volume={38},
+pages={113697--113727},
+year={2026},
+abstract ={ Few-shot learning (FSL) aims to recognize novel concepts from only a few labeled support samples. Recent studies enhance support features by incorporating additional semantic information (eg, class descriptions) or designing complex semantic fusion modules. However, these methods still suffer from hallucinating semantics that contradict the visual evidence due to the lack of grounding in actual instances, resulting in noisy guidance and costly corrections. To address these issues, we propose a novel framework, bridging Vision and Text with LLMs for Few-Shot Learning (VT-FSL), which constructs precise cross-modal prompts conditioned on Large Language Models (LLMs) and support images, seamlessly integrating them through a geometry-aware alignment mechanism. It mainly consists of Cross-modal Iterative Prompting (CIP) and Cross-modal Geometric Alignment (CGA). Specifically, the CIP conditions an LLM on both class names and support images to generate precise class descriptions iteratively in a single structured reasoning pass. These descriptions not only enrich the semantic understanding of novel classes but also enable the zero-shot synthesis of semantically consistent images. The descriptions and synthetic images act respectively as complementary textual and visual prompts, providing high-level class semantics and low-level intra-class diversity to compensate for limited support data. Furthermore, the CGA jointly aligns the fused textual, support, and synthetic visual representations by minimizing the kernelized volume of the 3-dimensional parallelotope they span. It captures global and nonlinear relationships among all representations, enabling structured and consistent multimodal integration. The proposed VT-FSL method establishes new state-of-the-art performance across ten diverse benchmarks, including standard, cross-domain, and fine-grained few-shot learning scenarios. Code is available at https://github. com/peacelwh/VT-FSL.}
+}
+
+@article{ma2025estimating,
+title={Estimating llm uncertainty with evidence},
+author={Ma, Huan and Chen, Jingdong and Zhou, Joey Tianyi and Wang, Guangyu and Zhang, Changqing},
+journal={arXiv preprint arXiv:2502.00290},
+year={2025},
+abstract = {Over the past few years, Large Language Models (LLMs) have developed rapidly and are widely applied in various domains. However, LLMs face the issue of hallucinations, generating responses that may be unreliable when the models lack relevant knowledge. To be aware of potential hallucinations, uncertainty estimation methods have been introduced, and most of them have confirmed that reliability lies in critical tokens. However, probability-based methods perform poorly in identifying token reliability, limiting their practical utility. In this paper, we reveal that the probability-based method fails to estimate token reliability due to the loss of evidence strength information which is accumulated in the training stage. Therefore, we present Logits-induced token uncertainty (LogTokU), a framework for estimating decoupled token uncertainty in LLMs, enabling real-time uncertainty estimation without requiring multiple sampling processes. We employ evidence modeling to implement LogTokU and use the estimated uncertainty to guide downstream tasks. The experimental results demonstrate that LogTokU has significant effectiveness and promise.}
+}
+@ARTICLE{10490262,
+  author={Hong, Danfeng and Zhang, Bing and Li, Xuyang and Li, Yuxuan and Li, Chenyu and Yao, Jing and Yokoya, Naoto and Li, Hao and Ghamisi, Pedram and Jia, Xiuping and Plaza, Antonio and Gamba, Paolo and Benediktsson, Jon Atli and Chanussot, Jocelyn},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={SpectralGPT: Spectral Remote Sensing Foundation Model}, 
+  year={2024},
+  volume={46},
+  number={8},
+  pages={5227-5244},
+  keywords={Data models;Task analysis;Computational modeling;Transformers;Image reconstruction;Three-dimensional displays;Visualization;Artificial intelligence;deep learning;downstream;foundation model;progressive;remote sensing;spectral data;tensor masked modeling;transformer},
+  doi={10.1109/TPAMI.2024.3362475},
+abstract = { The foundation model has recently garnered significant attention due to its potential to revolutionize the field of visual representation learning in a self-supervised manner. While most foundation models are tailored to effectively process RGB images for various visual tasks, there is a noticeable gap in research focused on spectral data, which offers valuable information for scene understanding, especially in remote sensing (RS) applications. To fill this gap, we created for the first time a universal RS foundation model, named SpectralGPT, which is purpose-built to handle spectral RS images using a novel 3D generative pretrained transformer (GPT). Compared to existing foundation models, SpectralGPT 1) accommodates input images with varying sizes, resolutions, time series, and regions in a progressive training fashion, enabling full utilization of extensive RS Big Data; 2) leverages 3D token generation for spatial-spectral coupling; 3) captures spectrally sequential patterns via multi-target reconstruction; and 4) trains on one million spectral RS images, yielding models with over 600 million parameters. Our evaluation highlights significant performance improvements with pretrained SpectralGPT models, signifying substantial potential in advancing spectral RS Big Data applications within the field of geoscience across four downstream tasks: single/multi-label scene classification, semantic segmentation, and change detection. }
+}
+
+@INPROCEEDINGS{10655854,
+  author={Guo, Xin and Lao, Jiangwei and Dang, Bo and Zhang, Yingying and Yu, Lei and Ru, Lixiang and Zhong, Liheng and Huang, Ziyuan and Wu, Kang and Hu, Dingxiang and He, Huimei and Wang, Jian and Chen, Jingdong and Yang, Ming and Zhang, Yongjun and Li, Yansheng},
+  booktitle={2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={SkySense: A Multi-Modal Remote Sensing Foundation Model Towards Universal Interpretation for Earth Observation Imagery}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={27662-27673},
+  keywords={Earth;Location awareness;Computer vision;Prototypes;Contrastive learning;Spatiotemporal phenomena;Satellite images;Remote Sensing;Multi-modal Foundation Model},
+  doi={10.1109/CVPR52733.2024.02613},
+abstract = { Prior studies on Remote Sensing Foundation Model (RSFM) reveal immense potential towards a generic model for Earth Observation. Nevertheless, these works primar-ily focus on a single modality without temporal and geo-context modeling, hampering their capabilities for diverse tasks. In this study, we present SkySense, a generic billion-scale model, pretrained on a curated multimodal Remote Sensing Imagery (RSI) dataset with 21.5 million temporal sequences. SkySense incorporates a factorized multimodal spatiotemporal encoder taking temporal sequences of opti-cal and Synthetic Aperture Radar (SAR) data as input. This encoder is pretrained by our proposed Multi-Granularity Contrastive Learning to learn representations across different modal and spatial granularities. To further enhance the RSI representations by the geo-context clue, we introduce Geo-Context Prototype Learning to learn region-aware prototypes upon RSI's multimodal spatiotemporal features. To our best knowledge, SkySense is the largest Multi-Modal RSFM to date, whose modules can be flexibly combined or used individually to accommodate various tasks. It demonstrates remarkable generalization capabilities on a thor-ough evaluation encompassing 16 datasets over 7 tasks, from single- to multimodal, static to temporal, and classification to localization. SkySense surpasses 18 recent RSFMs in all test scenarios. Specifically, it outperforms the latest models such as GFM, SatLas and Scale-MAE by a large margin, i.e., 2.76%, 3.67% and 3.61% on average respectively. We will release the pretrained weights to facilitate future research and Earth Observation applications. }
+}
+
+@inproceedings{kuckreja2024geochat,
+title={Geochat: Grounded large vision-language model for remote sensing},
+author={Kuckreja, Kartik and Danish, Muhammad Sohail and Naseer, Muzammal and Das, Abhijit and Khan, Salman and Khan, Fahad Shahbaz},
+booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+pages={27831--27840},
+year={2024},
+abstract = { Recent advancements in Large Vision-Language Models (VLMs) have shown great promise in natural image domains allowing users to hold a dialogue about given visual content. However such general-domain VLMs perform poorly for Remote Sensing (RS) scenarios leading to inaccurate or fabricated information when presented with RS domain-specific queries. Such a behavior emerges due to the unique challenges introduced by RS imagery. For example to handle high-resolution RS imagery with diverse scale changes across categories and many small objects region-level reasoning is necessary alongside holistic scene interpretation. Furthermore the lack of domain-specific multimodal instruction following data as well as strong backbone models for RS make it hard for the models to align their behavior with user queries. To address these limitations we propose GeoChat-the first versatile remote sensing VLM that offers multitask conversational capabilities with high-resolution RS images. Specifically GeoChat can not only answer image-level queries but also accepts region inputs to hold region-specific dialogue. Furthermore it can visually ground objects in its responses by referring to their spatial coordinates. To address the lack of domain-specific datasets we generate a novel RS multimodal instruction-following dataset by extending image-text pairs from existing diverse RS datasets. Leveraging this rich dataset we fine-tune our remote sensing VLM based on the LLaVA-1.5 architecture. We establish a comprehensive benchmark for RS multitask conversations and compare with a number of baseline methods. GeoChat demonstrates robust zero-shot performance on various remote sensing tasks eg image and region captioning visual question answering scene classification visually grounded conversations and referring object detection. Our codes will be open-sourced. }
+}
+
+@article{HU2025272,
+title = {RSGPT: A remote sensing vision language model and benchmark},
+journal = {ISPRS Journal of Photogrammetry and Remote Sensing},
+volume = {224},
+pages = {272-286},
+year = {2025},
+issn = {0924-2716},
+doi = {https://doi.org/10.1016/j.isprsjprs.2025.03.028},
+url = {https://www.sciencedirect.com/science/article/pii/S0924271625001352},
+author = {Yuan Hu and Jianlong Yuan and Congcong Wen and Xiaonan Lu and Yu Liu and Xiang Li},
+keywords = {Remote sensing (RS), Vision language model (VLM), Multi-modal large language model (MLLM)},
+abstract = {The emergence of large-scale Large Language Models (LLMs), with GPT-4 as a prominent example, has significantly propelled the rapid advancement of Artificial General Intelligence (AGI) and sparked the revolution of Artificial Intelligence 2.0. In the realm of remote sensing, there is a growing interest in developing large vision language models (VLMs) specifically tailored for data analysis in this domain. However, current research predominantly revolves around visual recognition tasks, lacking comprehensive, high-quality image–text datasets that are aligned and suitable for training large VLMs, which poses significant challenges to effectively training such models for remote sensing applications. In computer vision, recent research has demonstrated that fine-tuning large vision language models on small-scale, high-quality datasets can yield impressive performance in visual and language understanding. These results are comparable to state-of-the-art VLMs trained from scratch on massive amounts of data, such as GPT-4. Inspired by this captivating idea, in this work, we build a high-quality Remote Sensing Image Captioning dataset (RSICap) that facilitates the development of large VLMs in the remote sensing field. Unlike previous remote sensing datasets that either employ model-generated captions or short descriptions, RSICap comprises 2,585 human-annotated captions with rich and high-quality information. This dataset offers detailed descriptions for each image, encompassing scene descriptions (e.g., residential area, airport, or farmland) as well as object information (e.g., color, shape, quantity, absolute position, etc.). To facilitate the evaluation of VLMs in the field of remote sensing, we also provide a benchmark evaluation dataset called RSIEval. This dataset consists of human-annotated captions and visual question–answer pairs, allowing for a comprehensive assessment of VLMs in the context of remote sensing. We are actively engaged in expanding the scale of these two datasets to cover a broader spectrum of remote sensing image understanding tasks, further enhancing their utility and applicability. Our dataset and codes will be released at https://github.com/Lavender105/RSGPT.}
+}
+
+@ARTICLE{10555327,
+author={Wang, Yuduo and Ghamisi, Pedram},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={RSAdapter: Adapting Multimodal Models for Remote Sensing Visual Question Answering},
+year={2024},
+volume={62},
+number={},
+pages={1-13},
+keywords={Task analysis;Transformers;Computational modeling;Adaptation models;Visualization;Feature extraction;Question answering (information retrieval);Parameter efficient fine-tuning (PEFT);remote sensing (RS);vision-language models;visual question answering (VQA)},
+doi={10.1109/TGRS.2024.3413174},
+abstract = { In recent years, with the rapid advancement of transformer models, transformer-based multimodal architectures have found wide application in various downstream tasks, including, but not limited to, image captioning, visual question answering (VQA), and image–text generation. However, contemporary approaches to remote sensing (RS) VQA often involve resource-intensive techniques, such as full fine-tuning of large models or the extraction of image–text features from pretrained multimodal models, followed by modality fusion using decoders. These approaches demand significant computational resources and time, and a considerable number of trainable parameters are introduced. To address these challenges, we introduce a novel method known as RSAdapter, which prioritizes runtime and parameter efficiency. RSAdapter comprises two key components: the parallel adapter and an additional linear transformation layer inserted after each fully connected (FC) layer within the adapter. This approach not only improves adaptation to pretrained multimodal models but also allows the parameters of the linear transformation layer to be integrated into the preceding FC layers during inference, reducing inference costs. To demonstrate the effectiveness of RSAdapter, we conduct an extensive series of experiments using three distinct RS-VQA datasets and achieve state-of-the-art results on all three datasets. The code for RSAdapter is available online at https://github.com/Y-D-Wang/RSAdapter. }
+}
+
+@inproceedings{wei2026mm,
+title={Mm-ovseg: Multimodal optical-sar fusion for open-vocabulary segmentation in remote sensing},
+author={Wei, Yimin and Xiao, Aoran and Chen, Hongruixuan and Xia, Junshi and Yokoya, Naoto},
+booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+pages={42202--42212},
+year={2026},
+abstract = { Open-vocabulary segmentation enables pixel-level recognition from an open set of textual categories, allowing generalization beyond fixed classes. Despite great potential in remote sensing, progress in this area remains largely limited to clear-sky optical data and struggles under cloudy or haze-contaminated conditions. We present MM-OVSeg, a multimodal Optical-SAR fusion framework for resilient open-vocabulary segmentation under adverse weather conditions. MM-OVSeg leverages the complementary strengths of the two modalities--optical imagery provides rich spectral semantics, while synthetic aperture radar (SAR) offers cloud-penetrating structural cues. To address the cross-modal domain gap and the limited dense prediction capability of current vision-language models, we propose two key designs: a cross-modal unification process for multi-sensor representation alignment, and a dual-encoder fusion module that integrates hierarchical features from multiple vision foundation models for text-aligned multimodal segmentation. Extensive experiments demonstrate that MM-OVSeg achieves superior robustness and generalization across diverse cloud conditions. The source dataset and code are available at https://github. com/Jimmyxichen/MM-OVSeg.}
+}
+
+@article{2023RemoteCLIP,
+title={RemoteCLIP: A Vision Language Foundation Model for Remote Sensing},
+author={ Liu, F.  and  Chen, Delong  and  Guan, Zhan Rong  and  Zhou, Xiaocong  and  Zhu, Jiale  and  Zhou, Jun },
+journal={ArXiv},
+volume={abs/2306.11029},
+year={2023},
+abstract = {General-purpose foundation models have become increasingly important in the field of artificial intelligence. While self-supervised learning (SSL) and Masked Image Modeling (MIM) have led to promising results in building such foundation models for remote sensing, these models primarily learn low-level features, require annotated data for fine-tuning, and not applicable for retrieval and zero-shot applications due to the lack of language understanding. In response to these limitations, we propose RemoteCLIP, the first vision-language foundation model for remote sensing that aims to learn robust visual features with rich semantics, as well as aligned text embeddings for seamless downstream application. To address the scarcity of pre-training data, we leverage data scaling, converting heterogeneous annotations based on Box-to-Caption (B2C) and Mask-to-Box (M2B) conversion, and further incorporating UAV imagery, resulting a 12xlarger pretraining dataset. RemoteCLIP can be applied to a variety of downstream tasks, including zero-shot image classification, linear probing, k-NN classification, few-shot classification, image-text retrieval, and object counting. Evaluations on 16 datasets, including a newly introduced RemoteCount benchmark to test the object counting ability, show that RemoteCLIP consistently outperforms baseline foundation models across different model scales. Impressively, RemoteCLIP outperform previous SoTA by 9.14% mean recall on RSICD dataset and by 8.92% on RSICD dataset. For zero-shot classification, our RemoteCLIP outperform CLIP baseline by up to 6.39% average accuracy on 12 downstream datasets. }
+}
+
+@inproceedings{10.1609/aaai.v40i11.37828,
+author = {Rong, Fu and Lan, Meng and Zhang, Qian and Zhang, Lefei},
+title = {RS2-SAM2: customized SAM2 for referring remote sensing image segmentation},
+year = {2026},
+isbn = {978-1-57735-906-7},
+publisher = {AAAI Press},
+url = {https://doi.org/10.1609/aaai.v40i11.37828},
+doi = {10.1609/aaai.v40i11.37828},
+abstract = {Referring Remote Sensing Image Segmentation (RRSIS) aims to segment target objects in remote sensing (RS) images based on textual descriptions. Although Segment Anything Model 2 (SAM2) has shown remarkable performance in various segmentation tasks, its application to RRSIS presents several challenges, including understanding the text-described RS scenes and generating effective prompts from text. To address these issues, we propose RS2-SAM2, a novel framework that adapts SAM2 to RRSIS by aligning the adapted RS features and textual features while providing pseudo-mask-based dense prompts. Specifically, we employ a union encoder to jointly encode the visual and textual inputs, generating aligned visual and text embeddings as well as multimodal class tokens. A bidirectional hierarchical fusion module is introduced to adapt SAM2 to RS scenes and align adapted visual features with the visually enhanced text embeddings, improving the model's interpretation of text-described RS scenes. To provide precise target cues for SAM2, we design a mask prompt generator, which takes the visual embeddings and class tokens as input and produces a pseudo-mask as the dense prompt of SAM2. Experimental results on several RRSIS benchmarks demonstrate that RS2-SAM2 achieves state-of-the-art performance.},
+booktitle = {Proceedings of the Fortieth AAAI Conference on Artificial Intelligence and Thirty-Eighth Conference on Innovative Applications of Artificial Intelligence and Sixteenth Symposium on Educational Advances in Artificial Intelligence},
+articleno = {972},
+numpages = {9},
+series = {AAAI'26/IAAI'26/EAAI'26}
+}
+
+@inproceedings{zhuang2026libra,
+title={Libra-mil: Multimodal prototypes stereoscopic infused with task-specific language priors for few-shot whole slide image classification},
+author={Zhuang, Zhenfeng and Zhou, Fangyu and Wang, Liansheng},
+booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+volume={40},
+number={16},
+pages={14040--14048},
+year={2026},
+abstract = { While Large Language Models (LLMs) are emerging as a promising direction in computational pathology, the substantial computational cost of giga-pixel Whole Slide Images (WSIs) necessitates the use of Multi-Instance Learning (MIL) to enable effective modeling. A key challenge is that pathological tasks typically provide only bag-level labels, while instance-level descriptions generated by LLMs often suffer from bias due to a lack of fine-grained medical knowledge. To address this, we propose that constructing task-specific pathological entity prototypes is crucial for learning generalizable features and enhancing model interpretability. Furthermore, existing vision-language MIL methods often employ unidirectional guidance, limiting cross-modal synergy. In this paper, we introduce a novel approach, Multimodal Prototype-based Multi-Instance Learning, that promotes bidirectional interaction through a balanced information compression scheme. Specifically, we leverage a frozen LLM to generate task-specific pathological entity descriptions, which are learned as text prototypes. Concurrently, the vision branch learns instance-level prototypes to mitigate the model's reliance on redundant data. For the fusion stage, we employ the Stereoscopic Optimal Transport (SOT) algorithm, which is based on a similarity metric, thereby facilitating broader semantic alignment in a higher-dimensional space. We conduct few-shot classification and explainability experiments on three distinct cancer datasets, and the results demonstrate the superior generalization capabilities of our proposed method. Code will be made available.}
+}
+
+@article{chen2025gaze,
+title={From gaze to insight: Bridging human visual attention and vision language model explanation for weakly-supervised medical image segmentation},
+author={Chen, Jingkun and Duan, Haoran and Zhang, Xiao and Gao, Boyan and Grau, Vicente and Han, Jungong}, abstract = { Medical image segmentation remains challenging due to the high cost of pixel-level annotations for training. In the context of weak supervision, clinician gaze data captures regions of diagnostic interest; however, its sparsity limits its use for segmentation. In contrast, vision-language models (VLMs) provide semantic context through textual descriptions but lack the explanation precision required. Recognizing that neither source alone suffices, we propose a teacher-student framework that integrates both gaze and language supervision, leveraging their complementary strengths. Our key insight is that gaze data indicates “where” clinicians focus during diagnosis, while VLMs explain “why” those regions are significant. To implement this, the teacher model first learns from gaze points enhanced by VLM-generated descriptions of lesion morphology, establishing a foundation for guiding the student model. The teacher then directs the student through three strategies: 1) Multi-scale feature alignment to fuse visual cues with textual semantics; 2) Confidence-weighted consistency constraints to focus on reliable predictions; 3) Adaptive masking to limit error propagation in uncertain areas. Experiments on the Kvasir-SEG, NCI-ISBI, and ISIC datasets show that our method achieves Dice scores of 80.78%, 80.53%, and 84.22%, respectively—improving 3–5% over gaze baselines without increasing the annotation burden. By preserving correlations among predictions, gaze data, and lesion descriptions, our framework also maintains clinical interpretability. This work illustrates how integrating human visual attention with AI-generated semantic context can effectively overcome the limitations of individual weak supervision signals, thereby advancing the development of deployable, annotation-efficient medical AI systems. Code is available at: https://github.com/jingkunchen/FGI }
+journal={IEEE Transactions on Medical Imaging},
+year={2025},
+publisher={IEEE},
+abstract = { Medical image segmentation remains challenging due to the high cost of pixel-level annotations for training. In the context of weak supervision, clinician gaze data captures regions of diagnostic interest; however, its sparsity limits its use for segmentation. In contrast, vision-language models (VLMs) provide semantic context through textual descriptions but lack the explanation precision required. Recognizing that neither source alone suffices, we propose a teacher-student framework that integrates both gaze and language supervision, leveraging their complementary strengths. Our key insight is that gaze data indicates “where” clinicians focus during diagnosis, while VLMs explain “why” those regions are significant. To implement this, the teacher model first learns from gaze points enhanced by VLM-generated descriptions of lesion morphology, establishing a foundation for guiding the student model. The teacher then directs the student through three strategies: 1) Multi-scale feature alignment to fuse visual cues with textual semantics; 2) Confidence-weighted consistency constraints to focus on reliable predictions; 3) Adaptive masking to limit error propagation in uncertain areas. Experiments on the Kvasir-SEG, NCI-ISBI, and ISIC datasets show that our method achieves Dice scores of 80.78%, 80.53%, and 84.22%, respectively—improving 3–5% over gaze baselines without increasing the annotation burden. By preserving correlations among predictions, gaze data, and lesion descriptions, our framework also maintains clinical interpretability. This work illustrates how integrating human visual attention with AI-generated semantic context can effectively overcome the limitations of individual weak supervision signals, thereby advancing the development of deployable, annotation-efficient medical AI systems. Code is available at: https://github.com/jingkunchen/FGI }
+}
+
+@ARTICLE{11224558,
+author={An, Ke and Wang, Yupei and Chen, Liang},
+journal={IEEE Transactions on Geoscience and Remote Sensing},
+title={Soft-Guided Open-Vocabulary Semantic Segmentation of Remote Sensing Images},
+year={2025},
+volume={63},
+number={},
+pages={1-16},
+keywords={Remote sensing;Semantics;Semantic segmentation;Visualization;Optimization;Vocabulary;Collaboration;Noise;Adaptation models;Decoding;Fine-tune;open-vocabulary segmentation;remote sensing (RS);semantic segmentation},
+doi={10.1109/TGRS.2025.3628336},
+abstract = {Open-vocabulary remote sensing (RS) semantic segmentation strives to assign both seen and unseen class labels to individual pixels in RS images. Existing models follow the “fine-tune” paradigm based on vision-language models (VLMs). However, as VLMs are predominantly tailored to natural scenes, these directly fine-tuned models often collapse into the seen categories and show insensitivity in perceiving RS semantic cues. This critical issue of model collapse is closely related to the misalignment between image and text, making them struggle with the unique challenges of RS images, such as complex and diverse scenes, and objects with significant scale differences. To this end, we propose a soft-guided open-vocabulary RS semantic segmentation framework, which is the first to explore how to softly adapt VLMs to the downstream task of semantic segmentation for RS images. Concretely, instead of directly fine-tuning, we introduce a generalization compensation strategy, which employs an additional frozen VLM encoder to provide implicit semantic guidance for dynamic optimization of visual representation. By introducing prior knowledge from the frozen encoder, this soft strategy compensates potential losses incurred during fine-tuning, thus enhancing the model’s pixel-level perceptual alignment while avoiding model collapse. Afterward, to optimize the sensitivity of VLMs’ textual and visual embeddings to RS semantic information, bias-guided image–text collaborative optimization is presented to achieve a bilateral interaction of semantic information with the guidance of RS scenes’ Bias. Finally, an improved upsampling decoder is employed to obtain the progressive refinement and calibration of the cost map through the integration of multiscale information and textual embeddings. Extensive experiments demonstrate that our method achieves state-of-the-art performance on widely used challenging benchmarks. Code is available at https://github.com/H1NATA111/SGSeg.git }
+}
+
+@Article{su16072995,
+AUTHOR = {Ozdemir, Samed and Akbulut, Zeynep and Karsli, Fevzi and Kavzoglu, Taskin},
+TITLE = {Extraction of Water Bodies from High-Resolution Aerial and Satellite Images Using Visual Foundation Models},
+JOURNAL = {Sustainability},
+VOLUME = {16},
+YEAR = {2024},
+NUMBER = {7},
+ARTICLE-NUMBER = {2995},
+URL = {https://www.mdpi.com/2071-1050/16/7/2995},
+ISSN = {2071-1050},
+ABSTRACT = {Water, indispensable for life and central to ecosystems, human activities, and climate dynamics, requires rapid and accurate monitoring. This is vital for sustaining ecosystems, enhancing human welfare, and effectively managing land, water, and biodiversity on both the local and global level. In the rapidly evolving domain of remote sensing and deep learning, this study focuses on water body extraction and classification through the use of recent deep learning models of visual foundation models (VFMs). Specifically, the Segment Anything Model (SAM) and Contrastive Language-Image Pre-training (CLIP) models have shown promise in semantic segmentation, dataset creation, change detection, and instance segmentation tasks. A novel two-step approach involving segmenting images via the Automatic Mask Generator method of the SAM and the zero-shot classification of segments using CLIP is proposed, and its effectiveness is tested on water body extraction problems. The proposed methodology was applied to both remote sensing imagery acquired from LANDSAT 8 OLI and very high-resolution aerial imagery. Results revealed that the proposed methodology accurately delineated water bodies across complex environmental conditions, achieving a mean intersection over union (IoU) of 94.41% and an F1 score of 96.97% for satellite imagery. Similarly, for the aerial imagery dataset, the proposed methodology achieved a mean IoU of 90.83% and an F1 score exceeding 94.56%. The high accuracy achieved in selecting segments predominantly classified as water highlights the effectiveness of the proposed model in intricate environmental image analysis.},
+}
+
+@article{Liu2025ProbabilisticPC,
+title={Probabilistic Prototype Calibration of Vision-Language Models for Generalized Few-Shot Semantic Segmentation},
+author={Jie Liu and Jiayi Shen and Pan Zhou and Jan Jakob Sonke and Efstratios Gavves},
+journal={2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+year={2025},
+pages={21155-21165},
+url={https://api.semanticscholar.org/CorpusID:280010775},
+abstract = { Generalized Few-Shot Semantic Segmentation (GFSS) aims to extend a segmentation model to novel classes with only a few annotated examples while maintaining performance on base classes. Recently, pretrained vision-language models (VLMs) such as CLIP have been leveraged in GFSS to improve generalization on novel classes through multi-modal prototypes learning. However, existing prototype-based methods are inherently deterministic, limiting the adaptability of learned prototypes to diverse samples, particularly for novel classes with scarce annotations. To address this, we propose FewCLIP, a probabilistic prototype calibration framework over multi-modal prototypes from the pretrained CLIP, thus providing more adaptive prototype learning for GFSS. Specifically, FewCLIP first introduces a prototype calibration mechanism, which refines frozen textual prototypes with learnable visual calibration prototypes, leading to a more discriminative and adaptive representation. Furthermore, unlike deterministic prototype learning techniques, FewCLIP introduces distribution regularization over these calibration prototypes. This probabilistic formulation ensures structured and uncertainty-aware prototype learning, effectively mitigating overfitting to limited novel class data while enhancing generalization. Extensive experimental results on PASCAL- $5^{i}$ and COCO- $20^{i}$ datasets demonstrate that our proposed FewCLIP significantly outperforms state-of-the-art approaches across both GFSS and class-incremental setting. The code is available at https://github.com/jliu4ai/FewCLIP. }
+}
+
+@article{Kadavath2022LanguageM,
+  title={Language Models (Mostly) Know What They Know},
+  author={Saurav Kadavath and Tom Conerly and Amanda Askell and Thomas Henighan and Dawn Drain and Ethan Perez and Nicholas Schiefer and Zachary Dodds and Nova Dassarma and Eli Tran-Johnson and Scott Johnston and Sheer El-Showk and Andy Jones and Nelson Elhage and Tristan Hume and Anna Chen and Yuntao Bai and Sam Bowman and Stanislav Fort and Deep Ganguli and Danny Hernandez and Josh Jacobson and John Kernion and Shauna Kravec and Liane Lovitt and Kamal Ndousse and Catherine Olsson and Sam Ringer and Dario Amodei and Tom B. Brown and Jack Clark and Nicholas Joseph and Benjamin Mann and Sam McCandlish and Chris Olah and Jared Kaplan},
+  journal={ArXiv},
+  year={2022},
+  volume={abs/2207.05221},
+  url={https://api.semanticscholar.org/CorpusID:250451161},
+We study whether language models can evaluate the validity of their own claims and predict which questions they will be able to answer correctly. We first show that larger models are well-calibrated on diverse multiple choice and true/false questions when they are provided in the right format. Thus we can approach self-evaluation on open-ended sampling tasks by asking models to first propose answers, and then to evaluate the probability"P(True)"that their answers are correct. We find encouraging performance, calibration, and scaling for P(True) on a diverse array of tasks. Performance at self-evaluation further improves when we allow models to consider many of their own samples before predicting the validity of one specific possibility. Next, we investigate whether models can be trained to predict"P(IK)", the probability that"I know"the answer to a question, without reference to any particular proposed answer. Models perform well at predicting P(IK) and partially generalize across tasks, though they struggle with calibration of P(IK) on new tasks. The predicted P(IK) probabilities also increase appropriately in the presence of relevant source materials in the context, and in the presence of hints towards the solution of mathematical word problems. We hope these observations lay the groundwork for training more honest models, and for investigating how honesty generalizes to cases where models are trained on objectives other than the imitation of human writing.
+}
+
+@article{Lddecke2021ImageSU,
+  title={Image Segmentation Using Text and Image Prompts},
+  author={Timo L{\"u}ddecke and Alexander S. Ecker},
+  journal={2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2021},
+  pages={7076-7086},
+  url={https://api.semanticscholar.org/CorpusID:247794227},
+abstract = { Image segmentation is usually addressed by training a model for a fixed set of object classes. Incorporating additional classes or more complex queries later is expensive as it requires re-training the model on a dataset that encompasses these expressions. Here we propose a system that can generate image segmentations based on arbitrary prompts at test time. A prompt can be either a text or an image. This approach enables us to create a unified model (trained once) for three common segmentation tasks, which come with distinct challenges: referring expression segmentation, zero-shot segmentation and one-shot segmentation. We build upon the CLIP model as a backbone which we extend with a transformer-based decoder that enables dense prediction. After training on an extended version of the PhraseCut dataset, our system generates a binary segmentation map for an image based on a free-text prompt or on an additional image expressing the query. We analyze different variants of the latter image-based prompts in detail. This novel hybrid input allows for dynamic adaptation not only to the three segmentation tasks mentioned above, but to any binary segmentation task where a text or image query can be formulated. Finally, we find our system to adapt well to generalized queries involving affordances or properties. Code is available at https://eckerlab.org/code/CLIPSeg}
+}
+
+@INPROCEEDINGS{9879567,
+  author={Li, Liunian Harold and Zhang, Pengchuan and Zhang, Haotian and Yang, Jianwei and Li, Chunyuan and Zhong, Yiwu and Wang, Lijuan and Yuan, Lu and Zhang, Lei and Hwang, Jenq-Neng and Chang, Kai-Wei and Gao, Jianfeng},
+  booktitle={2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={Grounded Language-Image Pre-training}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={10955-10965},
+  keywords={Visualization;Computer vision;Image recognition;Head;Grounding;Object detection;Data models;Deep learning architectures and techniques; Recognition: detection;categorization;retrieval; Representation learning; Transfer/low-shot/long-tail learning; Vision + language},
+  doi={10.1109/CVPR52688.2022.01069},
+abstract = {This paper presents a grounded language-image pretraining (GLIP) model for learning object-level, language-aware, and semantic-rich visual representations. GLIP unifies object detection and phrase grounding for pre-training. The unification brings two benefits: 1) it allows GLIP to learn from both detection and grounding data to improve both tasks and bootstrap a good grounding model; 2) GLIP can leverage massive image-text pairs by generating grounding boxes in a self-training fashion, making the learned representations semantic-rich. In our experiments, we pre-train GLIP on 27M grounding data, including 3M human-annotated and 24M web-crawled image-text pairs. The learned representations demonstrate strong zero-shot and few-shot transferability to various object-level recognition tasks. 1) When directly evaluated on COCO and LVIS (without seeing any images in COCO during pre-training), GLIP achieves 49.8 AP and 26.9 AP, respectively, surpassing many supervised baselines.11Supervised baselines on COCO object detection: Faster-RCNN w/ ResNet50 (40.2) or ResNet101 (42.0), and DyHead w/ Swin-Tiny (49.7). 2) After fine-tuned on COCO, GLIP achieves 60.8 AP on val and 61.5 AP on test-dev, surpassing prior SoTA. 3) When transferred to 13 downstream object detection tasks, a 1-shot GLIP rivals with a fully-supervised Dynamic Head. Code will be released at https://github.com/microsoft/GLIP. }
+}
+
+@InProceedings{10.1007/978-3-031-72970-6_3,
+author="Liu, Shilong
+and Zeng, Zhaoyang
+and Ren, Tianhe
+and Li, Feng
+and Zhang, Hao
+and Yang, Jie
+and Jiang, Qing
+and Li, Chunyuan
+and Yang, Jianwei
+and Su, Hang
+and Zhu, Jun
+and Zhang, Lei",
+editor="Leonardis, Ale{\v{s}}
+and Ricci, Elisa
+and Roth, Stefan
+and Russakovsky, Olga
+and Sattler, Torsten
+and Varol, G{\"u}l",
+title="Grounding DINO: Marrying DINO with Grounded Pre-training for Open-Set Object Detection",
+booktitle="Computer Vision -- ECCV 2024",
+year="2025",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="38--55",
+abstract="In this paper, we develop an open-set object detector, called Grounding DINO, by marrying Transformer-based detector DINO with grounded pre-training, which can detect arbitrary objects with human inputs such as category names or referring expressions. The key solution of open-set object detection is introducing language to a closed-set detector for open-set concept generalization. To effectively fuse language and vision modalities, we conceptually divide a closed-set detector into three phases and propose a tight fusion solution, which includes a feature enhancer, a language-guided query selection, and a cross-modality decoder for modalities fusion. We first pre-train Grounding DINO on large-scale datasets, including object detection data, grounding data, and caption data, and evaluate the model on both open-set object detection and referring object detection benchmarks. Grounding DINO performs remarkably well on all three settings, including benchmarks on COCO, LVIS, ODinW, and RefCOCO/+/g. Grounding DINO achieves a 52.5 AP on the COCO zero-shot (In this paper, `zero-shot' refers to scenarios where the training split of the test dataset is not utilized in the training process) detection benchmark. It sets a new record on the ODinW zero-shot benchmark with a mean 26.1 AP. We release some checkpoints and inference codes at https://github.com/IDEA-Research/GroundingDINO.",
+isbn="978-3-031-72970-6"
+}
+
+@INPROCEEDINGS{10658574,
+  author={Lai, Xin and Tian, Zhuotao and Chen, Yukang and Li, Yanwei and Yuan, Yuhui and Liu, Shu and Jia, Jiaya},
+  booktitle={2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={LISA: Reasoning Segmentation via Large Language Model}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={9579-9589},
+  keywords={Image segmentation;Vocabulary;Visualization;Computer vision;Target recognition;Large language models;Benchmark testing},
+  doi={10.1109/CVPR52733.2024.00915},
+abstract = {Although perception systems have made remarkable ad-vancements in recent years, they still rely on explicit human instruction or pre-defined categories to identify the target objects before executing visual recognition tasks. Such systems cannot actively reason and comprehend implicit user intention. In this work, we propose a new segmentation task - reasoning segmentation. The task is designed to output a segmentation mask given a complex and implicit query text. Furthermore, we establish a benchmark comprising over one thousand image-instruction-mask data samples, incorporating intricate reasoning and world knowledge for evaluation purposes. Finally, we present LISA: large Language Instructed Segmentation Assistant, which inherits the language generation capabilities of multimodal Large Language Models (LLMs) while also possessing the ability to produce segmentation masks. We expand the original vocabulary with a token and propose the embedding-as-mask paradigm to unlock the segmentation capability. Remarkably, LISA can handle cases involving complex rea-soning and world knowledge. Also, it demonstrates robust zero-shot capability when trained exclusively on reasoning-free datasets. In addition, fine-tuning the model with merely 239 reasoning segmentation data samples results in further performance enhancement. Both quantitative and qualitative experiments show our method effectively unlocks new reasoning segmentation capabilities for multimodal LLMs. Code, models, and data are available at github.com/dvlab-research/LISA.}
+}
+
+@article{li2021soil,
+title={Soil moisture retrieval from remote sensing measurements: Current knowledge and directions for the future},
+author={Li, Zhao-Liang and Leng, Pei and Zhou, Chenghu and Chen, Kun-Shan and Zhou, Fang-Cheng and Shang, Guo-Fei},
+journal={Earth-Science Reviews},
+volume={218},
+pages={103673},
+year={2021},
+publisher={Elsevier},
+abstract = { Soil moisture (SM) is an essential parameter for understanding the interactions and feedbacks between the atmosphere and the Earth's surface through energy and water cycles. Knowledge of the spatiotemporal distribution of land surface SM has long been a challenge in the remote sensing community. Over the past 50 years, electromagnetic spectra, from the optical/thermal to the microwave regions, have been intensively investigated for SM retrieval, providing a number of algorithms, models and products that are available for actual applications nowadays. However, certain issues with respect to retrieval accuracy, spatiotemporal resolution, and data consistency exist and remain unsolved between the state-of-the-art of SM retrieval and readily-used SM datasets for various domains at field, regional/watershed or global scales. In particular, several new theories and algorithms for SM retrieval proposed in recent years have not been well documented in previous articles. Therefore, a critical review of the established and emerging SM retrieval methods with respect to their advantages and disadvantages is necessary. In present study, future directions for each method are highlighted to address the scientific challenges of SM retrieval in the new era of rapid data expansion.}
+}
+
+@article{pan2025evivlm,
+title={EviVLM: When evidential learning meets vision language model for medical image segmentation},
+author={Pan, Qingtao and Li, Zhengrong and Yang, Guang and Yang, Qing and Ji, Bing},
+journal={IEEE Transactions on Medical Imaging},
+year={2025},
+publisher={IEEE},
+abstract = { The disparity between image and text representations, often referred to as the modality gap, remains a significant obstacle for Vision Language Models (VLMs) in medical image segmentation. This gap complicates multi-modal fusion, thereby restricting segmentation performance. To address this challenge, we propose Evidence-driven Vision Language Model (EviVLM)—a novel paradigm that integrates Evidential Learning (EL) into VLMs to systematically measure and mitigate the modality gap for enhanced multi-modal fusion. To drive this paradigm, an Evidence Affinity Map Generator (EAMG) is proposed to collect complementary cross-modal evidences by learning a global cross-modal affinity map, thus refining modality-specific evidence embedding. An Evidence Differential Similarity Learning (EDSL) is further proposed to collect consistent cross-modal evidences by performing Bias-Variance Decomposition on differential matrix derived from bidirectional similarity matrices between image and text evidence embeddings. Finally, the subjective logic is used for mapping the collected evidences to opinions, and the Dempster-Shafer’s theory based combination rule is introduced for opinion aggregation, thereby quantifying the modality gap and facilitating effective multi-modal integration. Experimental results on three public medical image segmentation datasets validate that the proposed EviVLM can achieve state-of-the-art performance. Code is available at: https://github.com/QingtaoPan/EviVLM.}
+}
+
+@article{wang2026eauwseg,
+title={EAUWSeg: Eliminating Annotation Uncertainty in Weakly-Supervised Medical Image Segmentation},
+author={Wang, Lituan and Zhang, Lei and Wang, Yan and Wang, Zhenbin and Zhang, Zhenwei and Yi, Zhang},
+journal={IEEE Transactions on Emerging Topics in Computational Intelligence},
+year={2026},
+publisher={IEEE},
+abstract = { Weakly-supervised medical image segmentation is gaining traction as it requires only rough annotations rather than accurate pixel-to-pixel labels, thereby reducing the workload for specialists. Although some progress has been made, there is still a considerable performance gap between the label-efficient methods and fully-supervised one, which can be attributed to the uncertainty nature of these weak labels. To address this issue, we propose a novel weak annotation method coupled with its learning framework EAUWSeg to eliminate the annotation uncertainty. Specifically, we first propose the Bounded Polygon Annotation (BPAnno) by simply labeling two polygons for a lesion. Then, the tailored learning mechanism that explicitly treat bounded polygons as two separated annotations is proposed to learn invariant feature by providing adversarial supervision signal for model training. Subsequently, a confidence-auxiliary consistency learner incorporates with a classification-guided integrated confidence generator is designed to provide reliable supervision signal for pixels in uncertain region by leveraging the feature presentation consistency across pixels within the same category as well as class-specific information encapsulated in bounded polygons annotation. Experimental results demonstrate that EAUWSeg outperforms existing weakly-supervised segmentation methods. Furthermore, compared to fully-supervised counterparts, the proposed method not only delivers superior performance but also costs much less annotation workload. This underscores the superiority and effectiveness of our approach. }
+}
+
+@article{shang2026evidential,
+title={Evidential calibrated uncertainty-guided interactive segmentation paradigm for ultrasound images},
+author={Shang, Jiang and Wu, Yuanmeng and Han, Xiaoxiang and Zhang, Qi},
+journal={IEEE Transactions on Instrumentation and Measurement},
+year={2026},
+publisher={IEEE},
+abstract = {Accurate and robust ultrasound image segmentation is critical for computer-aided diagnostic systems. Nevertheless, the inherent challenges of ultrasound imaging, such as blurry boundaries and speckle noise, often cause traditional segmentation methods to struggle with performance. Despite recent advancements in universal image segmentation, such as the segment anything model (SAM), existing interactive segmentation methods still suffer from inefficiency and a lack of specialization. These methods rely heavily on extensive, accurate manual or random sampling prompts for interaction, necessitating numerous prompts and iterations to reach satisfactory performance. In response to this challenge, we propose evidential uncertainty-guided interactive segmentation (EUGIS), a tiered two-stage interactive segmentation framework for ultrasound image segmentation based on evidential uncertainty estimation. Specifically, EUGIS harnesses evidence-based uncertainty estimation, grounded in Dempster–Shafer theory (DST) and subjective logic (SL), to gauge the level of uncertainty in the predictions of the model for different regions. By prioritizing sampling the high-uncertainty region, our method can effectively simulate the interactive behavior of well-trained radiologists, enhancing the targeted sampling while reducing the number of prompts and iterations required. Additionally, we propose a trainable calibration mechanism for uncertainty estimation, which can further optimize the boundary between certainty and uncertainty, thereby enhancing the confidence of uncertainty estimation. Extensive experiments on three ultrasound datasets show that EUGIS achieves strong and consistent performance relative to the compared noninteractive and interactive segmentation methods within the ultrasound domain. These results suggest that evidential uncertainty-guided interactive segmentation is a promising direction for ultrasound image segmentation. Code and data are available at https://github.com/JiangVentinal/EUGIS}
+}
+
+@article{oh2025fiesta,
+title={Fiesta: Fourier-based semantic augmentation with uncertainty guidance for enhanced domain generalizability in medical image segmentation},
+author={Oh, Kwanseok and Jeon, Eunjin and Heo, Da-Woon and Shin, Yooseung and Suk, Heung-Il},
+journal={IEEE Transactions on Neural Networks and Learning Systems},
+year={2025},
+publisher={IEEE},
+abstract = {Single-source domain generalization (SDG) in medical image segmentation (MIS) aims to generalize a model using only one source domain data to segment data from an unseen target domain. Despite substantial advances in SDG with data augmentation, existing methods often fail to fully consider the details and uncertain areas prevalent in MIS, leading to mis-segmentation. In this study, we propose a Fourier-based semantic augmentation method called FIESTA using uncertainty guidance (UG) to enhance the fundamental goals of MIS in an SDG context by manipulating the amplitude and phase components in the frequency domain. The proposed Fourier augmentative transformer (FAT) addresses semantic amplitude modulation based on meaningful angular points to induce pertinent variations and harnesses the phase spectrum to ensure structural coherence. Moreover, FIESTA employs uncertainty estimation to fine-tune the augmentation process, improving the ability of the model to adapt to diverse augmented data and concentrate on areas with higher ambiguity. Extensive experiments across three cross-domain scenarios demonstrate that FIESTA surpasses recent state-of-the-art SDG approaches in segmentation performance and significantly contributes to boosting the model’s applicability in medical imaging modalities. }
+}
+
+@article{li2025aggregate,
+title={Aggregate twice more efficiently: dual feature aggregation Transformer for medical image segmentation},
+author={Li, Jiaxin and Cui, Hengfei and Zhang, Yanning and Xia, Yong},
+journal={Information Fusion},
+pages={103996},
+year={2025},
+publisher={Elsevier},
+abstract =  { Accurate medical image segmentation provides precise descriptions of anatomical structures and pathological regions, which plays a crucial role in formulating effective treatment plans, guiding surgeries and monitoring disease progression. Recently, hybrid models combining Convolutional Neural Networks (CNNs) and Transformers have been able to compensate for the limitations of traditional CNNs in capturing long-range dependencies. However, these models often exhibit insufficient generalization ability when confronted with unknown medical data. On the other hand, purely Transformer-based models, while possessing strong global modeling capabilities, face challenges of high computational complexity. To address these problems, this paper proposes a novel U-shaped pure Transformer architecture, called Dual Feature Aggregation Transformer (DFAFormer). A Dual Feature Aggregation Transformer Block (DFATB) is designed based on Feature Aggregation Feed-Forward Network (FAFN), which enhances the model’s ability to capture richer contextual information and complex features by integrating spatial aggregation attention and channel aggregation attention mechanisms. The FAFN module introduces a gating mechanism to capture nonlinear spatial information and reduce channel redundancy, achieving efficient feature extraction while reducing the computational complexity of the model. Additionally, the Differential Transformer is innovatively incorporated, which focuses on key information and suppresses unnecessary noise through differential operations, improving the model’s robustness and generalization capabilities. Extensive comparison and ablation experiments are conducted on the Synapse, ISIC 2018 and WORD dataset, achieving average Dice scores of 83.60%, 92.27% and 87.78% respectively. Experiments have shown that the proposed method outperforms state-of-the-art methods, reducing computational complexity while exhibiting strong generalization ability and promising application prospects. The code will be released via https://github.com/Sunflower-li369/DFAFormer. }
+}
+
+@article{ruan2025lightweight,
+title={A lightweight segmentation model based on Segment Anything Model for tongue image segmentation},
+author={Ruan, Qunsheng and Cao, Shan and Luo, Zhirong},
+journal={Engineering Applications of Artificial Intelligence},
+volume={162},
+pages={112379},
+year={2025},
+publisher={Elsevier},
+abstract = { Tongue image segmentation plays a crucial role in intelligent of diagnosis of Traditional Chinese Medicine. Accurate, efficient, and lightweight tongue segmentation significantly improves both the quality and practical applicability of intelligent disease diagnosis models. To address this challenge, we propose TongueSAM_Lite, a lightweight and fully automated tongue image segmentation model. Based on the Segment Anything Model. Our approach employs knowledge distillation and parameter-efficient fine-tuning to develop a novel lightweight image encoder, high-parameter modules in the Vision Transformer are partially replaced with lightweight image modules, which facilitate the transfer of its feature extraction capabilities while accelerating inference speed and reducing computational resource requirements. Additionally, to eliminate manual annotation of tongue region bounding boxes, we integrate a YOLOX-based automatic Box-prompt generator, enabling end-to-end fully automated prompting and segmentation of tongue images.}
+}
+
+@article{jiang2026vtfusion,
+title={VTFusion: A Vision--Text Multimodal Fusion Network for Few-Shot Anomaly Detection},
+author={Jiang, Yuxin and Cao, Yunkang and Cheng, Yuqi and Zhang, Yiheng and Shen, Weiming},
+journal={IEEE Transactions on Cybernetics},
+year={2026},
+publisher={IEEE},
+abstract = { Few-Shot Anomaly Detection (FSAD) has emerged as a critical paradigm for identifying irregularities using scarce normal references. While recent methods have integrated textual semantics to complement visual data, they predominantly rely on features pre-trained on natural scenes, thereby neglecting the granular, domain-specific semantics essential for industrial inspection. Furthermore, prevalent fusion strategies often resort to superficial concatenation, failing to address the inherent semantic misalignment between visual and textual modalities, which compromises robustness against cross-modal interference. To bridge these gaps, this study proposes VTFusion, a vision-text multimodal fusion framework tailored for FSAD. The framework rests on two core designs. First, adaptive feature extractors for both image and text modalities are introduced to learn task- specific representations, bridging the domain gap between pre- trained models and industrial data; this is further augmented by generating diverse synthetic anomalies to enhance feature discriminability. Second, a dedicated multimodal prediction fusion module is developed, comprising a fusion block that facilitates rich cross-modal information exchange and a segmentation network that generates refined pixel-level anomaly maps under multimodal guidance. VTFusion significantly advances FSAD performance, achieving image-level AUROCs of 96.8% and 86.2% in the 2-shot scenario on the MVTec AD and VisA datasets, respectively. Furthermore, VTFusion achieves an AUPRO of 93.5% on a real- world dataset of industrial automotive plastic parts introduced in this paper, further demonstrating its practical applicability in demanding industrial scenarios.}
+}

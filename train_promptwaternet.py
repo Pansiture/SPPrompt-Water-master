@@ -22,40 +22,50 @@ from sklearn.metrics import confusion_matrix
 
 join = os.path.join
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--data_train", type=str, default=r"/autodl-pub/glh_data/level0/train",
+parser.add_argument("--data_train", type=str, default=r"/root/autodl-tmp/SPPrompt-Water-master/data/GID_processed/level0/train",
                     help="path to training data; 3 subfolders: gts , imgs and prompt_mask_256")
 parser.add_argument("--data_val", type=str, default=None,
                     help="Optional: explicit val data path. If None, will replace 'train' with 'val' in data_train")
-parser.add_argument("--promptcp", type=str, default=r"",
+parser.add_argument("--promptcp", type=str, default=r"/root/autodl-tmp/SPPrompt-Water-master/pretrain/sam_vit_b_01ec64.pth",
                     help="The checkpoint of Prompt model (SAM vit-b pretrain weights, optional)")
 parser.add_argument(
-    "-freeze_prompt", type=bool, default=False, help="Freeze the prompt module (default False to allow fine-tuning SAM)"
+    "--freeze_prompt", type=str2bool, default=False, help="Freeze the prompt module (default False to allow fine-tuning SAM)"
 )
-parser.add_argument("--SwintransformerPretrain", type=str, default="./pretrain/swin_tiny_patch4_window7_224.pth",
+parser.add_argument("--SwintransformerPretrain", type=str, default="/root/autodl-tmp/SPPrompt-Water-master/pretrain/swin_tiny_patch4_window7_224.pth",
                     help="Path to Swin Transformer pretrain weights. Download from https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth")
-parser.add_argument("-work_dir", type=str, default=r"./work_dir")
+parser.add_argument("--work_dir", type=str, default=r"/root/autodl-tmp/SPPrompt-Water-master/work_dir")
 
 parser.add_argument("--num_workers", type=int, default=8)
 # ---------------------------------------------------------------------------------
-parser.add_argument("-task_name", type=str, default="SPP_GLH")
+parser.add_argument("--task_name", type=str, default="SPP_GID")
 
 # train
-parser.add_argument("-num_epochs", type=int, default=50)
-parser.add_argument("-batch_size", type=int, default=4)
-parser.add_argument("-val_batch_size", type=int, default=4)
+parser.add_argument("--num_epochs", type=int, default=50)
+parser.add_argument("--batch_size", type=int, default=4)
+parser.add_argument("--val_batch_size", type=int, default=4)
 # Optimizer parameters
 parser.add_argument(
-    "-weight_decay", type=float, default=0.01, help="weight decay (default: 0.01)"
+    "--weight_decay", type=float, default=0.01, help="weight decay (default: 0.01)"
 )
 parser.add_argument(
-    "-lr", type=float, default=0.0001, metavar="LR", help="learning rate (absolute lr)"
+    "--lr", type=float, default=0.0001, metavar="LR", help="learning rate (absolute lr)"
 )
 parser.add_argument(
-    "-use_wandb", type=bool, default=False, help="use wandb to monitor training"
+    "--use_wandb", type=str2bool, default=False, help="use wandb to monitor training"
 )
-parser.add_argument("-use_amp", action="store_true", default=True, help="use amp") #
+parser.add_argument("--use_amp", action="store_true", default=True, help="use amp") #
 parser.add_argument(
     "--resume", type=str, default="",
     help="Resuming training from checkpoint"
@@ -247,6 +257,34 @@ def main():
     
     def combined_loss(pred, target):
         return 0.6 * dice_focal_loss(pred, target) + 0.4 * tversky_loss(pred, target)
+
+    # 预训练权重存在性检查与日志
+    logger.info("=" * 60)
+    logger.info("Pretrained Weights Status:")
+    for name, path in [
+        ("SAM prompt checkpoint", args.promptcp),
+        ("Swin Transformer pretrain", args.SwintransformerPretrain),
+    ]:
+        exists = os.path.isfile(path) if path else False
+        logger.info("  %-30s %s  (%s)", name, "EXISTS" if exists else "MISSING", path if path else "None")
+    logger.info("=" * 60)
+
+    # 数据路径存在性检查与日志
+    logger.info("Dataset Path Check:")
+    levels = ["level0", "level1", "level2"]
+    all_ok = True
+    for lv in levels:
+        train_path = args.data_train.replace("level0", lv)
+        val_path = args.data_train.replace("train", "val").replace("level0", lv)
+        for name, path in [(f"{lv}/train", train_path), (f"{lv}/val", val_path)]:
+            exists = os.path.isdir(path)
+            if not exists:
+                all_ok = False
+            logger.info("  %-15s %s  (%s)", name, "EXISTS" if exists else "MISSING", path)
+    logger.info("=" * 60)
+    if not all_ok:
+        logger.error("Some dataset paths are missing! Please run preprocessing first.")
+        raise FileNotFoundError("Dataset paths missing. Check logs above.")
 
     # 设置训练和验证数据集
     num_epochs = args.num_epochs
