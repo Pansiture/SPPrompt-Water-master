@@ -6,6 +6,8 @@ import logging
 import sys
 import argparse
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import monai
 import numpy as np
 import matplotlib.pyplot as plt
@@ -158,12 +160,13 @@ def validate(prompt_water_net, val_dataloader, device, loss_fn):
     with torch.no_grad():
         for image, labels, prompts, _ in tqdm(val_dataloader, desc="Validation"):
             image, prompts, labels = image.to(device), prompts.to(device), labels.to(device).float()
-            medsam_pred = prompt_water_net(image, prompts)
-            loss = loss_fn(medsam_pred, labels)
+            labels_256 = F.interpolate(labels, size=(256, 256), mode='nearest')
+            seg_logits, evidence, prob_256, uncertainty_256, consistency = prompt_water_net(image, prompts)
+            loss = loss_fn(seg_logits, labels)
             val_loss += loss.item()
 
-            # 计算指标
-            miou, acc, f1 = calculate_metrics(torch.sigmoid(medsam_pred).detach(), labels)
+            # 计算指标 (仍然基于 1024x1024 分割输出)
+            miou, acc, f1 = calculate_metrics(torch.sigmoid(seg_logits).detach(), labels)
             miou_sum += miou
             acc_sum += acc
             f1_sum += f1
@@ -248,6 +251,27 @@ def main():
     def combined_loss(pred, target):
         return 0.6 * dice_focal_loss(pred, target) + 0.4 * tversky_loss(pred, target)
 
+    class EvidentialLoss(nn.Module):
+        def __init__(self, lambda_u=1.0):
+            super().__init__()
+            self.lambda_u = lambda_u
+        
+        def forward(self, evidence, target):
+            target = target.float()
+            alpha = evidence + 1.0
+            S = alpha[:, 0:1] + alpha[:, 1:2]
+            p = alpha[:, 0:1] / S
+            u = 2.0 / S
+            loss = target * (1 - p)**2 + (1 - target) * p**2 + self.lambda_u * u
+            return loss.mean()
+
+    class FMConsistencyLoss(nn.Module):
+        def forward(self, consistency, target):
+            return F.mse_loss(consistency, target.float(), reduction='mean')
+
+    edl_loss_fn = EvidentialLoss(lambda_u=1.0)
+    fm_loss_fn = FMConsistencyLoss()
+
     # 设置训练和验证数据集
     num_epochs = args.num_epochs
     # iter_num = 0
@@ -324,16 +348,23 @@ def main():
         for step, (image, labels, prompts, _) in enumerate(tqdm(train_dataloader)):
             optimizer.zero_grad()
             image, prompts, labels = image.to(device), prompts.to(device), labels.to(device).float()
+            labels_256 = F.interpolate(labels, size=(256, 256), mode='nearest')
             if args.use_amp:
                 with torch.autocast(device_type="cuda", dtype=torch.float16):
-                    medsam_pred = prompt_water_net(image, prompts)
-                    loss = combined_loss(medsam_pred, labels)
+                    seg_logits, evidence, prob_256, uncertainty_256, consistency = prompt_water_net(image, prompts)
+                    loss_seg = combined_loss(seg_logits, labels)
+                    loss_edl = edl_loss_fn(evidence, labels_256)
+                    loss_fm = fm_loss_fn(consistency, labels_256)
+                    loss = loss_seg + 0.5 * loss_edl + 0.3 * loss_fm
                 scaler.scale(loss).backward()
                 scaler.step(optimizer)
                 scaler.update()
             else:
-                medsam_pred = prompt_water_net(image, prompts)
-                loss = combined_loss(medsam_pred, labels)
+                seg_logits, evidence, prob_256, uncertainty_256, consistency = prompt_water_net(image, prompts)
+                loss_seg = combined_loss(seg_logits, labels)
+                loss_edl = edl_loss_fn(evidence, labels_256)
+                loss_fm = fm_loss_fn(consistency, labels_256)
+                loss = loss_seg + 0.5 * loss_edl + 0.3 * loss_fm
                 loss.backward()
                 optimizer.step()
 

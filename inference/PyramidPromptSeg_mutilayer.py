@@ -153,6 +153,7 @@ class PyramidSegmenterPNG:
 
             # 逐 patch 推理
             Y_patches = {}
+            U_patches = {}
             for (row, col), Xi in X_patches.items():
                 Pi = P_patches[(row, col)]
 
@@ -165,23 +166,35 @@ class PyramidSegmenterPNG:
                 Pi_model = F.interpolate(Pi, size=(256, 256), mode='bilinear', align_corners=False)
 
                 with torch.no_grad():
-                    Yi_model = torch.sigmoid(self.prompt_net(Xi_model, Pi_model))
-                # Resize 回原始 patch 尺寸，然后二值化
+                    seg_logits, evidence, prob_256, uncertainty_256, consistency = self.prompt_net(Xi_model, Pi_model)
+                    Yi_model = torch.sigmoid(seg_logits)
+                
+                # Resize 回原始 patch 尺寸
                 Yi = F.interpolate(Yi_model, size=(Xi.shape[2], Xi.shape[3]), mode='bilinear', align_corners=False)
-                Yi = (Yi > 0.5).float()
-
-                Y_patches[(row, col)] = Yi
+                
+                # UGPF: 不确定性引导的 prompt 融合
+                u_resized = F.interpolate(uncertainty_256, size=(Xi.shape[2], Xi.shape[3]), mode='bilinear', align_corners=False)
+                adaptive_prompt = Yi * (1.0 - u_resized)
+                
+                Y_patches[(row, col)] = adaptive_prompt
+                U_patches[(row, col)] = u_resized
                 if self.save_intermediate2:
-                    self._save_png(Yi * 255, self.output_dir / f'{prefix}_layer{level}_Y_{row}_{col}.png')
+                    self._save_png(adaptive_prompt * 255, self.output_dir / f'{prefix}_layer{level}_Y_{row}_{col}.png')
                 print(f"[Inference] Patch ({row},{col}): Xi_in={Xi.shape}, Pi_in={Pi.shape}, model_in=1024x1024/256x256, Yi_out={Yi.shape}, positive={(Yi > 0).sum().item()}")
 
             # 合并 patches
             Y_level = self._merge_patches(Y_patches)
+            U_level = self._merge_patches(U_patches) if U_patches else None
             self.memory_cache[f'layer{level}_Y'] = Y_level
+            if U_level is not None:
+                self.memory_cache[f'layer{level}_U'] = U_level
             print(f"[Inference] Level {level} merged output: {Y_level.shape}, positive pixels={(Y_level > 0).sum().item()}")
 
             if self.save_intermediate:
                 self._save_png(Y_level * 255, self.output_dir / f'{prefix}_layer{level}_Y.png')
+                if U_level is not None:
+                    u_vis = (U_level[0, 0].detach().cpu().numpy() * 255).astype(np.uint8)
+                    Image.fromarray(u_vis).save(self.output_dir / f'{prefix}_layer{level}_U.png')
 
         # 最终结果
         final_result = self.memory_cache['layer0_Y'][:, :, :orig_size[0], :orig_size[1]]
