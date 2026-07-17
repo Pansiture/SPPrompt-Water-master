@@ -51,10 +51,10 @@ python train_promptwaternet.py \
   --SwintransformerPretrain "${SWIN_CKPT}" \
   --work_dir "${WORK_DIR}" \
   --task_name "${TASK_NAME}" \
-  --num_epochs ${NUM_EPOCHS} \
-  --batch_size ${BATCH_SIZE} \
-  --val_batch_size ${VAL_BATCH_SIZE} \
-  --lr ${LR} \
+  -num_epochs ${NUM_EPOCHS} \
+  -batch_size ${BATCH_SIZE} \
+  -val_batch_size ${VAL_BATCH_SIZE} \
+  -lr ${LR} \
   --weight_decay ${WEIGHT_DECAY} \
   --num_workers ${NUM_WORKERS} \
   --device ${DEVICE} \
