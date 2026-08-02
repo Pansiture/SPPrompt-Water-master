@@ -238,7 +238,7 @@ class Attention(nn.Module):
         attn = (q * self.scale) @ k.transpose(-2, -1)
 
         if self.use_rel_pos:
-            attn = add_decomposed_rel_pos(
+            attn = add_decomposed_rel_pos_inplace(
                 attn, q, self.rel_pos_h, self.rel_pos_w, (H, W), (H, W)
             )
 
@@ -383,6 +383,36 @@ def add_decomposed_rel_pos(
         + rel_w[:, :, :, None, :]
     ).view(B, q_h * q_w, k_h * k_w)
 
+    return attn
+
+
+def add_decomposed_rel_pos_inplace(
+    attn: torch.Tensor,
+    q: torch.Tensor,
+    rel_pos_h: torch.Tensor,
+    rel_pos_w: torch.Tensor,
+    q_size: Tuple[int, int],
+    k_size: Tuple[int, int],
+) -> torch.Tensor:
+    """
+    Memory-efficient version of add_decomposed_rel_pos using in-place addition.
+    Avoids allocating a large 5D temporary tensor.
+    """
+    q_h, q_w = q_size
+    k_h, k_w = k_size
+    Rh = get_rel_pos(q_h, k_h, rel_pos_h)
+    Rw = get_rel_pos(q_w, k_w, rel_pos_w)
+
+    B, _, dim = q.shape
+    r_q = q.reshape(B, q_h, q_w, dim)
+    rel_h = torch.einsum("bhwc,hkc->bhwk", r_q, Rh)
+    rel_w = torch.einsum("bhwc,wkc->bhwk", r_q, Rw)
+
+    # In-place addition to avoid large temporary allocation
+    attn = attn.view(B, q_h, q_w, k_h, k_w)
+    attn.add_(rel_h[:, :, :, :, None])
+    attn.add_(rel_w[:, :, :, None, :])
+    attn = attn.view(B, q_h * q_w, k_h * k_w)
     return attn
 
 

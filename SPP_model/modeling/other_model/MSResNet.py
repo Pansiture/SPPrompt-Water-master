@@ -22,7 +22,11 @@ def conv3x3(in_planes, out_planes, stride=1):
 class FCN(nn.Module):
     def __init__(self, in_channels=3, num_classes=1, pretrained=True):
         super(FCN, self).__init__()
-        resnet = models.resnet34(pretrained)
+        if isinstance(pretrained, str):
+            resnet = models.resnet34(weights=None)
+            resnet.load_state_dict(torch.load(pretrained, map_location="cpu"))
+        else:
+            resnet = models.resnet34(pretrained=pretrained)
         newconv1 = nn.Conv2d(in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         newconv1.weight.data[:, 0:3, :, :].copy_(resnet.conv1.weight.data[:, 0:3, :, :])
         if in_channels > 3: newconv1.weight.data[:, 3:in_channels, :, :].copy_(
@@ -139,15 +143,23 @@ class DecoderBlock(nn.Module):
         return x
 
 class MSResNet(nn.Module):
-    def __init__(self, in_channels=3, num_classes=1):
+    def __init__(self, in_channels=3, num_classes=1, pretrained=False):
         super(MSResNet, self).__init__()
 
         filters = [64, 128, 256, 516]
-        self.FCN = FCN(in_channels, num_classes, pretrained=True)
+        self.FCN = FCN(in_channels, num_classes, pretrained=pretrained)
 
-        self.res1 = models.resnet34(pretrained=True).layer3
-        self.res2 = models.resnet34(pretrained=True).layer4
-        self.res3 = models.resnet34(pretrained=True).layer4
+        def _load_resnet_layer(pretrained, layer_fn):
+            if isinstance(pretrained, str):
+                resnet = models.resnet34(weights=None)
+                resnet.load_state_dict(torch.load(pretrained, map_location="cpu"))
+            else:
+                resnet = models.resnet34(pretrained=pretrained)
+            return layer_fn(resnet)
+
+        self.res1 = _load_resnet_layer(pretrained, lambda r: r.layer3)
+        self.res2 = _load_resnet_layer(pretrained, lambda r: r.layer4)
+        self.res3 = _load_resnet_layer(pretrained, lambda r: r.layer4)
         for n, m in self.res3.named_modules():
             if 'conv1' in n or 'downsample.0' in n: m.stride = (1, 1)
 
