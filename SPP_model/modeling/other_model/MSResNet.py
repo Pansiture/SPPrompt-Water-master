@@ -3,6 +3,7 @@
 
 import torch
 import numpy as np
+import os
 import torch.nn as nn
 from torchvision import models
 from torch.nn import functional as F
@@ -20,9 +21,14 @@ def conv3x3(in_planes, out_planes, stride=1):
 
 
 class FCN(nn.Module):
-    def __init__(self, in_channels=3, num_classes=1, pretrained=True):
+    def __init__(self, in_channels=3, num_classes=1, pretrained=True, pretrained_path=None):
         super(FCN, self).__init__()
-        resnet = models.resnet34(pretrained)
+        resnet = models.resnet34(pretrained=False)
+        if pretrained and pretrained_path and os.path.isfile(pretrained_path):
+            state_dict = torch.load(pretrained_path, map_location='cpu')
+            resnet.load_state_dict(state_dict)
+        elif pretrained:
+            resnet = models.resnet34(pretrained=True)
         newconv1 = nn.Conv2d(in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
         newconv1.weight.data[:, 0:3, :, :].copy_(resnet.conv1.weight.data[:, 0:3, :, :])
         if in_channels > 3: newconv1.weight.data[:, 3:in_channels, :, :].copy_(
@@ -139,15 +145,23 @@ class DecoderBlock(nn.Module):
         return x
 
 class MSResNet(nn.Module):
-    def __init__(self, in_channels=3, num_classes=1):
+    def __init__(self, in_channels=3, num_classes=1, pretrained_path=None):
         super(MSResNet, self).__init__()
 
         filters = [64, 128, 256, 516]
-        self.FCN = FCN(in_channels, num_classes, pretrained=True)
+        self.FCN = FCN(in_channels, num_classes, pretrained=True, pretrained_path=pretrained_path)
 
-        self.res1 = models.resnet34(pretrained=True).layer3
-        self.res2 = models.resnet34(pretrained=True).layer4
-        self.res3 = models.resnet34(pretrained=True).layer4
+        # Load ResNet34 once and reuse layers
+        base_resnet = models.resnet34(pretrained=False)
+        if pretrained_path and os.path.isfile(pretrained_path):
+            state_dict = torch.load(pretrained_path, map_location='cpu')
+            base_resnet.load_state_dict(state_dict)
+        elif pretrained_path is None:
+            base_resnet = models.resnet34(pretrained=True)
+
+        self.res1 = base_resnet.layer3
+        self.res2 = base_resnet.layer4
+        self.res3 = base_resnet.layer4
         for n, m in self.res3.named_modules():
             if 'conv1' in n or 'downsample.0' in n: m.stride = (1, 1)
 
@@ -188,11 +202,20 @@ class MSResNet(nn.Module):
         e2 = self.FCN.layer4(e2)
 
         #Decoder
-        d4 = self.decoder6(e4) + e3
-        d3 = self.decoder5(d4) + e2
+        d4 = self.decoder6(e4)
+        if d4.shape[2:] != e3.shape[2:]:
+            d4 = F.interpolate(d4, size=e3.shape[2:], mode='bilinear', align_corners=False)
+        d4 = d4 + e3
+        d3 = self.decoder5(d4)
+        if d3.shape[2:] != e2.shape[2:]:
+            d3 = F.interpolate(d3, size=e2.shape[2:], mode='bilinear', align_corners=False)
+        d3 = d3 + e2
         d3 = self.decoder4(d3)
         d3 = self.decoder3(d3)
-        d2 = self.decoder2(d3)+ x
+        d2 = self.decoder2(d3)
+        if d2.shape[2:] != x.shape[2:]:
+            d2 = F.interpolate(d2, size=x.shape[2:], mode='bilinear', align_corners=False)
+        d2 = d2 + x
         d1 = self.decoder1(d2)
 
         out = self.finaldeconv1(d1)
