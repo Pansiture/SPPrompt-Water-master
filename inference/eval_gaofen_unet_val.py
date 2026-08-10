@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-推理脚本：使用 SPPromptWaterNet 权重在 GID_processed val 集上逐张推理，
+推理脚本：使用 UNet 权重在 Gaofen_processed_v2 level0 val 集上逐张推理，
 计算每张图的 mIoU / F1 / Acc，汇总成 CSV，并避免 OOM（结果即时落 CPU / 磁盘）。
 """
 import os
@@ -19,7 +19,7 @@ from sklearn.metrics import confusion_matrix
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from SPP_model.modeling.prompt_water_net import SPPromptWaterNet
+from SPP_model.modeling.other_model.Unet import UNet
 
 
 def calculate_single_metrics(pred, gt, num_classes=2):
@@ -56,18 +56,13 @@ def main():
                         default="/root/autodl-tmp/SPPrompt-Water-master/data/Gaofen_processed_v2/level0/val/imgs")
     parser.add_argument("--gt_folder", type=str,
                         default="/root/autodl-tmp/SPPrompt-Water-master/data/Gaofen_processed_v2/level0/val/gts")
-    parser.add_argument("--prompt_folder", type=str,
-                        default="/root/autodl-tmp/SPPrompt-Water-master/data/Gaofen_processed_v2/level0/val/prompt_mask_256")
     parser.add_argument("--resume", type=str,
-                        default="/root/autodl-tmp/SPPrompt-Water-master/work_dir/Golden_SPPrompt_13epoch_e9_0.8295_2.7022/Golden_SPPrompt_13epoch_e9_0.8295_2.7022.pth")
-    parser.add_argument("--promptcp", type=str,
-                        default="/root/autodl-tmp/SPPrompt-Water-master/pretrain/sam_vit_b_01ec64.pth")
-    parser.add_argument("--swin_pretrained", type=str,
-                        default="/root/autodl-tmp/SPPrompt-Water-master/pretrain/swin_tiny_patch4_window7_224.pth")
+                        default="/root/autodl-tmp/SPPrompt-Water-master/work_dir/Golden_UNet_10epoch_5epoch_0.8142_2.67/Golden_UNet_10epoch_5epoch_0.8142_2.67.pth")
     parser.add_argument("--output_dir", type=str,
-                        default="/root/autodl-tmp/SPPrompt-Water-master/output/eval_gaofen_spprompt_val")
+                        default="/root/autodl-tmp/SPPrompt-Water-master/output/eval_gaofen_unet_val")
     parser.add_argument("--save_visuals", type=int, default=1, help="1=save pred masks, 0=don't save")
     parser.add_argument("--image_list", type=str, default=None, help="Optional: path to a text file with image names (one per line) to process only those images")
+    parser.add_argument("--out_channels", type=int, default=1)
     args = parser.parse_args()
 
     save_visuals = bool(args.save_visuals)
@@ -77,11 +72,7 @@ def main():
     print(f"Device: {device}")
 
     # --- Load model ---
-    model = SPPromptWaterNet(
-        promptcheckpoint=args.promptcp,
-        swin_pretrained=args.swin_pretrained,
-        freeze_prompt=False
-    )
+    model = UNet(in_channels=3, out_channels=args.out_channels)
     print(f"Loading checkpoint: {args.resume}")
     ckpt = torch.load(args.resume, map_location=device)
     if "model" in ckpt:
@@ -92,7 +83,6 @@ def main():
 
     img_dir = Path(args.image_folder)
     gt_dir = Path(args.gt_folder)
-    prompt_dir = Path(args.prompt_folder)
 
     # --- 如果指定了 image_list，只处理这些图片 ---
     if args.image_list is not None and os.path.isfile(args.image_list):
@@ -123,31 +113,18 @@ def main():
             img = np.expand_dims(img, axis=2)
             img = np.repeat(img, 3, axis=2)
         img = np.transpose(img, (2, 0, 1))
-        img = np.expand_dims(img, 0).astype(np.float32)  # NO /255, match training
+        img = np.expand_dims(img, 0).astype(np.float32) / 255.0  # match training: divided by 255
         image = torch.from_numpy(img).to(device)
 
-        # --- Load prompt mask (256x256) ---
-        prompt_path = prompt_dir / (prefix + ".png")
-        if not prompt_path.exists():
-            prompt_path = prompt_dir / (prefix + ".tif")
-        if not prompt_path.exists():
-            print(f"Warning: Prompt mask not found for {prefix}, skip")
-            continue
-
-        prompt_mask = io.imread(prompt_path)
-        prompt_mask = np.expand_dims(prompt_mask, axis=0)  # (1, H, W)
-        prompt_mask = np.expand_dims(prompt_mask, axis=0).astype(np.float32) / 255.0  # (1, 1, H, W)
-        prompt_mask = torch.from_numpy(prompt_mask).to(device)
-
         with torch.no_grad():
-            logit = model(image, prompt_mask)
+            logit = model(image)
             prob = torch.sigmoid(logit)
 
         # 立即回 CPU 并转为 numpy，释放 GPU 显存
         prob_np = prob.squeeze().cpu().numpy()
 
         # 清空当前图的显存缓存
-        del image, prompt_mask, logit, prob
+        del image, logit, prob
         torch.cuda.empty_cache()
 
         # --- Load GT ---
